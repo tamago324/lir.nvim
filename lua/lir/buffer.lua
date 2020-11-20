@@ -3,11 +3,15 @@ local vim = vim
 
 
 local get_value = function(lnum)
-  return vim.b.lir_files[lnum].value
+  local file = vim.b.lir_files[lnum]
+  if file then
+    return file.value
+  end
+  return nil
 end
 
 
-function buffer.current ()
+function buffer.current()
   return get_value(vim.fn.line('.'))
 end
 

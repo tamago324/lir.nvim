@@ -4,6 +4,7 @@ local lir = {}
 local buffer = require'lir.buffer'
 local devicons = require'lir.devicons'
 local history = require'lir.history'
+local utils = require'lir.utils'
 local vim = vim
 
 local uv = vim.loop
@@ -30,7 +31,7 @@ local readdir = function(path)
 
     table.insert(files, {
       value = name,
-      display = ' ' .. icon .. ' ' .. name,
+      display = ' ' .. icon .. ' ' .. name .. (is_dir and '/' or ''),
       devicons = {
         icon = icon,
         highlight_name = highlight_name,
@@ -82,7 +83,6 @@ lir.init = function ()
   -- nvim_buf_set_lines() するため
   vim.bo.modifiable = true
 
-  vim.bo.filetype  = 'lir'
   vim.bo.buftype   = 'nofile'
   vim.bo.bufhidden = 'wipe'
   vim.bo.buflisted = false
@@ -120,7 +120,13 @@ lir.init = function ()
   buffer.set_cursor(lnum, 1)
   devicons.update_highlights(files)
 
+  if #files == 0 then
+    utils.set_nocontent_text()
+  end
+
   vim.cmd([[setlocal cursorline]])
+
+  vim.bo.filetype  = 'lir'
 end
 
 

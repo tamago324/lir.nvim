@@ -7,7 +7,11 @@ local uv = vim.loop
 
 
 local esc_current = function ()
-  return vim.fn.fnameescape(buffer.current())
+  local file = buffer.current()
+  if file then
+    return vim.fn.fnameescape(file)
+  end
+  return ''
 end
 
 actions.edit = function ()
