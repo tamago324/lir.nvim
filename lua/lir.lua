@@ -33,7 +33,7 @@ local readdir = function(path)
     table.insert(files, {
       value = name,
       display = ' ' .. icon .. name .. (is_dir and '/' or ''),
-      Devicons = {
+      devicons = {
         icon = icon,
         highlight_name = highlight_name,
       },
