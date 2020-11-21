@@ -3,20 +3,35 @@ local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
 local vim = vim
 
 
+local folder_icon_name = 'lir_folder_icon'
+
 local get_ns = function ()
   return vim.api.nvim_create_namespace('lir')
 end
 
 
 if has_devicons then
+  local _, hi_name = devicons.get_icon(folder_icon_name)
+  if hi_name:match('IconDefault$') then
+    devicons.setup({
+      override = {
+        [folder_icon_name] = {
+          icon = "",
+          color = "#7ebae4",
+          name = "LirFolderNode"
+        },
+      }
+    })
+  end
+
   local icon, _ = devicons.get_icon('default_icon')
   local ICON_WIDTH = vim.fn.strlen(icon)
 
   function M.get_devicons(filename, is_dir)
     if is_dir then
-      filename = 'lir_folder_icon'
+      filename = folder_icon_name
     end
-    return devicons.get_icon(filename, string.match(filename, '%a+$'))
+    return devicons.get_icon(filename, string.match(filename, '%a+$'), {default = true})
   end
 
   function M.update_highlights(files)

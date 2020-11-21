@@ -5,6 +5,8 @@
 
 ```vim
 Plug 'tamago324/lir.nvim'
+" Optional
+Plug 'kyazdani42/nvim-web-devicons'
 ```
 
 
@@ -33,29 +35,19 @@ augroup my-ft-lir
     autocmd!
     autocmd FileType lir call <SID>my_ft_lir()
 augroup END
-```
 
-
-## Devicons
-
-Use [kyazdani42/nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons) to display the icons.
-
-```vim
-Plug 'kyazdani42/nvim-web-devicons'
-
+-- custom folder icon
 lua << EOF
 require'nvim-web-devicons'.setup({
-  default = true,
   override = {
-    -- Define folder icon
-    ["lir_folder_icon"] = {
+    lir_folder_icon = {
       icon = "",
       color = "#7ebae4",
       name = "LirFolderNode"
     },
   }
 })
-EOD
+EOF
 ```
 
 
