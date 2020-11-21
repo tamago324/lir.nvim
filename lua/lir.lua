@@ -1,10 +1,10 @@
 local lir = {}
 
 
-local buffer = require'lir.buffer'
-local devicons = require'lir.devicons'
-local history = require'lir.history'
-local utils = require'lir.utils'
+local Buffer = require'lir.buffer'
+local Devicons = require'lir.devicons'
+local History = require'lir.history'
+local Utils = require'lir.utils'
 local vim = vim
 
 local uv = vim.loop
@@ -27,13 +27,13 @@ local readdir = function(path)
       is_dir = true
     end
 
-    local icon, highlight_name = devicons.get_devicons(name, is_dir)
+    local icon, highlight_name = Devicons.get_devicons(name, is_dir)
     icon = (icon and icon ~= '' and icon .. ' ' or '')
 
     table.insert(files, {
       value = name,
       display = ' ' .. icon .. name .. (is_dir and '/' or ''),
-      devicons = {
+      Devicons = {
         icon = icon,
         highlight_name = highlight_name,
       },
@@ -107,22 +107,22 @@ lir.init = function ()
   vim.bo.modifiable = false
 
   local lnum = 1
-  if history.exists(dir) then
-    lnum = buffer.indexof(history.get(dir))
+  if History.exists(dir) then
+    lnum = Buffer.indexof(History.get(dir))
   end
 
   local alt_dir = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:h')
   local alt_file = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:t')
 
   if alt_file and string.gsub(dir, '/$', '') == alt_dir then
-    lnum = buffer.indexof(alt_file)
+    lnum = Buffer.indexof(alt_file)
   end
 
-  buffer.set_cursor(lnum, 1)
-  devicons.update_highlights(files)
+  Buffer.set_cursor(lnum, 1)
+  Devicons.update_highlights(files)
 
   if #files == 0 then
-    utils.set_nocontent_text()
+    Utils.set_nocontent_text()
   end
 
   vim.cmd([[setlocal cursorline]])

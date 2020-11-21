@@ -1,13 +1,13 @@
 local actions = {}
-local buffer = require 'lir.buffer'
-local history = require 'lir.history'
-local utils = require 'lir.utils'
+local Buffer = require 'lir.buffer'
+local History = require 'lir.history'
+local Utils = require 'lir.utils'
 local vim = vim
 local uv = vim.loop
 
 
 local esc_current = function ()
-  local file = buffer.current()
+  local file = Buffer.current()
   if file then
     return vim.fn.fnameescape(file)
   end
@@ -44,7 +44,7 @@ end
 actions.up = function ()
   local cur_file, path, name, dir
 
-  cur_file = buffer.current()
+  cur_file = Buffer.current()
   path = string.gsub(vim.b.lir_dir, '/$', '')
   name = vim.fn.fnamemodify(path, ':t')
   if name == '' then
@@ -52,9 +52,9 @@ actions.up = function ()
   end
   dir = vim.fn.fnamemodify(path, ':p:h:h')
   vim.cmd('keepalt edit ' .. dir)
-  buffer.set_cursor(buffer.indexof(name))
+  Buffer.set_cursor(Buffer.indexof(name))
 
-  history.add(path, cur_file)
+  History.add(path, cur_file)
 end
 
 
@@ -70,12 +70,12 @@ actions.mkdir = function ()
   end
 
   if name == '.' or name == '..' or string.match(name, '[/\\]') then
-    utils.error('Invalid directory name: ' .. name)
+    Utils.error('Invalid directory name: ' .. name)
     return
   end
 
-  if vim.fn.mkdir(buffer.curdir() .. name) == 0 then
-    utils.error('Create directory failed')
+  if vim.fn.mkdir(Buffer.curdir() .. name) == 0 then
+    Utils.error('Create directory failed')
     return
   end
 
@@ -85,19 +85,19 @@ end
 
 
 actions.rename = function ()
-  local old = string.gsub(buffer.current(), '/$', '')
+  local old = string.gsub(Buffer.current(), '/$', '')
   local new = vim.fn.input('Rename: ', old)
   if new == '' or new == old then
     return
   end
 
   if new == '.' or new == '..' or string.match(new, '[/\\]') then
-    utils.error('Invalid name: ' .. new)
+    Utils.error('Invalid name: ' .. new)
     return
   end
 
-  if not uv.fs_rename(buffer.curdir() .. old, buffer.curdir() .. new) then
-    utils.error('Rename failed')
+  if not uv.fs_rename(Buffer.curdir() .. old, Buffer.curdir() .. new) then
+    Utils.error('Rename failed')
   end
 
   actions.reload()
@@ -105,21 +105,21 @@ end
 
 
 actions.delete = function ()
-  local name = buffer.current()
+  local name = Buffer.current()
 
   if vim.fn.confirm('Delete?: ' .. name, '&Yes\n&No\n&Force', 2) == 2 then
     return
   end
 
-  local path = buffer.curdir() .. name
+  local path = Buffer.curdir() .. name
   if vim.fn.isdirectory(path) == 1 then
     if not uv.fs_rmdir(path) then
-      utils.error('Delete directory failed')
+      Utils.error('Delete directory failed')
       return
     end
   else
     if not uv.fs_unlink(path) then
-      utils.error('Delete file failed')
+      Utils.error('Delete file failed')
       return
     end
   end
@@ -129,13 +129,13 @@ end
 
 
 actions.newfile = function()
-  vim.api.nvim_feedkeys(':edit ' .. buffer.curdir(), 'n', true)
+  vim.api.nvim_feedkeys(':edit ' .. Buffer.curdir(), 'n', true)
 end
 
 
 actions.cd = function ()
-  vim.cmd(string.format([[silent execute (haslocaldir() ? 'lcd' : 'cd') '%s']], buffer.curdir()))
-  print('cd: ' .. buffer.curdir())
+  vim.cmd(string.format([[silent execute (haslocaldir() ? 'lcd' : 'cd') '%s']], Buffer.curdir()))
+  print('cd: ' .. Buffer.curdir())
 end
 
 
@@ -145,7 +145,7 @@ end
 
 
 actions.yank_path = function ()
-  local path = buffer.curdir() .. buffer.current()
+  local path = Buffer.curdir() .. Buffer.current()
   vim.fn.setreg(vim.v.register, path)
   print('Yank path: ' .. path)
 end

@@ -1,5 +1,5 @@
 local M = {}
-local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
+local has_devicons, Devicons = pcall(require, 'nvim-web-devicons')
 local vim = vim
 
 
@@ -11,9 +11,9 @@ end
 
 
 if has_devicons then
-  local _, hi_name = devicons.get_icon(folder_icon_name)
+  local _, hi_name = Devicons.get_icon(folder_icon_name)
   if hi_name:match('IconDefault$') then
-    devicons.setup({
+    Devicons.setup({
       override = {
         [folder_icon_name] = {
           icon = "",
@@ -24,14 +24,14 @@ if has_devicons then
     })
   end
 
-  local icon, _ = devicons.get_icon('default_icon')
+  local icon, _ = Devicons.get_icon('default_icon')
   local ICON_WIDTH = vim.fn.strlen(icon)
 
   function M.get_devicons(filename, is_dir)
     if is_dir then
       filename = folder_icon_name
     end
-    return devicons.get_icon(filename, string.match(filename, '%a+$'), {default = true})
+    return Devicons.get_icon(filename, string.match(filename, '%a+$'), {default = true})
   end
 
   function M.update_highlights(files)
