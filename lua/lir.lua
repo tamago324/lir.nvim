@@ -28,10 +28,11 @@ local readdir = function(path)
     end
 
     local icon, highlight_name = devicons.get_devicons(name, is_dir)
+    icon = (icon and icon ~= '' and icon .. ' ' or '')
 
     table.insert(files, {
       value = name,
-      display = ' ' .. icon .. ' ' .. name .. (is_dir and '/' or ''),
+      display = ' ' .. icon .. name .. (is_dir and '/' or ''),
       devicons = {
         icon = icon,
         highlight_name = highlight_name,
@@ -68,7 +69,7 @@ lir.init = function ()
   end
 
   -- 代替バッファを保持
-  local alt_file_path = vim.fn.expand('#')
+  local alt_file_path = vim.fn.expand('#:p')
   if alt_file_path ~= '' then
     vim.w.alf_file = alt_file_path
   end
