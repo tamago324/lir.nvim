@@ -36,8 +36,8 @@ augroup my-ft-lir
     autocmd FileType lir call <SID>my_ft_lir()
 augroup END
 
--- custom folder icon
 lua << EOF
+-- custom folder icon
 require'nvim-web-devicons'.setup({
   override = {
     lir_folder_icon = {
