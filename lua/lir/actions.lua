@@ -6,36 +6,34 @@ local vim = vim
 local uv = vim.loop
 
 
-local esc_current = function ()
-  local file = Buffer.current()
-  if file then
-    return vim.fn.fnameescape(file)
-  end
-  return ''
+local fnameescape = vim.fn.fnameescape
+
+local current_path = function ()
+  return fnameescape(Buffer.curdir() .. Buffer.current())
 end
 
 actions.edit = function ()
   -- 代替フ ァイルを変更しないで開く (<C-^)
-  vim.cmd('keepalt edit ' .. vim.b.lir_dir .. esc_current())
+  vim.cmd('keepalt edit ' .. current_path())
 end
 
 
 actions.split = function ()
-  local filename = esc_current()
+  local filename = current_path()
   actions.quit()
   vim.cmd('new ' .. filename)
 end
 
 
 actions.vsplit = function ()
-  local filename = esc_current()
+  local filename = current_path()
   actions.quit()
   vim.cmd('vnew ' .. filename)
 end
 
 
 actions.tabopen = function ()
-  local filename = esc_current()
+  local filename = current_path()
   actions.quit()
   vim.cmd('tabe ' .. filename)
 end
