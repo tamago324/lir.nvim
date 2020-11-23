@@ -59,6 +59,61 @@ local sort = function(lhs, rhs)
 end
 
 
+--[[
+  https://luarocks.org/modules/steved/microlight
+  https://github.com/EvandroLG/array.lua
+]]
+-- slice っぽいのを返す
+local function upper(t, i2)
+  if not i2 or i2 > #t then
+    return #t
+  elseif i2 < 0 then
+    -- 後ろから
+    return #t + i2 + 1
+  else
+    return i2
+  end
+end
+
+
+-- sub
+local function tbl_sub(t, i1, i2)
+  i2 = upper(t, i2)
+  local res = {}
+  -- ぐるぐるして集める
+  for i = i1, i2 do
+    table.insert(res, t[i])
+  end
+  return res
+end
+
+
+local function setlines(dir, lines)
+  local lnum = 1
+  if History.exists(dir) then
+    lnum = Buffer.indexof(History.get(dir))
+  end
+
+  local alt_file = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:t')
+  if alt_file then
+    local alt_dir = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:h')
+    if string.gsub(dir, '/$', '') == alt_dir then
+      lnum = Buffer.indexof(alt_file)
+    end
+  end
+
+  if lnum == nil or lnum == 1 then
+    vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
+    return
+  end
+
+  local before, after = tbl_sub(lines, 1, lnum - 1), tbl_sub(lines, lnum)
+  -- カーソルの上の行にペーストし、カーソルを下にもってく
+  vim.api.nvim_put(before, 'l', false, true)
+  -- 置き換える
+  vim.api.nvim_buf_set_lines(0, lnum-1, -1, true, after)
+end
+
 
 lir.init = function ()
   local path = vim.fn.resolve(vim.fn.expand('%:p'))
@@ -98,27 +153,15 @@ lir.init = function ()
       return string.match(val.value, '^[^.]') ~= nil
     end, files)
   end
-  vim.api.nvim_buf_set_lines(0, 0, -1, true, vim.tbl_map(function(item)
+
+  vim.b.lir_files = files
+  setlines(dir, vim.tbl_map(function(item)
     return item.display
   end, files))
 
-  vim.b.lir_files = files
   vim.bo.modified = false
   vim.bo.modifiable = false
 
-  local lnum = 1
-  if History.exists(dir) then
-    lnum = Buffer.indexof(History.get(dir))
-  end
-
-  local alt_dir = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:h')
-  local alt_file = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:t')
-
-  if alt_file and string.gsub(dir, '/$', '') == alt_dir then
-    lnum = Buffer.indexof(alt_file)
-  end
-
-  Buffer.set_cursor(lnum, 1)
   Devicons.update_highlights(files)
 
   if #files == 0 then
