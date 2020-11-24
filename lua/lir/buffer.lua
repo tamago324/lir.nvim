@@ -32,12 +32,4 @@ function buffer.indexof(value)
 end
 
 
-function buffer.set_cursor(lnum, col)
-  -- XXX: なぜか、defer_fn が必要
-  vim.defer_fn(function ()
-    vim.fn.cursor(lnum, 1)
-  end, 1)
-end
-
-
 return buffer

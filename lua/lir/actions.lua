@@ -13,8 +13,10 @@ local current_path = function ()
 end
 
 actions.edit = function ()
+  local dir, file = Buffer.curdir(), Buffer.current()
   -- 代替フ ァイルを変更しないで開く (<C-^)
   vim.cmd('keepalt edit ' .. current_path())
+  History.add(dir, file)
 end
 
 
@@ -49,10 +51,9 @@ actions.up = function ()
     return
   end
   dir = vim.fn.fnamemodify(path, ':p:h:h')
-  vim.cmd('keepalt edit ' .. dir)
-  Buffer.set_cursor(Buffer.indexof(name))
-
   History.add(path, cur_file)
+  History.add(dir, name)
+  vim.cmd('keepalt edit ' .. dir)
 end
 
 
