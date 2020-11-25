@@ -76,7 +76,7 @@ local function upper(t, i2)
 end
 
 
--- sub
+--- sub
 local function tbl_sub(t, i1, i2)
   i2 = upper(t, i2)
   local res = {}
@@ -88,17 +88,23 @@ local function tbl_sub(t, i1, i2)
 end
 
 
+--[[
+  カーソルを良い感じに調整しつつ、行をセットする
+]]
 local function setlines(dir, lines)
   local lnum = 1
   if History.exists(dir) then
     lnum = Buffer.indexof(History.get(dir))
   end
 
-  local alt_file = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:t')
-  if alt_file then
-    local alt_dir = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:h')
-    if string.gsub(dir, '/$', '') == alt_dir then
-      lnum = Buffer.indexof(alt_file)
+  -- 前が lir ではない場合、代替ファイルの位置にカーソルを移動する
+  if not vim.w.lir_before_lir_buffer then
+    local alt_file = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:t')
+    if alt_file then
+      local alt_dir = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:h')
+      if string.gsub(dir, '/$', '') == alt_dir then
+        lnum = Buffer.indexof(alt_file)
+      end
     end
   end
 

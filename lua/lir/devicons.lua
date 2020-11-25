@@ -12,7 +12,7 @@ end
 
 if has_devicons then
   local _, hi_name = Devicons.get_icon(folder_icon_name)
-  if hi_name:match('IconDefault$') then
+  if hi_name ~= nil and hi_name:match('IconDefault$') then
     Devicons.setup({
       override = {
         [folder_icon_name] = {
