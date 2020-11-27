@@ -97,15 +97,20 @@ local function setlines(dir, lines)
     lnum = Buffer.indexof(History.get(dir))
   end
 
-  -- 前が lir ではない場合、代替ファイルの位置にカーソルを移動する
+  -- 前が lir ではない場合、
   if not vim.w.lir_before_lir_buffer then
-    local alt_file = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:t')
-    if alt_file then
+    -- ジャンプ対象のファイルが指定されていれば、そのファイルの位置にカーソルを移動する
+    -- そうでなければ、代替ファイルの位置にカーソルを移動する
+    local file = vim.w.lir_file_jump_cursor or vim.fn.expand('#')
+    file = vim.fn.fnamemodify(file, ':p:t')
+    if file then
       local alt_dir = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:h')
       if string.gsub(dir, '/$', '') == alt_dir then
-        lnum = Buffer.indexof(alt_file)
+        lnum = Buffer.indexof(file)
       end
     end
+    -- 削除
+    vim.api.nvim_win_set_var(0, 'lir_file_jump_cursor', nil)
   end
 
   if lnum == nil or lnum == 1 then
@@ -129,10 +134,9 @@ lir.init = function ()
     return
   end
 
-  -- 代替バッファを保持
-  local alt_file_path = vim.fn.expand('#:p')
-  if alt_file_path ~= '' then
-    vim.w.alf_file = alt_file_path
+  local alt_f = vim.fn.expand('#:p')
+  if alt_f ~= '' then
+    vim.w.lir_file_quit_on_edit = alt_f
   end
 
   local dir = path
@@ -149,8 +153,6 @@ lir.init = function ()
   vim.bo.bufhidden = 'wipe'
   vim.bo.buflisted = false
   vim.bo.swapfile  = false
-
-  vim.cmd([[setlocal nowrap]])
 
   local files = readdir(path)
   table.sort(files, sort)
@@ -174,6 +176,7 @@ lir.init = function ()
     Utils.set_nocontent_text()
   end
 
+  vim.cmd([[setlocal nowrap]])
   vim.cmd([[setlocal cursorline]])
 
   vim.bo.filetype  = 'lir'
