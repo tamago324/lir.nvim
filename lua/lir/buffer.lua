@@ -32,4 +32,13 @@ function buffer.indexof(value)
 end
 
 
+
+function buffer.is_dir_current()
+  local file = vim.b.lir_files[vim.fn.line('.')]
+  if file then
+    return file.is_dir
+  end
+  return nil
+end
+
 return buffer

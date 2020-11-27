@@ -58,7 +58,7 @@ end
 
 
 actions.quit = function ()
-  vim.cmd('edit ' .. vim.w.alf_file)
+  vim.cmd('edit ' .. vim.w.lir_file_quit_on_edit)
 end
 
 
