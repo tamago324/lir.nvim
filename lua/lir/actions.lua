@@ -34,7 +34,7 @@ actions.vsplit = function ()
 end
 
 
-actions.tabopen = function ()
+actions.tabedit = function ()
   local filename = current_path()
   actions.quit()
   vim.cmd('tabe ' .. filename)
@@ -53,7 +53,7 @@ actions.up = function ()
   dir = vim.fn.fnamemodify(path, ':p:h:h')
   History.add(path, cur_file)
   History.add(dir, name)
-  vim.cmd('keepalt edit ' .. dir)
+  vim.cmd('edit ' .. dir)
 end
 
 

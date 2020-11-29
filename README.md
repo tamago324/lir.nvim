@@ -18,7 +18,7 @@ function! s:my_ft_lir() abort
     nnoremap <buffer> o     <cmd>lua require'lir.actions'.edit()<CR>
     nnoremap <buffer> <C-s> <cmd>lua require'lir.actions'.split()<CR>
     nnoremap <buffer> <C-v> <cmd>lua require'lir.actions'.vsplit()<CR>
-    nnoremap <buffer> <C-t> <cmd>lua require'lir.actions'.tabopen()<CR>
+    nnoremap <buffer> <C-t> <cmd>lua require'lir.actions'.tabedit()<CR>
 
     nnoremap <buffer> h     <cmd>lua require'lir.actions'.up()<CR>
     nnoremap <buffer> q     <cmd>lua require'lir.actions'.quit()<CR>
