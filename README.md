@@ -9,34 +9,35 @@ Plug 'tamago324/lir.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 ```
 
+If you want to use it with a floating window, you should also install [lir-float.nvim](https://github.com/tamago324/lir-float.nvim).
 
-## Exmaple
 
-```vim
-function! s:my_ft_lir() abort
-    nnoremap <buffer> l     <cmd>lua require'lir.actions'.edit()<CR>
-    nnoremap <buffer> o     <cmd>lua require'lir.actions'.edit()<CR>
-    nnoremap <buffer> <C-s> <cmd>lua require'lir.actions'.split()<CR>
-    nnoremap <buffer> <C-v> <cmd>lua require'lir.actions'.vsplit()<CR>
-    nnoremap <buffer> <C-t> <cmd>lua require'lir.actions'.tabedit()<CR>
+## Configuration
 
-    nnoremap <buffer> h     <cmd>lua require'lir.actions'.up()<CR>
-    nnoremap <buffer> q     <cmd>lua require'lir.actions'.quit()<CR>
-    nnoremap <buffer> <C-e> <cmd>lua require'lir.actions'.quit()<CR>
+```lua
+local actions = require'lir.actions'
 
-    nnoremap <buffer> K     <cmd>lua require'lir.actions'.mkdir()<CR>
-    nnoremap <buffer> N     <cmd>lua require'lir.actions'.newfile()<CR>
-    nnoremap <buffer> R     <cmd>lua require'lir.actions'.rename()<CR>
-    nnoremap <buffer> @     <cmd>lua require'lir.actions'.cd()<CR>
-    nnoremap <buffer> Y     <cmd>lua require'lir.actions'.yank_path()<CR>
-    nnoremap <buffer> .     <cmd>lua require'lir.actions'.toggle_show_hidden()<CR>
-endfunction
-augroup my-ft-lir
-    autocmd!
-    autocmd FileType lir call <SID>my_ft_lir()
-augroup END
+require'lir'.setup {
+  show_hidden_files = false,
+  devicons_enable = true,
+  mappings = {
+    ['l']     = actions.edit,
+    ['<C-s>'] = actions.split,
+    ['<C-v>'] = actions.vsplit,
+    ['<C-t>'] = actions.tabedit,
 
-lua << EOF
+    ['h']     = actions.up,
+    ['q']     = actions.quit,
+
+    ['K']     = actions.mkdir,
+    ['N']     = actions.newfile,
+    ['R']     = actions.rename,
+    ['@']     = actions.cd,
+    ['Y']     = actions.yank_path,
+    ['.']     = actions.toggle_show_hidden,
+  }
+}
+
 -- custom folder icon
 require'nvim-web-devicons'.setup({
   override = {
@@ -47,13 +48,13 @@ require'nvim-web-devicons'.setup({
     },
   }
 })
-EOF
 ```
 
 
 ## Credit
 
-* Thanks [vim-molder](https://github.com/mattn/vim-molder)
+* [mattn/vim-molder](https://github.com/mattn/vim-molder)
+* [norcalli/nvim_utils](https://github.com/norcalli/nvim_utils)
 
 
 ## License

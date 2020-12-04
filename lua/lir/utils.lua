@@ -9,8 +9,10 @@ function utils.error(msg)
 end
 
 
-function utils.set_nocontent_text()
-  vim.api.nvim_buf_set_virtual_text(0, -1, 0, { {' No content', "NonText"} }, {})
+function utils.set_nocontent_text(devicon_enable)
+  -- From vim-clap
+  local text = string.format(' %s Directory is empty', (devicon_enable and '' or ''))
+  vim.api.nvim_buf_set_virtual_text(0, -1, 0, { {text, "BlueSign"} }, {})
 end
 
 

@@ -1,16 +1,23 @@
-local lir = {}
+local devicons  = require'lir.devicons'
+local history   = require'lir.history'
+local utils     = require'lir.utils'
+local config    = require'lir.config'
+local mappings  = require'lir.mappings'
+local devicons  = require'lir.devicons'
+local highlight = require'lir.highlight'
+local Context   = require'lir.context'
+local lvim      = require'lir.vim'
 
-
-local Buffer = require'lir.buffer'
-local Devicons = require'lir.devicons'
-local History = require'lir.history'
-local Utils = require'lir.utils'
 local vim = vim
+local uv  = vim.loop
+local api = vim.api
 
-local uv = vim.loop
 
-
-local readdir = function(path)
+-----------------------------
+-- Private
+-----------------------------
+--- readdir
+local function readdir(path)
   local files = {}
   local handle = uv.fs_scandir(path)
   if handle == nil then
@@ -27,43 +34,48 @@ local readdir = function(path)
       is_dir = true
     end
 
-    local icon, highlight_name = Devicons.get_devicons(name, is_dir)
-    icon = (icon and icon ~= '' and icon .. ' ' or '')
-
-    table.insert(files, {
+    local file = {
       value = name,
-      display = ' ' .. icon .. name .. (is_dir and '/' or ''),
-      devicons = {
-        icon = icon,
-        highlight_name = highlight_name,
-      },
+      type = typ,
       is_dir = is_dir,
-    })
+      display = nil,
+      devicons = nil,
+    }
+
+    if config.values.devicons_enable then
+      local icon, highlight_name = devicons.get_devicons(name, is_dir)
+      file.display = string.format(' %s %s%s', icon, name, (is_dir and '/' or ''))
+      file.devicons = {
+        icon = icon,
+        highlight_name = highlight_name
+      }
+    else
+      file.display = ' ' .. name .. (is_dir and '/' or '')
+    end
+
+    table.insert(files, file)
   end
   return files
 end
 
 
-local sort = function(lhs, rhs)
+--- sort
+local function sort(lhs, rhs)
   local l_val, r_val = lhs.value, rhs.value
   if lhs.is_dir and not rhs.is_dir then
-    -- lhs がディレクトリなら そのまま
     return true
   elseif not lhs.is_dir and rhs.is_dir then
-    -- rhs がディレクトリなら入れ替える
     return false
   end
-
-  -- 単純に比較
   return lhs.value < rhs.value
 end
 
 
+--- upper
 --[[
-  https://luarocks.org/modules/steved/microlight
-  https://github.com/EvandroLG/array.lua
+  Return values like slice
+    From https://luarocks.org/modules/steved/microlight, https://github.com/EvandroLG/array.lua
 ]]
--- slice っぽいのを返す
 local function upper(t, i2)
   if not i2 or i2 > #t then
     return #t
@@ -76,7 +88,7 @@ local function upper(t, i2)
 end
 
 
---- sub
+--- tbl_sub
 local function tbl_sub(t, i1, i2)
   i2 = upper(t, i2)
   local res = {}
@@ -88,13 +100,12 @@ local function tbl_sub(t, i1, i2)
 end
 
 
---[[
-  カーソルを良い感じに調整しつつ、行をセットする
-]]
+--- setlines
+-- Set the lines while adjusting the cursor to feel good
 local function setlines(dir, lines)
   local lnum = 1
-  if History.exists(dir) then
-    lnum = Buffer.indexof(History.get(dir))
+  if history.exists(dir) then
+    lnum = lvim.b.context:indexof(history.get(dir))
   end
 
   -- 前が lir ではない場合、
@@ -106,15 +117,15 @@ local function setlines(dir, lines)
     if file then
       local alt_dir = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:h')
       if string.gsub(dir, '/$', '') == alt_dir then
-        lnum = Buffer.indexof(file)
+        lnum = lvim.b.context:indexof(file)
       end
     end
-    -- 削除
     vim.api.nvim_win_set_var(0, 'lir_file_jump_cursor', nil)
   end
 
   if lnum == nil or lnum == 1 then
     vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
+    -- move cursor
     vim.schedule(function()
       vim.cmd('normal! 0')
     end)
@@ -122,14 +133,56 @@ local function setlines(dir, lines)
   end
 
   local before, after = tbl_sub(lines, 1, lnum - 1), tbl_sub(lines, lnum)
-  -- カーソルの上の行にペーストし、カーソルを下にもってく
   vim.api.nvim_put(before, 'l', false, true)
-  -- 置き換える
   vim.api.nvim_buf_set_lines(0, lnum-1, -1, true, after)
 end
 
 
-lir.init = function ()
+--- create_augroups
+-- Source: https://teukka.tech/luanvim.html
+local function create_augroups(definitions)
+  for group_name, definition in ipairs(definitions) do
+    vim.cmd('augroup ' .. group_name)
+    vim.cmd('autocmd!')
+    for _, def in ipairs(definition) do
+      local command = table.concat(vim.tbl_flatten {'autocmd', def}, ' ')
+      vim.cmd(command)
+    end
+    vim.cmd('augroup END')
+  end
+end
+
+
+--- setup_autocommands
+local function setup_autocommands()
+  function _G.__shupup_netrw()
+    if vim.fn.exists('#FileExplorer') == 1 then
+      vim.cmd('autocmd! FileExplorer *')
+    end
+    if vim.fn.exists('#NERDTreeHijackNetrw') == 1 then
+      vim.cmd('autocmd! NERDTreeHijackNetrw *')
+    end
+  end
+
+  local autocommands = {
+    {'VimEnter', '*', [[lua __shupup_netrw()]]},
+    {'BufEnter', '*', [[lua require'lir'.init()]]},
+    {'FileType', 'lir', 'let w:lir_before_lir_buffer = v:true'},
+    {'BufLeave', '*', [[let w:lir_before_lir_buffer = &filetype !=# 'lir']]},
+  }
+
+  nvim_create_augroups({['lir-nvim'] = autocommands})
+end
+
+
+-----------------------------
+-- Export
+-----------------------------
+local lir = {}
+
+
+--- lir.init()
+function lir.init()
   local path = vim.fn.resolve(vim.fn.expand('%:p'))
 
   local stat = uv.fs_stat(path)
@@ -147,7 +200,8 @@ lir.init = function ()
     dir = path .. '/'
   end
 
-  vim.b.lir_dir = dir
+  local context = Context.new(dir)
+  lvim.b.context = context
 
   -- nvim_buf_set_lines() するため
   vim.bo.modifiable = true
@@ -159,31 +213,53 @@ lir.init = function ()
 
   local files = readdir(path)
   table.sort(files, sort)
-  if not vim.b.lir_show_hidden then
+  if not config.values.show_hidden_files then
     files = vim.tbl_filter(function (val)
       return string.match(val.value, '^[^.]') ~= nil
     end, files)
   end
 
-  vim.b.lir_files = files
+  context.files = files
   setlines(dir, vim.tbl_map(function(item)
     return item.display
   end, files))
 
-  vim.bo.modified = false
-  vim.bo.modifiable = false
-
-  Devicons.update_highlights(files)
+  highlight.update_highlight(files)
 
   if #files == 0 then
-    Utils.set_nocontent_text()
+    utils.set_nocontent_text(config.values.devicons_enable)
   end
 
   vim.cmd([[setlocal nowrap]])
   vim.cmd([[setlocal cursorline]])
 
+  mappings.apply_mappings(config.values.mappings)
+
+  vim.bo.modified = false
+  vim.bo.modifiable = false
   vim.bo.filetype  = 'lir'
 end
 
 
-return lir
+--- lir.setup()
+function lir.setup(prefs)
+  -- Set preferences
+  config.set_default_values(prefs)
+
+  -- devicons
+  if config.values.devicons_enable then
+    devicons.setup()
+  end
+
+  -- Autocmd
+  setup_autocommands()
+
+  -- TODO: Define command
+end
+
+
+
+return {
+  init = lir.init,
+  setup = lir.setup,
+}

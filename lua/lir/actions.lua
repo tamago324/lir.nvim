@@ -1,80 +1,99 @@
-local actions = {}
-local Buffer = require 'lir.buffer'
-local History = require 'lir.history'
-local Utils = require 'lir.utils'
+local history = require 'lir.history'
+local utils   = require 'lir.utils'
+local Context = require 'lir.context'
+local config  = require 'lir.config'
+local lvim = require'lir.vim'
+
+
 local vim = vim
 local uv = vim.loop
 
 
-local fnameescape = vim.fn.fnameescape
 
-local current_path = function ()
-  return fnameescape(Buffer.curdir() .. Buffer.current())
-end
-
-actions.edit = function ()
-  local dir, file = Buffer.curdir(), Buffer.current()
-  -- 代替フ ァイルを変更しないで開く (<C-^)
-  vim.cmd('keepalt edit ' .. current_path())
-  History.add(dir, file)
-end
-
-
-actions.split = function ()
-  local filename = current_path()
+-----------------------------
+-- Private
+-----------------------------
+local function open(cmd)
+  if not lvim.b.context:current() then
+    return
+  end
+  local filename = vim.fn.fnameescape(lvim.b.context.dir .. lvim.b.context:current())
   actions.quit()
-  vim.cmd('new ' .. filename)
+  vim.cmd(cmd .. ' ' .. filename)
+end
+
+-----------------------------
+-- Export
+-----------------------------
+local actions = {}
+
+
+--- edit
+function actions.edit()
+  local dir, file = lvim.b.context.dir, lvim.b.context:current()
+  if not file then
+    return
+  end
+  vim.cmd('keepalt edit ' .. vim.fn.fnameescape(dir .. file))
+  history.add(dir, file)
 end
 
 
-actions.vsplit = function ()
-  local filename = current_path()
-  actions.quit()
-  vim.cmd('vnew ' .. filename)
+--- split
+function actions.split()
+  open('new')
 end
 
 
-actions.tabedit = function ()
-  local filename = current_path()
-  actions.quit()
-  vim.cmd('tabe ' .. filename)
+--- vsplit
+function actions.vsplit()
+  open('vnew')
 end
 
 
-actions.up = function ()
+--- tabedit
+function actions.tabedit()
+  open('tabedit')
+end
+
+
+--- up
+function actions.up()
   local cur_file, path, name, dir
 
-  cur_file = Buffer.current()
-  path = string.gsub(vim.b.lir_dir, '/$', '')
+  cur_file = lvim.b.context:current()
+  path = string.gsub(lvim.b.context.dir, '/$', '')
   name = vim.fn.fnamemodify(path, ':t')
   if name == '' then
     return
   end
   dir = vim.fn.fnamemodify(path, ':p:h:h')
-  History.add(path, cur_file)
-  History.add(dir, name)
+  history.add(path, cur_file)
+  history.add(dir, name)
   vim.cmd('edit ' .. dir)
 end
 
 
-actions.quit = function ()
+--- quit
+function actions.quit()
   vim.cmd('edit ' .. vim.w.lir_file_quit_on_edit)
 end
 
 
-actions.mkdir = function ()
+--- mkdir
+function actions.mkdir()
   local name = vim.fn.input('Create directory: ')
   if name == '' then
     return
   end
 
   if name == '.' or name == '..' or string.match(name, '[/\\]') then
-    Utils.error('Invalid directory name: ' .. name)
+    utils.error('Invalid directory name: ' .. name)
     return
   end
 
-  if vim.fn.mkdir(Buffer.curdir() .. name) == 0 then
-    Utils.error('Create directory failed')
+  if vim.fn.mkdir(lvim.b.context.dir .. name) == 0 then
+    utils.error('Create directory failed')
     return
   end
 
@@ -83,42 +102,44 @@ actions.mkdir = function ()
 end
 
 
-actions.rename = function ()
-  local old = string.gsub(Buffer.current(), '/$', '')
+--- rename
+function actions.rename()
+  local old = string.gsub(lvim.b.context:current(), '/$', '')
   local new = vim.fn.input('Rename: ', old)
   if new == '' or new == old then
     return
   end
 
   if new == '.' or new == '..' or string.match(new, '[/\\]') then
-    Utils.error('Invalid name: ' .. new)
+    utils.error('Invalid name: ' .. new)
     return
   end
 
-  if not uv.fs_rename(Buffer.curdir() .. old, Buffer.curdir() .. new) then
-    Utils.error('Rename failed')
+  if not uv.fs_rename(lvim.b.context.dir .. old, lvim.b.context.dir .. new) then
+    utils.error('Rename failed')
   end
 
   actions.reload()
 end
 
 
-actions.delete = function ()
-  local name = Buffer.current()
+--- delete
+function actions.delete()
+  local name = lvim.b.context:current()
 
   if vim.fn.confirm('Delete?: ' .. name, '&Yes\n&No\n&Force', 2) == 2 then
     return
   end
 
-  local path = Buffer.curdir() .. name
+  local path = lvim.b.context.dir .. name
   if vim.fn.isdirectory(path) == 1 then
     if not uv.fs_rmdir(path) then
-      Utils.error('Delete directory failed')
+      utils.error('Delete directory failed')
       return
     end
   else
     if not uv.fs_unlink(path) then
-      Utils.error('Delete file failed')
+      utils.error('Delete file failed')
       return
     end
   end
@@ -127,31 +148,36 @@ actions.delete = function ()
 end
 
 
-actions.newfile = function()
-  vim.api.nvim_feedkeys(':edit ' .. Buffer.curdir(), 'n', true)
+--- newfile
+function actions.newfile()
+  vim.api.nvim_feedkeys(':edit ' .. lvim.b.context.dir, 'n', true)
 end
 
 
-actions.cd = function ()
-  vim.cmd(string.format([[silent execute (haslocaldir() ? 'lcd' : 'cd') '%s']], Buffer.curdir()))
-  print('cd: ' .. Buffer.curdir())
+--- cd
+function actions.cd()
+  vim.cmd(string.format([[silent execute (haslocaldir() ? 'lcd' : 'cd') '%s']], lvim.b.context.dir))
+  print('cd: ' .. lvim.b.context.dir)
 end
 
 
-actions.reload = function ()
+--- reload
+function actions.reload()
   vim.cmd([[edit]])
 end
 
 
-actions.yank_path = function ()
-  local path = Buffer.curdir() .. Buffer.current()
+--- yank_path
+function actions.yank_path()
+  local path = lvim.b.context.dir .. lvim.b.context:current()
   vim.fn.setreg(vim.v.register, path)
   print('Yank path: ' .. path)
 end
 
 
-actions.toggle_show_hidden = function ()
-  vim.b.lir_show_hidden = not (vim.b.lir_show_hidden or false)
+--- toggle_show_hidden
+function actions.toggle_show_hidden()
+  config.values.show_hidden_files = not (config.values.show_hidden_files)
   actions.reload()
 end
 
