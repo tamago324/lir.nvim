@@ -115,6 +115,9 @@ local function setlines(dir, lines)
 
   if lnum == nil or lnum == 1 then
     vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
+    vim.schedule(function()
+      vim.cmd('normal! 0')
+    end)
     return
   end
 
