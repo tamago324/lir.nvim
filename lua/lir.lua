@@ -1,17 +1,16 @@
-local devicons  = require'lir.devicons'
-local history   = require'lir.history'
-local utils     = require'lir.utils'
-local config    = require'lir.config'
-local mappings  = require'lir.mappings'
-local devicons  = require'lir.devicons'
-local highlight = require'lir.highlight'
-local Context   = require'lir.context'
-local lvim      = require'lir.vim'
+local devicons = require 'lir.devicons'
+local history = require 'lir.history'
+local utils = require 'lir.utils'
+local config = require 'lir.config'
+local mappings = require 'lir.mappings'
+local devicons = require 'lir.devicons'
+local highlight = require 'lir.highlight'
+local Context = require 'lir.context'
+local lvim = require 'lir.vim'
 
 local vim = vim
-local uv  = vim.loop
+local uv = vim.loop
 local api = vim.api
-
 
 -----------------------------
 -- Private
@@ -44,11 +43,9 @@ local function readdir(path)
 
     if config.values.devicons_enable then
       local icon, highlight_name = devicons.get_devicons(name, is_dir)
-      file.display = string.format(' %s %s%s', icon, name, (is_dir and '/' or ''))
-      file.devicons = {
-        icon = icon,
-        highlight_name = highlight_name
-      }
+      file.display = string.format(' %s %s%s', icon, name,
+                                   (is_dir and '/' or ''))
+      file.devicons = {icon = icon, highlight_name = highlight_name}
     else
       file.display = ' ' .. name .. (is_dir and '/' or '')
     end
@@ -57,7 +54,6 @@ local function readdir(path)
   end
   return files
 end
-
 
 --- sort
 local function sort(lhs, rhs)
@@ -69,7 +65,6 @@ local function sort(lhs, rhs)
   end
   return lhs.value < rhs.value
 end
-
 
 --- upper
 --[[
@@ -87,7 +82,6 @@ local function upper(t, i2)
   end
 end
 
-
 --- tbl_sub
 local function tbl_sub(t, i1, i2)
   i2 = upper(t, i2)
@@ -98,7 +92,6 @@ local function tbl_sub(t, i1, i2)
   end
   return res
 end
-
 
 --- setlines
 -- Set the lines while adjusting the cursor to feel good
@@ -134,9 +127,8 @@ local function setlines(dir, lines)
 
   local before, after = tbl_sub(lines, 1, lnum - 1), tbl_sub(lines, lnum)
   vim.api.nvim_put(before, 'l', false, true)
-  vim.api.nvim_buf_set_lines(0, lnum-1, -1, true, after)
+  vim.api.nvim_buf_set_lines(0, lnum - 1, -1, true, after)
 end
-
 
 --- create_augroups
 -- Source: https://teukka.tech/luanvim.html
@@ -151,7 +143,6 @@ local function create_augroups(definitions)
     vim.cmd('augroup END')
   end
 end
-
 
 --- setup_autocommands
 local function setup_autocommands()
@@ -174,12 +165,10 @@ local function setup_autocommands()
   nvim_create_augroups({['lir-nvim'] = autocommands})
 end
 
-
 -----------------------------
 -- Export
 -----------------------------
 local lir = {}
-
 
 --- lir.init()
 function lir.init()
@@ -206,15 +195,15 @@ function lir.init()
   -- nvim_buf_set_lines() するため
   vim.bo.modifiable = true
 
-  vim.bo.buftype   = 'nofile'
+  vim.bo.buftype = 'nofile'
   vim.bo.bufhidden = 'wipe'
   vim.bo.buflisted = false
-  vim.bo.swapfile  = false
+  vim.bo.swapfile = false
 
   local files = readdir(path)
   table.sort(files, sort)
   if not config.values.show_hidden_files then
-    files = vim.tbl_filter(function (val)
+    files = vim.tbl_filter(function(val)
       return string.match(val.value, '^[^.]') ~= nil
     end, files)
   end
@@ -237,9 +226,8 @@ function lir.init()
 
   vim.bo.modified = false
   vim.bo.modifiable = false
-  vim.bo.filetype  = 'lir'
+  vim.bo.filetype = 'lir'
 end
-
 
 --- lir.setup()
 function lir.setup(prefs)
@@ -257,9 +245,4 @@ function lir.setup(prefs)
   -- TODO: Define command
 end
 
-
-
-return {
-  init = lir.init,
-  setup = lir.setup,
-}
+return {init = lir.init, setup = lir.setup}

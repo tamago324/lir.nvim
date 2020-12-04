@@ -3,10 +3,9 @@
 -----------------------------
 local Context = {}
 
-
 --- Context.new
 function Context.new(dir)
-  local self = setmetatable({}, { __index = Context })
+  local self = setmetatable({}, {__index = Context})
   self.dir = dir
   self.files = nil
   return self
@@ -20,7 +19,6 @@ function Context:current()
   end
   return nil
 end
-
 
 --- Context:indexof
 -- from microlight
@@ -41,6 +39,5 @@ function Context:is_dir_current()
   end
   return nil
 end
-
 
 return Context

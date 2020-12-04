@@ -10,7 +10,6 @@ local function get_or_empty(key)
   return lir_vim[key]
 end
 
-
 -----------------------------
 -- Export
 -----------------------------
@@ -25,9 +24,8 @@ Vim.b = setmetatable({}, {
       return get_or_empty(vim.fn.bufnr())[key]
     end
 
-  end
+  end,
 })
 -- Vim.w = {}
-
 
 return Vim

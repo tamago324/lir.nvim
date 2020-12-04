@@ -1,14 +1,11 @@
 local history = require 'lir.history'
-local utils   = require 'lir.utils'
+local utils = require 'lir.utils'
 local Context = require 'lir.context'
-local config  = require 'lir.config'
-local lvim = require'lir.vim'
-
+local config = require 'lir.config'
+local lvim = require 'lir.vim'
 
 local vim = vim
 local uv = vim.loop
-
-
 
 -----------------------------
 -- Private
@@ -17,7 +14,8 @@ local function open(cmd)
   if not lvim.b.context:current() then
     return
   end
-  local filename = vim.fn.fnameescape(lvim.b.context.dir .. lvim.b.context:current())
+  local filename = vim.fn.fnameescape(lvim.b.context.dir ..
+                                          lvim.b.context:current())
   actions.quit()
   vim.cmd(cmd .. ' ' .. filename)
 end
@@ -26,7 +24,6 @@ end
 -- Export
 -----------------------------
 local actions = {}
-
 
 --- edit
 function actions.edit()
@@ -38,24 +35,20 @@ function actions.edit()
   history.add(dir, file)
 end
 
-
 --- split
 function actions.split()
   open('new')
 end
-
 
 --- vsplit
 function actions.vsplit()
   open('vnew')
 end
 
-
 --- tabedit
 function actions.tabedit()
   open('tabedit')
 end
-
 
 --- up
 function actions.up()
@@ -73,12 +66,10 @@ function actions.up()
   vim.cmd('edit ' .. dir)
 end
 
-
 --- quit
 function actions.quit()
   vim.cmd('edit ' .. vim.w.lir_file_quit_on_edit)
 end
-
 
 --- mkdir
 function actions.mkdir()
@@ -101,7 +92,6 @@ function actions.mkdir()
   vim.fn.search(string.format([[\v^%s]], name .. '/'), 'c')
 end
 
-
 --- rename
 function actions.rename()
   local old = string.gsub(lvim.b.context:current(), '/$', '')
@@ -121,7 +111,6 @@ function actions.rename()
 
   actions.reload()
 end
-
 
 --- delete
 function actions.delete()
@@ -147,25 +136,22 @@ function actions.delete()
   actions.reload()
 end
 
-
 --- newfile
 function actions.newfile()
   vim.api.nvim_feedkeys(':edit ' .. lvim.b.context.dir, 'n', true)
 end
 
-
 --- cd
 function actions.cd()
-  vim.cmd(string.format([[silent execute (haslocaldir() ? 'lcd' : 'cd') '%s']], lvim.b.context.dir))
+  vim.cmd(string.format([[silent execute (haslocaldir() ? 'lcd' : 'cd') '%s']],
+                        lvim.b.context.dir))
   print('cd: ' .. lvim.b.context.dir)
 end
-
 
 --- reload
 function actions.reload()
   vim.cmd([[edit]])
 end
-
 
 --- yank_path
 function actions.yank_path()
@@ -174,12 +160,10 @@ function actions.yank_path()
   print('Yank path: ' .. path)
 end
 
-
 --- toggle_show_hidden
 function actions.toggle_show_hidden()
   config.values.show_hidden_files = not (config.values.show_hidden_files)
   actions.reload()
 end
-
 
 return actions
