@@ -51,6 +51,19 @@ require'nvim-web-devicons'.setup({
 ```
 
 
+## Usage
+
+```sh
+$ nvim /path/to/directory/
+```
+
+or
+
+```vim
+:edit .
+```
+
+
 ## Credit
 
 * [mattn/vim-molder](https://github.com/mattn/vim-molder)
