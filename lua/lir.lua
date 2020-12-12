@@ -133,14 +133,14 @@ end
 --- create_augroups
 -- Source: https://teukka.tech/luanvim.html
 local function create_augroups(definitions)
-  for group_name, definition in ipairs(definitions) do
-    vim.cmd('augroup ' .. group_name)
-    vim.cmd('autocmd!')
+  for group_name, definition in pairs(definitions) do
+    api.nvim_command('augroup ' .. group_name)
+    api.nvim_command('autocmd!')
     for _, def in ipairs(definition) do
       local command = table.concat(vim.tbl_flatten {'autocmd', def}, ' ')
-      vim.cmd(command)
+      api.nvim_command(command)
     end
-    vim.cmd('augroup END')
+    api.nvim_command('augroup END')
   end
 end
 
@@ -162,7 +162,7 @@ local function setup_autocommands()
     {'BufLeave', '*', [[let w:lir_before_lir_buffer = &filetype !=# 'lir']]},
   }
 
-  nvim_create_augroups({['lir-nvim'] = autocommands})
+  create_augroups({['lir-nvim'] = autocommands})
 end
 
 -----------------------------
