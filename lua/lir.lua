@@ -29,13 +29,13 @@ local function readdir(path)
     if name == nil then
       break
     end
-    local is_dir = Path:new(path):joinpath(name):is_dir()
+    local p = Path:new(path):joinpath(name)
+    local is_dir = p:is_dir()
     local file = {
       value = name,
       is_dir = is_dir,
       display = nil,
       devicons = nil,
-      link_to = nil,
     }
 
     if config.values.devicons_enable then
@@ -162,6 +162,22 @@ local function setup_autocommands()
   create_augroups({['lir-nvim'] = autocommands})
 end
 
+
+-- is_symlink
+local function is_symlink(path)
+  return uv.fs_lstat(path).type == 'link'
+end
+
+--- set_virtual_text_symlink
+local function set_virtual_text_symlink(dir, files)
+  for i, file in ipairs(files) do
+    if is_symlink(dir .. file.value) then
+      local text = '-> ' .. uv.fs_readlink(dir .. file.value)
+      vim.api.nvim_buf_set_virtual_text(0, -1, i - 1, {{text, "PreProc"}}, {})
+    end
+  end
+end
+
 -----------------------------
 -- Export
 -----------------------------
@@ -214,6 +230,7 @@ function lir.init()
   if #files == 0 then
     utils.set_nocontent_text(config.values.devicons_enable)
   end
+  set_virtual_text_symlink(dir, files)
 
   vim.cmd([[setlocal nowrap]])
   vim.cmd([[setlocal cursorline]])
