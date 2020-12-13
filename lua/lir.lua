@@ -7,6 +7,7 @@ local devicons = require 'lir.devicons'
 local highlight = require 'lir.highlight'
 local Context = require 'lir.context'
 local lvim = require 'lir.vim'
+local Path = require 'plenary.path'
 
 local vim = vim
 local uv = vim.loop
@@ -28,17 +29,13 @@ local function readdir(path)
     if name == nil then
       break
     end
-    local is_dir = false
-    if typ == 'directory' or typ == 'link' or typ == 'linked' then
-      is_dir = true
-    end
-
+    local is_dir = Path:new(path):joinpath(name):is_dir()
     local file = {
       value = name,
-      type = typ,
       is_dir = is_dir,
       display = nil,
       devicons = nil,
+      link_to = nil,
     }
 
     if config.values.devicons_enable then
@@ -174,8 +171,7 @@ local lir = {}
 function lir.init()
   local path = vim.fn.resolve(vim.fn.expand('%:p'))
 
-  local stat = uv.fs_stat(path)
-  if path == '' or not stat or stat.type ~= 'directory' then
+  if path == '' or not Path:new(path):is_dir(path) then
     return
   end
 

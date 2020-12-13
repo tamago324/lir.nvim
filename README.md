@@ -5,6 +5,8 @@
 
 ```vim
 Plug 'tamago324/lir.nvim'
+Plug 'nvim-lua/plenary.nvim'
+
 " Optional
 Plug 'kyazdani42/nvim-web-devicons'
 ```
