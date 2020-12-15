@@ -205,20 +205,20 @@ function lir.init()
   lvim.b.context = context
 
   -- nvim_buf_set_lines() するため
-  vim.bo.modifiable = true
+  api.nvim_buf_set_option(0, 'modifiable', true)
 
-  vim.bo.buftype = 'nofile'
-  vim.bo.bufhidden = 'wipe'
-  vim.bo.buflisted = false
-  vim.bo.swapfile = false
+  api.nvim_buf_set_option(0, 'buftype', 'nofile')
+  api.nvim_buf_set_option(0, 'bufhidden', 'wipe')
+  api.nvim_buf_set_option(0, 'buflisted', false)
+  api.nvim_buf_set_option(0, 'swapfile', false)
 
   local files = readdir(path)
-  table.sort(files, sort)
   if not config.values.show_hidden_files then
     files = vim.tbl_filter(function(val)
       return string.match(val.value, '^[^.]') ~= nil
     end, files)
   end
+  table.sort(files, sort)
 
   context.files = files
   setlines(dir, vim.tbl_map(function(item)
@@ -237,9 +237,9 @@ function lir.init()
 
   mappings.apply_mappings(config.values.mappings)
 
-  vim.bo.modified = false
-  vim.bo.modifiable = false
-  vim.bo.filetype = 'lir'
+  api.nvim_buf_set_option(0, 'modified', false)
+  api.nvim_buf_set_option(0, 'modifiable', false)
+  api.nvim_buf_set_option(0, 'filetype', 'lir')
 end
 
 --- lir.setup()
