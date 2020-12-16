@@ -7,6 +7,8 @@ local lvim = require 'lir.vim'
 local vim = vim
 local uv = vim.loop
 
+local actions = {}
+
 -----------------------------
 -- Private
 -----------------------------
@@ -23,7 +25,6 @@ end
 -----------------------------
 -- Export
 -----------------------------
-local actions = {}
 
 --- edit
 function actions.edit()
@@ -31,6 +32,12 @@ function actions.edit()
   if not file then
     return
   end
+
+  if vim.w.lir_is_float and not lvim.b.context:is_dir_current() then
+    -- 閉じてから開く
+    actions.quit()
+  end
+
   vim.cmd('keepalt edit ' .. vim.fn.fnameescape(dir .. file))
   history.add(dir, file)
 end
@@ -68,7 +75,11 @@ end
 
 --- quit
 function actions.quit()
-  vim.cmd('edit ' .. vim.w.lir_file_quit_on_edit)
+  if vim.w.lir_is_float then
+    vim.api.nvim_win_close(0, true)
+  else
+    vim.cmd('edit ' .. vim.w.lir_file_quit_on_edit)
+  end
 end
 
 --- mkdir
@@ -138,7 +149,11 @@ end
 
 --- newfile
 function actions.newfile()
-  vim.api.nvim_feedkeys(':edit ' .. lvim.b.context.dir, 'n', true)
+  if vim.w.lir_is_float then
+    vim.api.nvim_feedkeys(':close | :edit ' .. lvim.b.context.dir, 'n', true)
+  else
+    vim.api.nvim_feedkeys(':edit ' .. lvim.b.context.dir, 'n', true)
+  end
 end
 
 --- cd

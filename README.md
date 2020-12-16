@@ -11,8 +11,6 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 ```
 
-If you want to use it with a floating window, you should also install [lir-float.nvim](https://github.com/tamago324/lir-float.nvim).
-
 
 ## Configuration
 
@@ -37,6 +35,10 @@ require'lir'.setup {
     ['@']     = actions.cd,
     ['Y']     = actions.yank_path,
     ['.']     = actions.toggle_show_hidden,
+  },
+  float = {
+    size_percentage = 0.5,
+    winblend = 15,
   }
 }
 
@@ -65,6 +67,12 @@ or
 :edit .
 ```
 
+### Use floating window
+
+```
+:lua require'lir.float'.toggle()
+:lua require'lir.float'.init()
+```
 
 ## Credit
 
