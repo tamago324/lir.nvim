@@ -5,6 +5,10 @@ local defaults_values = {
   show_hidden_files = false,
   devicons_enable = false,
   mappings = {},
+  float = {
+    size_percentage = 0.5,
+    winblend = 15,
+  }
 }
 
 function config.set_default_values(opts)
