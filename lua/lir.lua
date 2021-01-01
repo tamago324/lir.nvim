@@ -95,7 +95,7 @@ end
 local function setlines(dir, lines)
   local lnum = 1
   if history.exists(dir) then
-    lnum = lvim.b.context:indexof(history.get(dir))
+    lnum = lvim.get_context():indexof(history.get(dir))
   end
 
   -- 前が lir ではない場合、
@@ -107,7 +107,7 @@ local function setlines(dir, lines)
     if file then
       local alt_dir = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:h')
       if string.gsub(dir, '/$', '') == alt_dir then
-        lnum = lvim.b.context:indexof(file)
+        lnum = lvim.get_context():indexof(file)
       end
     end
     vim.api.nvim_win_set_var(0, 'lir_file_jump_cursor', nil)
@@ -202,7 +202,7 @@ function lir.init()
   end
 
   local context = Context.new(dir)
-  lvim.b.context = context
+  lvim.set_context(context)
 
   -- nvim_buf_set_lines() するため
   api.nvim_buf_set_option(0, 'modifiable', true)

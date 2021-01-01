@@ -3,29 +3,45 @@
 -----------------------------
 local lir_vim = {}
 
-local function get_or_empty(key)
-  if not lir_vim[key] then
-    lir_vim[key] = {}
+local function get_or_empty(bufnr)
+  if not lir_vim[bufnr] then
+    lir_vim[bufnr] = {}
   end
-  return lir_vim[key]
+  return lir_vim[bufnr]
 end
 
 -----------------------------
 -- Export
 -----------------------------
 local Vim = {}
-Vim.b = setmetatable({}, {
+Vim = setmetatable({}, {
   __index = function(t, key)
+    local bufnr
     if type(key) == 'number' then
-      -- lvim.b[12]
-      return get_or_empty(key)
+      -- lvim[12]
+      bufnr = key
+      return get_or_empty(bufnr)
     else
-      -- lvim.b.context
-      return get_or_empty(vim.fn.bufnr())[key]
+      -- lvim.dir
+      bufnr = vim.fn.bufnr()
+      return get_or_empty(bufnr)[key]
     end
 
   end,
 })
--- Vim.w = {}
+
+function Vim.get_context(bufnr)
+  local bufnr = bufnr or vim.fn.bufnr()
+  return get_or_empty(bufnr).context
+end
+
+function Vim.set_context(context, bufnr)
+  local bufnr = bufnr or vim.fn.bufnr()
+  get_or_empty(bufnr).context = context
+end
+
+function Vim.print()
+  pprint(lir_vim)
+end
 
 return Vim

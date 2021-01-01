@@ -33,8 +33,8 @@ end
 function float.init(dir_path)
   local dir, file
   if vim.bo.filetype == 'lir' then
-    dir = lvim.b.context.dir
-    file = lvim.b.context:current()
+    dir = lvim.get_context().dir
+    file = lvim.get_context():current()
   else
     dir = dir_path or vim.fn.expand('%:p:h')
     file = vim.fn.expand('%:p')
