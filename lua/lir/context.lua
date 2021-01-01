@@ -15,6 +15,15 @@ end
 function Context:current()
   local file = self.files[vim.fn.line('.')]
   if file then
+    return file
+  end
+  return nil
+end
+
+--- Context:current_value
+function Context:current_value()
+  local file = self.files[vim.fn.line('.')]
+  if file then
     return file.value
   end
   return nil

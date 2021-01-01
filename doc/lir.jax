@@ -1,0 +1,206 @@
+*lir.nvim*
+
+
+==============================================================================
+INTRODUCTION                                               *lir-instroduction*
+
+simple file explorer
+
+
+==============================================================================
+REQUIREMENTS                                                *lir-requirements*
+
+- Neovim Nightly (0.5)
+
+
+==============================================================================
+INTERFACE                                                      *lir-interface*
+
+------------------------------------------------------------------------------
+FUNCTIONS                                                      *lir-functions*
+
+lir.setup([{opts}])                                              *lir.setup()*
+   lir のセットアップをする
+   |lir-settings| を見てください
+
+lir.get_context([{bufnr}])                                 *lir.get_context()*
+    |lir-context| を返す
+
+lir.float.init([{dir}])                                     *lir.float.init()*
+    defualt: `vim.fn.expand('%:p:h')`
+
+lir.float.toggle([{dir}])                                 *lir.float.toggle()*
+    表示/非表示を切り替える
+
+    defualt: `vim.fn.expand('%:p:h')`
+
+
+==============================================================================
+CONTEXT                                                          *lir-context*
+
+|lir.get_context()| で取得できる情報。
+
+
+context.dir                                                  *lir-context.dir*
+    ディレクトリ
+
+context.files                                              *lir-context.files*
+    |lir-file-item| のリスト
+
+context:current()                                      *lir-context:current()*
+    カーソル下の |lir-file-item| を返す
+
+context:current_value()                          *lir-context:current_value()*
+    カーソル下の |lir-file-item| の `value` を返す
+
+context:indexof(value)                                 *lir-context:indexof()*
+    context.files の中で、どこ行にあるか
+    files[n].value (|lir-file-item|.value) と value を比較する
+
+context:is_dir_current()                        *lir-context:is_dir_current()*
+    カーソル下の |lir-file-item| がディレクトリかどうか
+
+
+------------------------------------------------------------------------------
+LIR-FILE-ITEM                                                  *lir-file-item*
+
+ファイルに関連する情報が入っているテーブル
+このテーブルは |context:current()| や |context.files| で取得できます。
+
+
+------------------------------------------------------------------------------
+LIR-FILE-ITEM-ATTRIBUTES                            *lir-file-item-attributes*
+
+value                                          *lir-file-item-attribute-value*
+    ファイル名、ディレクトリ名
+
+is_dir                                        *lir-file-item-attribute-is_dir*
+    ディレクトリかどうか
+
+display                                      *lir-file-item-attribute-display*
+    行に表示する値
+
+devicons                                    *lir-file-item-attribute-devicons*
+    devicons のテーブル
+    もし、devdocs が無効なら nil
+
+devicons.icon                          *lir-file-item-attribute-devicons-icon*
+    アイコン
+
+devicons.highlight_name      *lir-file-item-attribute-devicons-highlight_name*
+    ハイライトの名前
+    |nvim_buf_add_highlight()| に渡される値
+
+
+==============================================================================
+SETTINGS                                                        *lir-settings*
+
+|lir.setup()| で設定できます。
+
+デフォルト値: >
+
+    {
+      show_hidden_files = false,
+      devicons_enable = false,
+      mappings = {},
+      float = {
+        size_percentage = 0.5,
+        winblend = 15,
+      }
+    }
+<
+
+
+設定例: >
+
+    local actions = require'lir.actions'
+    
+    require'lir'.setup {
+      show_hidden_files = false,
+      devicons_enable = true,
+      mappings = {
+        ['l']     = actions.edit,
+        ['<C-s>'] = actions.split,
+        ['<C-v>'] = actions.vsplit,
+        ['<C-t>'] = actions.tabedit,
+    
+        ['h']     = actions.up,
+        ['q']     = actions.quit,
+    
+        ['K']     = actions.mkdir,
+        ['N']     = actions.newfile,
+        ['R']     = actions.rename,
+        ['@']     = actions.cd,
+        ['Y']     = actions.yank_path,
+        ['.']     = actions.toggle_show_hidden,
+      },
+      float = {
+        size_percentage = 0.5,
+        winblend = 15,
+      }
+    }
+    
+    -- custom folder icon
+    require'nvim-web-devicons'.setup({
+      override = {
+        lir_folder_icon = {
+          icon = "",
+          color = "#7ebae4",
+          name = "LirFolderNode"
+        },
+      }
+    })
+<
+
+==============================================================================
+ACTIONS                                                          *lir-actions*
+
+マッピングに使用するための関数
+
+lir.actions.edit()                                        *lir.actions.edit()*
+    カーソル下のファイルを|:edit| を使って開く。
+
+lir.actions.split()                                      *lir.actions.split()*
+    カーソル下のファイルを|:new| を使って開く。
+
+lir.actions.vsplit()                                    *lir.actions.vsplit()*
+    カーソル下のファイルを|:vnew| を使って開く。
+
+lir.actions.tabedit()                                  *lir.actions.tabedit()*
+    カーソル下のファイルを|:tabedit| を使って開く。
+
+lir.actions.up()                                            *lir.actions.up()*
+    ひとつ上のディレクトリに移動する。
+
+lir.actions.quit()                                        *lir.actions.quit()*
+    lir を閉じる。
+
+lir.actions.mkdir()                                      *lir.actions.mkdir()*
+    ディレクトリを作成する。
+
+lir.actions.rename()                                    *lir.actions.rename()*
+    ファイル名を変更する。
+
+lir.actions.delete()                                    *lir.actions.delete()*
+    ファイルを削除する。
+
+lir.actions.newfile()                                  *lir.actions.newfile()*
+    ファイルを新規作成する。
+
+lir.actions.cd()                                            *lir.actions.cd()*
+    Vim のカレントディレクトリを lir のディレクトリ (|lir-context.dir|) に変更
+    する。
+    |:lcd| か |:cd| を使う
+
+lir.actions.reload()                                    *lir.actions.reload()*
+    lir を再表示します。
+
+lir.actions.yank_path()                              *lir.actions.yank_path()*
+    カーソル下のファイルパスを |v:register| のレジスタにヤンクします。
+
+lir.actions.toggle_show_hidden()            *lir.actions.toggle_show_hidden()*
+    先頭が `.` のファイルの表示/非表示を切り替える。
+
+
+==============================================================================
+vim:tw=78:sw=4:sts=4:ts=4:ft=help:norl:et

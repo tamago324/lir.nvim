@@ -13,11 +13,11 @@ local actions = {}
 -- Private
 -----------------------------
 local function open(cmd)
-  if not lvim.get_context():current() then
+  if not lvim.get_context():current_value() then
     return
   end
   local filename = vim.fn.fnameescape(lvim.get_context().dir ..
-                                          lvim.get_context():current())
+                                          lvim.get_context():current_value())
   actions.quit()
   vim.cmd(cmd .. ' ' .. filename)
 end
@@ -28,7 +28,7 @@ end
 
 --- edit
 function actions.edit()
-  local dir, file = lvim.get_context().dir, lvim.get_context():current()
+  local dir, file = lvim.get_context().dir, lvim.get_context():current_value()
   if not file then
     return
   end
@@ -61,7 +61,7 @@ end
 function actions.up()
   local cur_file, path, name, dir
 
-  cur_file = lvim.get_context():current()
+  cur_file = lvim.get_context():current_value()
   path = string.gsub(lvim.get_context().dir, '/$', '')
   name = vim.fn.fnamemodify(path, ':t')
   if name == '' then
@@ -105,7 +105,7 @@ end
 
 --- rename
 function actions.rename()
-  local old = string.gsub(lvim.get_context():current(), '/$', '')
+  local old = string.gsub(lvim.get_context():current_value(), '/$', '')
   local new = vim.fn.input('Rename: ', old)
   if new == '' or new == old then
     return
@@ -125,7 +125,7 @@ end
 
 --- delete
 function actions.delete()
-  local name = lvim.get_context():current()
+  local name = lvim.get_context():current_value()
 
   if vim.fn.confirm('Delete?: ' .. name, '&Yes\n&No\n&Force', 2) == 2 then
     return
@@ -170,7 +170,7 @@ end
 
 --- yank_path
 function actions.yank_path()
-  local path = lvim.get_context().dir .. lvim.get_context():current()
+  local path = lvim.get_context().dir .. lvim.get_context():current_value()
   vim.fn.setreg(vim.v.register, path)
   print('Yank path: ' .. path)
 end

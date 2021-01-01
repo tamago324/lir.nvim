@@ -258,4 +258,8 @@ function lir.setup(prefs)
   -- TODO: Define command
 end
 
-return {init = lir.init, setup = lir.setup}
+return {
+  init = lir.init,
+  setup = lir.setup,
+  get_context = lvim.get_context,
+}

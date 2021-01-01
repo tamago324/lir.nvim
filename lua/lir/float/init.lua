@@ -34,7 +34,7 @@ function float.init(dir_path)
   local dir, file
   if vim.bo.filetype == 'lir' then
     dir = lvim.get_context().dir
-    file = lvim.get_context():current()
+    file = lvim.get_context():current_value()
   else
     dir = dir_path or vim.fn.expand('%:p:h')
     file = vim.fn.expand('%:p')
@@ -51,4 +51,7 @@ function float.init(dir_path)
   vim.w.lir_curdir_win = CurdirWindow.new(info.bufnr, info.win_id)
 end
 
-return float
+return {
+  init = float.init,
+  toggle = float.toggle,
+}
