@@ -3,7 +3,6 @@ local history = require 'lir.history'
 local utils = require 'lir.utils'
 local config = require 'lir.config'
 local mappings = require 'lir.mappings'
-local devicons = require 'lir.devicons'
 local highlight = require 'lir.highlight'
 local Context = require 'lir.context'
 local lvim = require 'lir.vim'
@@ -187,7 +186,7 @@ local lir = {}
 function lir.init()
   local path = vim.fn.resolve(vim.fn.expand('%:p'))
 
-  if path == '' or not Path:new(path):is_dir(path) then
+  if path == '' or not Path:new(path):is_dir() then
     return
   end
 

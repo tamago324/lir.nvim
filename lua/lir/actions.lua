@@ -100,7 +100,9 @@ function actions.mkdir()
   end
 
   actions.reload()
-  vim.fn.search(string.format([[\v^%s]], name .. '/'), 'c')
+
+  local lnum = lvim.get_context():indexof(name)
+  vim.cmd(tostring(lnum))
 end
 
 --- rename
