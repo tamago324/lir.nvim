@@ -20,17 +20,17 @@ INTERFACE                                                      *lir-interface*
 FUNCTIONS                                                      *lir-functions*
 
 lir.setup([{opts}])                                              *lir.setup()*
-   lir のセットアップをする
-   |lir-settings| を見てください
+   lir のセットアップをします。
+   |lir-settings| を見てください。
 
 lir.get_context([{bufnr}])                                 *lir.get_context()*
-    |lir-context| を返す
+    |lir-context| を返します。
 
 lir.float.init([{dir}])                                     *lir.float.init()*
     defualt: `vim.fn.expand('%:p:h')`
 
 lir.float.toggle([{dir}])                                 *lir.float.toggle()*
-    表示/非表示を切り替える
+    表示/非表示を切り替えます。
 
     defualt: `vim.fn.expand('%:p:h')`
 
@@ -39,6 +39,7 @@ lir.float.toggle([{dir}])                                 *lir.float.toggle()*
 CONTEXT                                                          *lir-context*
 
 |lir.get_context()| で取得できる情報。
+|mappings| の function の第一引数に渡されます。
 
 
 context.dir                                                  *lir-context.dir*
@@ -48,17 +49,17 @@ context.files                                              *lir-context.files*
     |lir-file-item| のリスト
 
 context:current()                                      *lir-context:current()*
-    カーソル下の |lir-file-item| を返す
+    カーソル下の |lir-file-item| を返します
 
 context:current_value()                          *lir-context:current_value()*
-    カーソル下の |lir-file-item| の `value` を返す
+    カーソル下の |lir-file-item| の `value` を返します
 
 context:indexof(value)                                 *lir-context:indexof()*
-    context.files の中で、どこ行にあるか
-    files[n].value (|lir-file-item|.value) と value を比較する
+    context.files の中で、どこ行にあるかを返します
+    files[n].value (|lir-file-item|.value) と value を比較します
 
 context:is_dir_current()                        *lir-context:is_dir_current()*
-    カーソル下の |lir-file-item| がディレクトリかどうか
+    カーソル下の |lir-file-item| がディレクトリか？
 
 
 ------------------------------------------------------------------------------
@@ -109,6 +110,22 @@ SETTINGS                                                        *lir-settings*
       }
     }
 <
+
+show_hidden_files                             *lir-settings-show_hidden_files*
+    デフォルトで先頭が `.` のファイルを表示するか
+
+devicons_enable                                 *lir-settings-devicons_enable*
+    devicons を表示するか
+
+mappings                                               *lir-settings-mappings*
+    table を指定する。
+    自分で定義した関数を使用することもできます。
+
+float.size_percentage                     *lir-settings-float.size_percentage*
+    floating window で表示するウィンドウサイズの割合
+
+float.winblend                                   *lir-settings-float.winblend*
+    floating window で表示するウィンドウの透過度合い
 
 
 設定例: >
