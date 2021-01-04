@@ -12,12 +12,11 @@ local actions = {}
 -----------------------------
 -- Private
 -----------------------------
-local function open(cmd)
-  if not lvim.get_context():current_value() then
+local function open(cmd, context)
+  if not context:current_value() then
     return
   end
-  local filename = vim.fn.fnameescape(lvim.get_context().dir ..
-                                          lvim.get_context():current_value())
+  local filename = vim.fn.fnameescape(context.dir .. context:current_value())
   actions.quit()
   vim.cmd(cmd .. ' ' .. filename)
 end
@@ -27,13 +26,13 @@ end
 -----------------------------
 
 --- edit
-function actions.edit()
-  local dir, file = lvim.get_context().dir, lvim.get_context():current_value()
+function actions.edit(context)
+  local dir, file = context.dir, context:current_value()
   if not file then
     return
   end
 
-  if vim.w.lir_is_float and not lvim.get_context():is_dir_current() then
+  if vim.w.lir_is_float and not context:is_dir_current() then
     -- 閉じてから開く
     actions.quit()
   end
@@ -43,26 +42,26 @@ function actions.edit()
 end
 
 --- split
-function actions.split()
-  open('new')
+function actions.split(context)
+  open('new', context)
 end
 
 --- vsplit
-function actions.vsplit()
-  open('vnew')
+function actions.vsplit(context)
+  open('vnew', context)
 end
 
 --- tabedit
-function actions.tabedit()
-  open('tabedit')
+function actions.tabedit(context)
+  open('tabedit', context)
 end
 
 --- up
-function actions.up()
+function actions.up(context)
   local cur_file, path, name, dir
 
-  cur_file = lvim.get_context():current_value()
-  path = string.gsub(lvim.get_context().dir, '/$', '')
+  cur_file = context:current_value()
+  path = string.gsub(context.dir, '/$', '')
   name = vim.fn.fnamemodify(path, ':t')
   if name == '' then
     return
@@ -83,7 +82,7 @@ function actions.quit()
 end
 
 --- mkdir
-function actions.mkdir()
+function actions.mkdir(context)
   local name = vim.fn.input('Create directory: ')
   if name == '' then
     return
@@ -94,20 +93,22 @@ function actions.mkdir()
     return
   end
 
-  if vim.fn.mkdir(lvim.get_context().dir .. name) == 0 then
+  if vim.fn.mkdir(context.dir .. name) == 0 then
     utils.error('Create directory failed')
     return
   end
 
   actions.reload()
 
-  local lnum = lvim.get_context():indexof(name)
-  vim.cmd(tostring(lnum))
+  vim.schedule(function()
+    local lnum = lvim.get_context():indexof(name)
+    vim.cmd(tostring(lnum))
+  end)
 end
 
 --- rename
-function actions.rename()
-  local old = string.gsub(lvim.get_context():current_value(), '/$', '')
+function actions.rename(context)
+  local old = string.gsub(context:current_value(), '/$', '')
   local new = vim.fn.input('Rename: ', old)
   if new == '' or new == old then
     return
@@ -118,7 +119,7 @@ function actions.rename()
     return
   end
 
-  if not uv.fs_rename(lvim.get_context().dir .. old, lvim.get_context().dir .. new) then
+  if not uv.fs_rename(context.dir .. old, context.dir .. new) then
     utils.error('Rename failed')
   end
 
@@ -126,14 +127,14 @@ function actions.rename()
 end
 
 --- delete
-function actions.delete()
-  local name = lvim.get_context():current_value()
+function actions.delete(context)
+  local name = context:current_value()
 
   if vim.fn.confirm('Delete?: ' .. name, '&Yes\n&No\n&Force', 2) == 2 then
     return
   end
 
-  local path = lvim.get_context().dir .. name
+  local path = context.dir .. name
   if vim.fn.isdirectory(path) == 1 then
     if not uv.fs_rmdir(path) then
       utils.error('Delete directory failed')
@@ -150,29 +151,29 @@ function actions.delete()
 end
 
 --- newfile
-function actions.newfile()
+function actions.newfile(context)
   if vim.w.lir_is_float then
-    vim.api.nvim_feedkeys(':close | :edit ' .. lvim.get_context().dir, 'n', true)
+    vim.api.nvim_feedkeys(':close | :edit ' .. context.dir, 'n', true)
   else
-    vim.api.nvim_feedkeys(':edit ' .. lvim.get_context().dir, 'n', true)
+    vim.api.nvim_feedkeys(':edit ' .. context.dir, 'n', true)
   end
 end
 
 --- cd
-function actions.cd()
+function actions.cd(context)
   vim.cmd(string.format([[silent execute (haslocaldir() ? 'lcd' : 'cd') '%s']],
-                        lvim.get_context().dir))
-  print('cd: ' .. lvim.get_context().dir)
+                        context.dir))
+  print('cd: ' .. context.dir)
 end
 
 --- reload
-function actions.reload()
+function actions.reload(_)
   vim.cmd([[edit]])
 end
 
 --- yank_path
-function actions.yank_path()
-  local path = lvim.get_context().dir .. lvim.get_context():current_value()
+function actions.yank_path(context)
+  local path = context.dir .. context:current_value()
   vim.fn.setreg(vim.v.register, path)
   print('Yank path: ' .. path)
 end
