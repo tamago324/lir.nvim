@@ -3,6 +3,7 @@ local utils = require 'lir.utils'
 local Context = require 'lir.context'
 local config = require 'lir.config'
 local lvim = require 'lir.vim'
+local Path = require 'plenary.path'
 
 local vim = vim
 local uv = vim.loop
@@ -93,10 +94,15 @@ function actions.mkdir(context)
     return
   end
 
-  if vim.fn.mkdir(context.dir .. name) == 0 then
-    utils.error('Create directory failed')
+  local path = Path:new(context.dir .. name)
+  if path:exists() then
+    utils.error('Directory already exists')
+    -- cursor jump
+    vim.cmd(tostring(context:indexof(name)))
     return
   end
+
+  path:mkdir()
 
   actions.reload()
 
