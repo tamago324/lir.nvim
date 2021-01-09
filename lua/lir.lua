@@ -126,41 +126,6 @@ local function setlines(dir, lines)
   vim.api.nvim_buf_set_lines(0, lnum - 1, -1, true, after)
 end
 
---- create_augroups
--- Source: https://teukka.tech/luanvim.html
-local function create_augroups(definitions)
-  for group_name, definition in pairs(definitions) do
-    api.nvim_command('augroup ' .. group_name)
-    api.nvim_command('autocmd!')
-    for _, def in ipairs(definition) do
-      local command = table.concat(vim.tbl_flatten {'autocmd', def}, ' ')
-      api.nvim_command(command)
-    end
-    api.nvim_command('augroup END')
-  end
-end
-
---- setup_autocommands
-local function setup_autocommands()
-  function _G.__shupup_netrw()
-    if vim.fn.exists('#FileExplorer') == 1 then
-      vim.cmd('autocmd! FileExplorer *')
-    end
-    if vim.fn.exists('#NERDTreeHijackNetrw') == 1 then
-      vim.cmd('autocmd! NERDTreeHijackNetrw *')
-    end
-  end
-
-  local autocommands = {
-    {'VimEnter', '*', [[lua __shupup_netrw()]]},
-    {'BufEnter', '*', [[lua require'lir'.init()]]},
-    {'FileType', 'lir', 'let w:lir_before_lir_buffer = v:true'},
-    {'BufLeave', '*', [[let w:lir_before_lir_buffer = &filetype !=# 'lir']]},
-  }
-
-  create_augroups({['lir-nvim'] = autocommands})
-end
-
 
 -- is_symlink
 local function is_symlink(path)
@@ -250,9 +215,6 @@ function lir.setup(prefs)
   if config.values.devicons_enable then
     devicons.setup()
   end
-
-  -- Autocmd
-  setup_autocommands()
 
   -- TODO: Define command
 end
