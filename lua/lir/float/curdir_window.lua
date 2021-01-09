@@ -1,23 +1,21 @@
 local lvim = require 'lir.vim'
 
-local api = vim.api
-
-local CurdirWindow = {}
+local a = vim.api
+local M = {}
 
 local function setup_autocmd(bufnr, win_id)
+  -- By delaying it a bit, we can make it look like it's not closed when we move the directory.
   vim.cmd(string.format(
-              "autocmd WinClosed <buffer=%s> ++nested ++once :lua require('plenary.window').try_close(%s, true)",
+              "autocmd BufWipeout,BufHidden,WinClosed <buffer=%s> ++nested ++once :lua vim.defer_fn(function() require('plenary.window').try_close(%s, true) end, 10)",
               bufnr, win_id))
 end
 
-function CurdirWindow.new(content_bufnr, content_win_id)
-  local self = setmetatable({}, {__index = CurdirWindow})
-  local context_win_config = api.nvim_win_get_config(content_win_id)
+local function create_curdir_window(content_win_id)
+  local content_bufnr = a.nvim_get_current_buf()
+  local context_win_config = a.nvim_win_get_config(content_win_id)
 
-  self.content_bufnr = content_bufnr
-  self.content_win_id = content_win_id
-  self.bufnr = api.nvim_create_buf(false, true)
-  self.win_id = api.nvim_open_win(self.bufnr, false, {
+  curdir_bufnr = a.nvim_create_buf(false, true)
+  win_id = a.nvim_open_win(curdir_bufnr, false, {
     style = 'minimal',
     row = context_win_config.row[false] - 1,
     col = context_win_config.col[false],
@@ -27,29 +25,18 @@ function CurdirWindow.new(content_bufnr, content_win_id)
     focusable = false,
   })
 
-  api.nvim_buf_set_lines(self.bufnr, 0, -1, false,
+  a.nvim_buf_set_lines(curdir_bufnr, 0, -1, false,
                          {vim.fn.fnamemodify(lvim.get_context().dir, ':~')})
-  setup_autocmd(content_bufnr, self.win_id)
-  return self
+  setup_autocmd(content_bufnr, win_id)
 end
 
-function _G._LirFloatSetCurdirText()
-  if vim.w.lir_is_float and vim.w.lir_curdir_win then
-    local dir = vim.fn.fnamemodify(lvim.get_context().dir, ':~')
-    api.nvim_buf_set_lines(vim.w.lir_curdir_win.bufnr, 0, -1, false, {dir})
+function M.new()
+  local win = vim.t.lir_float_winid
+  if win and a.nvim_win_is_valid(win) then
+    create_curdir_window(win)
   end
 end
 
-function _G._LirFloatSetupAutocmd()
-  if vim.w.lir_curdir_win then
-    setup_autocmd(vim.fn.bufnr(), vim.w.lir_curdir_win.win_id)
-  end
-end
-
-vim.cmd([[augroup lir-float]])
-vim.cmd([[  autocmd!]])
-vim.cmd([[  autocmd FileType lir :lua _LirFloatSetCurdirText()]])
-vim.cmd([[  autocmd FileType lir :lua _LirFloatSetupAutocmd()]])
-vim.cmd([[augroup END]])
-
-return CurdirWindow
+return {
+  new = M.new
+}
