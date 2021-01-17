@@ -39,7 +39,8 @@ require'lir'.setup {
   float = {
     size_percentage = 0.5,
     winblend = 15,
-  }
+  },
+  hide_cursor = true
 }
 
 -- custom folder icon
@@ -78,6 +79,7 @@ or
 
 * [mattn/vim-molder](https://github.com/mattn/vim-molder)
 * [norcalli/nvim_utils](https://github.com/norcalli/nvim_utils)
+* [lambdalisue/fern.vim](https://github.com/lambdalisue/fern.vim)
 
 
 ## License

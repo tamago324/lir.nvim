@@ -8,7 +8,8 @@ local defaults_values = {
   float = {
     size_percentage = 0.5,
     winblend = 15,
-  }
+  },
+  hide_cursor = false,
 }
 
 function config.set_default_values(opts)
