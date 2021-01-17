@@ -4,6 +4,7 @@ local utils = require 'lir.utils'
 local config = require 'lir.config'
 local mappings = require 'lir.mappings'
 local highlight = require 'lir.highlight'
+local smart_cursor = require 'lir.smart_cursor'
 local Context = require 'lir.context'
 local lvim = require 'lir.vim'
 local Path = require 'plenary.path'
@@ -37,13 +38,15 @@ local function readdir(path)
       devicons = nil,
     }
 
+    local prefix = config.values.hide_cursor and '' or ' '
+
     if config.values.devicons_enable then
       local icon, highlight_name = devicons.get_devicons(name, is_dir)
-      file.display = string.format(' %s %s%s', icon, name,
+      file.display = string.format('%s%s %s%s', prefix, icon, name,
                                    (is_dir and '/' or ''))
       file.devicons = {icon = icon, highlight_name = highlight_name}
     else
-      file.display = ' ' .. name .. (is_dir and '/' or '')
+      file.display = prefix .. name .. (is_dir and '/' or '')
     end
 
     table.insert(files, file)
@@ -175,6 +178,8 @@ function lir.init()
   api.nvim_buf_set_option(0, 'bufhidden', 'wipe')
   api.nvim_buf_set_option(0, 'buflisted', false)
   api.nvim_buf_set_option(0, 'swapfile', false)
+
+  smart_cursor.init()
 
   local files = readdir(path)
   if not config.values.show_hidden_files then
