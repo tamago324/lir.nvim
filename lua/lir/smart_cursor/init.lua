@@ -1,4 +1,9 @@
--- Ported from fern.vim
+--[[
+
+This was written based on fern.vim under the MIT License.
+
+Original code: https://github.com/lambdalisue/fern.vim/blob/920ecc5c3c86e22bc3cd8beecaa73cb0e7951557/autoload/fern/internal/viewer/smart_cursor.vim
+]]
 
 local config = require 'lir.config'
 
