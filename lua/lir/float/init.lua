@@ -3,15 +3,17 @@ local actions = require 'lir.actions'
 local lvim = require 'lir.vim'
 local config = require 'lir.config'
 
-local api = vim.api
+local a = vim.api
 
-local float = {}
 
+-----------------------------
+-- Private
+-----------------------------
 local function find_lir_float_win()
-  for i, win in ipairs(api.nvim_tabpage_list_wins(0)) do
-    local buf = api.nvim_win_get_buf(win)
-    local is_float = vim.F.npcall(api.nvim_win_get_var, win, 'lir_is_float')
-    if api.nvim_buf_get_option(buf, 'filetype') == 'lir' and is_float then
+  for i, win in ipairs(a.nvim_tabpage_list_wins(0)) do
+    local buf = a.nvim_win_get_buf(win)
+    local is_float = vim.F.npcall(a.nvim_win_get_var, win, 'lir_is_float')
+    if a.nvim_buf_get_option(buf, 'filetype') == 'lir' and is_float then
       return win
     end
   end
@@ -19,11 +21,16 @@ local function find_lir_float_win()
 end
 
 
+-----------------------------
+-- Export
+-----------------------------
+local float = {}
+
 --- toggle
 function float.toggle(dir)
   local float_win = find_lir_float_win()
   if float_win then
-    api.nvim_set_current_win(float_win)
+    a.nvim_set_current_win(float_win)
     actions.quit()
   else
     float.init(dir)
@@ -51,7 +58,4 @@ function float.init(dir_path)
   vim.w.lir_is_float = true
 end
 
-return {
-  init = float.init,
-  toggle = float.toggle,
-}
+return float

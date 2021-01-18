@@ -7,6 +7,7 @@ local Path = require 'plenary.path'
 
 local vim = vim
 local uv = vim.loop
+local a = vim.api
 
 local actions = {}
 
@@ -79,7 +80,7 @@ end
 --- quit
 function actions.quit()
   if vim.w.lir_is_float then
-    vim.api.nvim_win_close(0, true)
+    a.nvim_win_close(0, true)
   else
     vim.cmd('edit ' .. vim.w.lir_file_quit_on_edit)
   end
@@ -162,9 +163,9 @@ end
 --- newfile
 function actions.newfile(context)
   if vim.w.lir_is_float then
-    vim.api.nvim_feedkeys(':close | :edit ' .. context.dir, 'n', true)
+    a.nvim_feedkeys(':close | :edit ' .. context.dir, 'n', true)
   else
-    vim.api.nvim_feedkeys(':edit ' .. context.dir, 'n', true)
+    a.nvim_feedkeys(':edit ' .. context.dir, 'n', true)
   end
 end
 

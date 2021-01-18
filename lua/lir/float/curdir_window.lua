@@ -1,8 +1,10 @@
 local lvim = require 'lir.vim'
 
 local a = vim.api
-local M = {}
 
+-----------------------------
+-- Private
+-----------------------------
 local function setup_autocmd(bufnr, win_id)
   -- By delaying it a bit, we can make it look like it's not closed when we move the directory.
   vim.cmd(string.format(
@@ -30,13 +32,16 @@ local function create_curdir_window(content_win_id)
   setup_autocmd(content_bufnr, win_id)
 end
 
-function M.new()
+-----------------------------
+-- Export
+-----------------------------
+local curdir_window = {}
+
+function curdir_window.new()
   local win = vim.t.lir_float_winid
   if win and a.nvim_win_is_valid(win) then
     create_curdir_window(win)
   end
 end
 
-return {
-  new = M.new
-}
+return curdir_window

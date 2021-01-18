@@ -1,6 +1,6 @@
-local config = {}
-config.values = {}
-
+-----------------------------
+-- Private
+-----------------------------
 local defaults_values = {
   show_hidden_files = false,
   devicons_enable = false,
@@ -11,6 +11,13 @@ local defaults_values = {
   },
   hide_cursor = false,
 }
+
+
+-----------------------------
+-- Export
+-----------------------------
+local config = {}
+config.values = {}
 
 function config.set_default_values(opts)
   config.values = vim.tbl_deep_extend('force', defaults_values, opts or {})

@@ -2,7 +2,7 @@
 From https://github.com/norcalli/nvim_utils
 From telescope.nvim
 ]]
-local api = vim.api
+local a = vim.api
 local lvim = require'lir.vim'
 
 -----------------------------
@@ -24,7 +24,7 @@ end
 local mappings = {}
 
 function mappings.apply_mappings(mappings)
-  local bufnr = api.nvim_get_current_buf()
+  local bufnr = a.nvim_get_current_buf()
   local options = {}
   options.noremap = true
   options.silent = true
@@ -35,7 +35,7 @@ function mappings.apply_mappings(mappings)
     -- cleanup
     if not buf_keymap[bufnr] then
       buf_keymap[bufnr] = {}
-      api.nvim_buf_attach(bufnr, false, {
+      a.nvim_buf_attach(bufnr, false, {
         on_detach = function()
           buf_keymap[bufnr] = nil
         end,
@@ -44,7 +44,7 @@ function mappings.apply_mappings(mappings)
     buf_keymap[bufnr][escaped] = rhs
     key_mapping =
         ([[:<C-u>lua require"lir.mappings".execute_keymap(%d, "%s")<CR>]]):format(bufnr, escaped)
-    api.nvim_buf_set_keymap(bufnr, 'n', lhs, key_mapping, options)
+    a.nvim_buf_set_keymap(bufnr, 'n', lhs, key_mapping, options)
   end
 end
 

@@ -11,7 +11,8 @@ local Path = require 'plenary.path'
 
 local vim = vim
 local uv = vim.loop
-local api = vim.api
+local a = vim.api
+
 
 -----------------------------
 -- Private
@@ -112,11 +113,11 @@ local function setlines(dir, lines)
         lnum = lvim.get_context():indexof(file)
       end
     end
-    vim.api.nvim_win_set_var(0, 'lir_file_jump_cursor', nil)
+    a.nvim_win_set_var(0, 'lir_file_jump_cursor', nil)
   end
 
   if lnum == nil or lnum == 1 then
-    vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
+    a.nvim_buf_set_lines(0, 0, -1, true, lines)
     -- move cursor
     vim.schedule(function()
       vim.cmd('normal! 0')
@@ -125,8 +126,8 @@ local function setlines(dir, lines)
   end
 
   local before, after = tbl_sub(lines, 1, lnum - 1), tbl_sub(lines, lnum)
-  vim.api.nvim_put(before, 'l', false, true)
-  vim.api.nvim_buf_set_lines(0, lnum - 1, -1, true, after)
+  a.nvim_put(before, 'l', false, true)
+  a.nvim_buf_set_lines(0, lnum - 1, -1, true, after)
 end
 
 
@@ -140,10 +141,11 @@ local function set_virtual_text_symlink(dir, files)
   for i, file in ipairs(files) do
     if is_symlink(dir .. file.value) then
       local text = '-> ' .. uv.fs_readlink(dir .. file.value)
-      vim.api.nvim_buf_set_virtual_text(0, -1, i - 1, {{text, "PreProc"}}, {})
+      a.nvim_buf_set_virtual_text(0, -1, i - 1, {{text, "PreProc"}}, {})
     end
   end
 end
+
 
 -----------------------------
 -- Export
@@ -172,12 +174,12 @@ function lir.init()
   lvim.set_context(context)
 
   -- nvim_buf_set_lines() するため
-  api.nvim_buf_set_option(0, 'modifiable', true)
+  a.nvim_buf_set_option(0, 'modifiable', true)
 
-  api.nvim_buf_set_option(0, 'buftype', 'nofile')
-  api.nvim_buf_set_option(0, 'bufhidden', 'wipe')
-  api.nvim_buf_set_option(0, 'buflisted', false)
-  api.nvim_buf_set_option(0, 'swapfile', false)
+  a.nvim_buf_set_option(0, 'buftype', 'nofile')
+  a.nvim_buf_set_option(0, 'bufhidden', 'wipe')
+  a.nvim_buf_set_option(0, 'buflisted', false)
+  a.nvim_buf_set_option(0, 'swapfile', false)
 
   smart_cursor.init()
 
@@ -206,9 +208,9 @@ function lir.init()
 
   mappings.apply_mappings(config.values.mappings)
 
-  api.nvim_buf_set_option(0, 'modified', false)
-  api.nvim_buf_set_option(0, 'modifiable', false)
-  api.nvim_buf_set_option(0, 'filetype', 'lir')
+  a.nvim_buf_set_option(0, 'modified', false)
+  a.nvim_buf_set_option(0, 'modifiable', false)
+  a.nvim_buf_set_option(0, 'filetype', 'lir')
 end
 
 --- lir.setup()
@@ -224,8 +226,6 @@ function lir.setup(prefs)
   -- TODO: Define command
 end
 
-return {
-  init = lir.init,
-  setup = lir.setup,
-  get_context = lvim.get_context,
-}
+lir.get_context = lvim.get_context
+
+return lir
