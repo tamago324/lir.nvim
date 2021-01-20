@@ -106,7 +106,10 @@ function actions.mkdir(context)
   if path:exists() then
     utils.error('Directory already exists')
     -- cursor jump
-    vim.cmd(tostring(context:indexof(name)))
+    local lnum = context:indexof(name)
+    if lnum then
+      vim.cmd(tostring(lnum))
+    end
     return
   end
 
@@ -116,7 +119,9 @@ function actions.mkdir(context)
 
   vim.schedule(function()
     local lnum = lvim.get_context():indexof(name)
-    vim.cmd(tostring(lnum))
+    if lnum then
+      vim.cmd(tostring(lnum))
+    end
   end)
 end
 
