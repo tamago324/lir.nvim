@@ -34,12 +34,16 @@ function actions.edit(context)
     return
   end
 
+  local cmd
   if vim.w.lir_is_float and not context:is_dir_current() then
     -- 閉じてから開く
     actions.quit()
+    cmd = 'edit'
+  else
+    cmd = 'keepalt edit'
   end
 
-  vim.cmd('keepalt edit ' .. vim.fn.fnameescape(dir .. file))
+  vim.cmd(cmd .. ' ' .. vim.fn.fnameescape(dir .. file))
   history.add(dir, file)
 end
 
