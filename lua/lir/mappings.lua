@@ -43,7 +43,7 @@ function mappings.apply_mappings(mappings)
     end
     buf_keymap[bufnr][escaped] = rhs
     key_mapping =
-        ([[:<C-u>lua require"lir.mappings".execute_keymap(%d, "%s")<CR>]]):format(bufnr, escaped)
+        ([[<Cmd>lua require"lir.mappings".execute_keymap(%d, "%s")<CR>]]):format(bufnr, escaped)
     a.nvim_buf_set_keymap(bufnr, 'n', lhs, key_mapping, options)
   end
 end
