@@ -49,4 +49,14 @@ function Context:is_dir_current()
   return nil
 end
 
+function Context:marked_items()
+  local results = {}
+  for i, f in ipairs(self.files) do
+    if f.marked then
+      table.insert(results, f)
+    end
+  end
+  return results
+end
+
 return Context

@@ -61,6 +61,9 @@ context:indexof(value)                                 *lir-context:indexof()*
 context:is_dir_current()                        *lir-context:is_dir_current()*
     カーソル下の |lir-file-item| がディレクトリか？
 
+context:marked_files()                           *llir-context:marked_files()*
+    マークしている |lir-file-item| を返します
+
 
 ------------------------------------------------------------------------------
 LIR-FILE-ITEM                                                  *lir-file-item*
@@ -80,6 +83,9 @@ is_dir                                        *lir-file-item-attribute-is_dir*
 
 display                                      *lir-file-item-attribute-display*
     行に表示する値
+
+marked                                        *lir-file-item-attribute-marked*
+    マークしているかどうか
 
 devicons                                    *lir-file-item-attribute-devicons*
     devicons のテーブル
