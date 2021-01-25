@@ -7,7 +7,15 @@ local Context = {}
 function Context.new(dir)
   local self = setmetatable({}, {__index = Context})
   self.dir = dir
-  self.files = nil
+  self.files = {
+    {
+      -- value
+      -- is_dir
+      -- fullpath
+      -- display
+      -- devicons
+    }
+  }
   return self
 end
 

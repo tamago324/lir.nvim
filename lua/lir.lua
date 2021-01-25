@@ -35,6 +35,7 @@ local function readdir(path)
     local file = {
       value = name,
       is_dir = is_dir,
+      fullpath = p:absolute(),
       display = nil,
       devicons = nil,
     }

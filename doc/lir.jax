@@ -78,6 +78,9 @@ value                                          *lir-file-item-attribute-value*
 is_dir                                        *lir-file-item-attribute-is_dir*
     ディレクトリかどうか
 
+fullpath                                    *lir-file-item-attribute-fullpath*
+    フルパス
+
 display                                      *lir-file-item-attribute-display*
     行に表示する値
 
