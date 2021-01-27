@@ -131,6 +131,12 @@ float.size_percentage                     *lir-settings-float.size_percentage*
 float.winblend                                   *lir-settings-float.winblend*
     floating window で表示するウィンドウの透過度合い
 
+float.border                                       *lir-settings-float.border*
+    ボーダーを表示するか
+
+float.borderchars                             *lir-settings-float.borderchars*
+    ボーダーの文字
+
 hide_cursor                                         *lir-settings-hide_cursor*
     カーソルを非表示にするか
     カーソルを表示する場合、先頭に空白が入る
@@ -161,6 +167,8 @@ hide_cursor                                         *lir-settings-hide_cursor*
       float = {
         size_percentage = 0.5,
         winblend = 15,
+        border = true,
+        borderchars = {"═" , "║" , "═" , "║" , "╔" , "╗" , "╝" , "╚"},
       }
     }
     

@@ -39,8 +39,10 @@ require'lir'.setup {
   float = {
     size_percentage = 0.5,
     winblend = 15,
+    border = true,
+    borderchars = {"═" , "║" , "═" , "║" , "╔" , "╗" , "╝" , "╚"},
   },
-  hide_cursor = true
+  hide_cursor = true,
 }
 
 -- custom folder icon
@@ -74,6 +76,14 @@ or
 :lua require'lir.float'.toggle()
 :lua require'lir.float'.init()
 ```
+
+Change highlights groups.
+
+```viml
+hi LirFloatNormal guibg=#32302f
+hi LirFloatBorder guifg=#7c6f64
+```
+
 
 ## Credit
 

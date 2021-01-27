@@ -8,6 +8,8 @@ local defaults_values = {
   float = {
     size_percentage = 0.5,
     winblend = 15,
+    border = false,
+    borderchars = {"═" , "║" , "═" , "║" , "╔" , "╗" , "╝" , "╚"},
   },
   hide_cursor = false,
 }

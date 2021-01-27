@@ -2,6 +2,7 @@ local win_float = require 'plenary.window.float'
 local actions = require 'lir.actions'
 local lvim = require 'lir.vim'
 local config = require 'lir.config'
+local border = require'lir.float.border'
 
 local a = vim.api
 
@@ -51,6 +52,9 @@ function float.init(dir_path)
     percentage = config.values.float.size_percentage,
     winblend = config.values.float.winblend,
   })
+
+  a.nvim_win_set_option(info.win_id, 'winhl', 'Normal:LirFloatNormal')
+
   vim.t.lir_float_winid = info.win_id
   -- To move the cursor
   vim.w.lir_file_jump_cursor = file

@@ -23,4 +23,9 @@ augroup END
 augroup lir-float
   autocmd!
   autocmd FileType lir :lua require'lir.float.curdir_window'.new()
+  autocmd FileType lir :lua require'lir.float.border'.new()
 augroup END
+
+
+highlight def link LirFloatNormal Normal
+highlight def link LirFloatBorder LirFloatNormal
