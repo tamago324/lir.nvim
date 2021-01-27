@@ -14,14 +14,14 @@ end
 
 local function create_curdir_window(content_win_id)
   local content_bufnr = a.nvim_get_current_buf()
-  local context_win_config = a.nvim_win_get_config(content_win_id)
+  local content_win_config = a.nvim_win_get_config(content_win_id)
 
   local curdir_bufnr = a.nvim_create_buf(false, true)
   local win_id = a.nvim_open_win(curdir_bufnr, false, {
     style = 'minimal',
-    row = context_win_config.row[false] - 1,
-    col = context_win_config.col[false],
-    width = context_win_config.width,
+    row = content_win_config.row[false] - 1,
+    col = content_win_config.col[false],
+    width = content_win_config.width,
     height = 1,
     relative = 'editor',
     focusable = false,
