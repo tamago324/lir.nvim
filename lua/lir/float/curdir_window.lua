@@ -1,4 +1,5 @@
 local lvim = require 'lir.vim'
+local config = require'lir.config'
 
 local a = vim.api
 
@@ -10,6 +11,10 @@ local function setup_autocmd(bufnr, win_id)
   vim.cmd(string.format(
               "autocmd BufWipeout,BufHidden,WinClosed <buffer=%s> ++nested ++once :lua vim.defer_fn(function() require('plenary.window').try_close(%s, true) end, 10)",
               bufnr, win_id))
+end
+
+local function get_curdir()
+  return vim.fn.fnamemodify(lvim.get_context().dir, ':~')
 end
 
 local function create_curdir_window(content_win_id)
@@ -27,8 +32,7 @@ local function create_curdir_window(content_win_id)
     focusable = false,
   })
 
-  a.nvim_buf_set_lines(curdir_bufnr, 0, -1, false,
-                         {vim.fn.fnamemodify(lvim.get_context().dir, ':~')})
+  a.nvim_buf_set_lines(curdir_bufnr, 0, -1, false, {get_curdir()})
   setup_autocmd(content_bufnr, win_id)
 end
 
@@ -39,9 +43,15 @@ local curdir_window = {}
 
 function curdir_window.new()
   local win = vim.t.lir_float_winid
+  if config.values.float.border then
+    -- To be displayed in border.lua
+    return
+  end
   if win and a.nvim_win_is_valid(win) then
     create_curdir_window(win)
   end
 end
+
+curdir_window.get_curdir = get_curdir
 
 return curdir_window
