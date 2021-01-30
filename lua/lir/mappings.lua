@@ -50,7 +50,7 @@ end
 
 function M.execute_keymap(bufnr, escaped)
   local func = buf_keymap[bufnr][escaped]
-  func(lvim.get_context())
+  func()
 end
 
 return M
