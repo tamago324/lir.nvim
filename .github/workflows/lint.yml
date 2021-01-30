@@ -1,0 +1,29 @@
+# This is a basic workflow to help you get started with Actions
+
+name: lint
+
+# Controls when the action will run. 
+on: [push, pull_request]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  luacheck:
+    name: Luacheck
+    # The type of runner that the job will run on
+    runs-on: ubuntu 20.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Prepare
+        run: |
+          sudo apt-get update
+          sudo apt-get install luarocks
+          sudo luarocks install luacheck
+
+      - name: Lint
+        run: sudo make lint
