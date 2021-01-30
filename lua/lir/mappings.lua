@@ -3,7 +3,6 @@ From https://github.com/norcalli/nvim_utils
 From telescope.nvim
 ]]
 local a = vim.api
-local lvim = require'lir.vim'
 
 -----------------------------
 -- Private
