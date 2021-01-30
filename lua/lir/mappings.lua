@@ -10,7 +10,7 @@ local lvim = require'lir.vim'
 -----------------------------
 
 -- { bufnr = { esc_key = function } }
-local buf_keymap = buf_keymap or {}
+local buf_keymap =  {}
 
 --- escape_keymap
 local function escape_keymap(key)
@@ -21,9 +21,9 @@ end
 -----------------------------
 -- Export
 -----------------------------
-local mappings = {}
+local M = {}
 
-function mappings.apply_mappings(mappings)
+function M.apply_mappings(mappings)
   local bufnr = a.nvim_get_current_buf()
   local options = {}
   options.noremap = true
@@ -48,9 +48,9 @@ function mappings.apply_mappings(mappings)
   end
 end
 
-function mappings.execute_keymap(bufnr, escaped)
+function M.execute_keymap(bufnr, escaped)
   local func = buf_keymap[bufnr][escaped]
   func(lvim.get_context())
 end
 
-return mappings
+return M

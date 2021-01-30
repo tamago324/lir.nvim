@@ -9,7 +9,10 @@ local a = vim.api
 local function setup_autocmd(bufnr, win_id)
   -- By delaying it a bit, we can make it look like it's not closed when we move the directory.
   vim.cmd(string.format(
-              "autocmd BufWipeout,BufHidden,WinClosed <buffer=%s> ++nested ++once :lua vim.defer_fn(function() require('plenary.window').try_close(%s, true) end, 10)",
+              [[autocmd BufWipeout,BufHidden,WinClosed <buffer=%s> ++nested ++once :lua
+                  vim.defer_fn(function()
+                    require('plenary.window').try_close(%s, true)
+                  end, 10)]],
               bufnr, win_id))
 end
 

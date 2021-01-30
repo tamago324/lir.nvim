@@ -13,9 +13,8 @@ end
 -----------------------------
 -- Export
 -----------------------------
-local Vim = {}
-Vim = setmetatable({}, {
-  __index = function(t, key)
+local Vim = setmetatable({}, {
+  __index = function(_, key)
     local bufnr
     if type(key) == 'number' then
       -- lvim[12]
@@ -31,17 +30,17 @@ Vim = setmetatable({}, {
 })
 
 function Vim.get_context(bufnr)
-  local bufnr = bufnr or vim.fn.bufnr()
+  bufnr = bufnr or vim.fn.bufnr()
   return get_or_empty(bufnr).context
 end
 
 function Vim.set_context(context, bufnr)
-  local bufnr = bufnr or vim.fn.bufnr()
+  bufnr = bufnr or vim.fn.bufnr()
   get_or_empty(bufnr).context = context
 end
 
 function Vim.print()
-  pprint(lir_vim)
+  print(vim.inspect(lir_vim))
 end
 
 return Vim

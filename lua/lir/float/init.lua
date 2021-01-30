@@ -2,7 +2,6 @@ local win_float = require 'plenary.window.float'
 local actions = require 'lir.actions'
 local lvim = require 'lir.vim'
 local config = require 'lir.config'
-local border = require'lir.float.border'
 
 local a = vim.api
 
@@ -11,7 +10,7 @@ local a = vim.api
 -- Private
 -----------------------------
 local function find_lir_float_win()
-  for i, win in ipairs(a.nvim_tabpage_list_wins(0)) do
+  for _, win in ipairs(a.nvim_tabpage_list_wins(0)) do
     local buf = a.nvim_win_get_buf(win)
     local is_float = vim.F.npcall(a.nvim_win_get_var, win, 'lir_is_float')
     if a.nvim_buf_get_option(buf, 'filetype') == 'lir' and is_float then

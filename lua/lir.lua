@@ -26,7 +26,7 @@ local function readdir(path)
   end
 
   while true do
-    local name, typ = uv.fs_scandir_next(handle)
+    local name, _ = uv.fs_scandir_next(handle)
     if name == nil then
       break
     end
@@ -58,7 +58,6 @@ end
 
 --- sort
 local function sort(lhs, rhs)
-  local l_val, r_val = lhs.value, rhs.value
   if lhs.is_dir and not rhs.is_dir then
     return true
   elseif not lhs.is_dir and rhs.is_dir then

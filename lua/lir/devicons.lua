@@ -1,5 +1,6 @@
 local has_devicons, Devicons = pcall(require, 'nvim-web-devicons')
 local utils = require 'lir.utils'
+-- local config = 'lir.config'
 
 local vim = vim
 local a = vim.api
@@ -20,7 +21,7 @@ function devicons.setup()
   if not has_devicons then
     utils.error('[lir.nvim] Require nvim-web-devicons')
     -- XXX: Can I change the config here?
-    config.values.devicons_enable = false
+    -- config.values.devicons_enable = false
     return
   end
   local _, hi_name = Devicons.get_icon(FOLDER_ICON_NAME)

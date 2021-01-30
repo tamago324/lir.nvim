@@ -1,6 +1,5 @@
 local history = require 'lir.history'
 local utils = require 'lir.utils'
-local Context = require 'lir.context'
 local config = require 'lir.config'
 local lvim = require 'lir.vim'
 local Path = require 'plenary.path'
