@@ -39,14 +39,19 @@ end
 
 --- init
 function float.init(dir_path)
-  local dir, file
+  local dir, file, old_win
   if vim.bo.filetype == 'lir' then
     dir = lvim.get_context().dir
     file = lvim.get_context():current_value()
+
+    if not vim.w.lir_is_float then
+      old_win = a.nvim_get_current_win()
+    end
   else
     dir = dir_path or vim.fn.expand('%:p:h')
     file = vim.fn.expand('%:p')
   end
+
   local info = win_float.centered({
     percentage = config.values.float.size_percentage,
     winblend = config.values.float.winblend,
@@ -59,6 +64,11 @@ function float.init(dir_path)
   vim.w.lir_is_float = true
 
   a.nvim_win_set_option(info.win_id, 'winhl', 'Normal:LirFloatNormal')
+
+  -- 空バッファに置き換える
+  if old_win then
+    a.nvim_win_set_buf(old_win, a.nvim_create_buf(true, false))
+  end
 end
 
 return float
