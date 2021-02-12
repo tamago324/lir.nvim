@@ -27,23 +27,22 @@ lir.get_context([{bufnr}])                                 *lir.get_context()*
     |lir-context| を返します。
 
 lir.float.init([{dir}])                                     *lir.float.init()*
-    defualt: `vim.fn.expand('%:p:h')`
+    `dir` が nil の場合、`vim.fn.expand('%:p:h')` が使われます。
 
 lir.float.toggle([{dir}])                                 *lir.float.toggle()*
     表示/非表示を切り替えます。
 
-    defualt: `vim.fn.expand('%:p:h')`
+    `dir` が nil の場合、`vim.fn.expand('%:p:h')` が使われます。
 
 
 ==============================================================================
 CONTEXT                                                          *lir-context*
 
-|lir.get_context()| で取得できる情報。
-|mappings| の function の第一引数に渡されます。
+|lir.get_context()| が返すテーブルです。
 
 
 context.dir                                                  *lir-context.dir*
-    ディレクトリ
+    lir のカレントディレクトリ
 
 context.files                                              *lir-context.files*
     |lir-file-item| のリスト
@@ -55,7 +54,7 @@ context:current_value()                          *lir-context:current_value()*
     カーソル下の |lir-file-item| の `value` を返します
 
 context:indexof(value)                                 *lir-context:indexof()*
-    context.files の中で、どこ行にあるかを返します
+    `value` が |lir-context.files| の中で、何番目にあるかを返します
     files[n].value (|lir-file-item|.value) と value を比較します
 
 context:is_dir_current()                        *lir-context:is_dir_current()*
@@ -69,7 +68,6 @@ LIR-FILE-ITEM                                                  *lir-file-item*
 このテーブルは |context:current()| や |context.files| で取得できます。
 
 
-------------------------------------------------------------------------------
 LIR-FILE-ITEM-ATTRIBUTES                            *lir-file-item-attributes*
 
 value                                          *lir-file-item-attribute-value*
@@ -86,7 +84,7 @@ display                                      *lir-file-item-attribute-display*
 
 devicons                                    *lir-file-item-attribute-devicons*
     devicons のテーブル
-    もし、devdocs が無効なら nil
+    もし、devicons が無効なら nil
 
 devicons.icon                          *lir-file-item-attribute-devicons-icon*
     アイコン
@@ -110,6 +108,8 @@ SETTINGS                                                        *lir-settings*
       float = {
         size_percentage = 0.5,
         winblend = 15,
+        border = false,
+        borderchars = {"═" , "║" , "═" , "║" , "╔" , "╗" , "╝" , "╚"},
       },
       hide_cursor = false
     }
@@ -140,6 +140,7 @@ float.borderchars                             *lir-settings-float.borderchars*
 hide_cursor                                         *lir-settings-hide_cursor*
     カーソルを非表示にするか
     カーソルを表示する場合、先頭に空白が入る
+
 
 設定例: >
 
@@ -188,6 +189,7 @@ hide_cursor                                         *lir-settings-hide_cursor*
 ACTIONS                                                          *lir-actions*
 
 マッピングに使用するための関数
+
 
 lir.actions.edit()                                        *lir.actions.edit()*
     カーソル下のファイルを|:edit| を使って開く。
