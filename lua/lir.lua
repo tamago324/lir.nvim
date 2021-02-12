@@ -1,6 +1,5 @@
 local devicons = require 'lir.devicons'
 local history = require 'lir.history'
-local utils = require 'lir.utils'
 local config = require 'lir.config'
 local mappings = require 'lir.mappings'
 local highlight = require 'lir.highlight'
@@ -146,6 +145,13 @@ local function set_virtual_text_symlink(dir, files)
   end
 end
 
+local function set_nocontent_text(devicon_enable)
+  -- From vim-clap
+  local text = string.format(' %s Directory is empty',
+                             (devicon_enable and '' or ''))
+  a.nvim_buf_set_virtual_text(0, -1, 0, {{text, "BlueSign"}}, {})
+end
+
 
 -----------------------------
 -- Export
@@ -199,7 +205,7 @@ function lir.init()
   highlight.update_highlight(files)
 
   if #files == 0 then
-    utils.set_nocontent_text(config.values.devicons_enable)
+    set_nocontent_text(config.values.devicons_enable)
   end
   set_virtual_text_symlink(dir, files)
 
