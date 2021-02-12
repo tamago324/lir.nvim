@@ -85,6 +85,13 @@ hi LirFloatBorder guifg=#7c6f64
 ```
 
 
+### Extensions
+
+* [tamago324/lir-mark.nvim](https://github.com/tamago324/lir-mark.nvim)
+* [tamago324/lir-mmv.nvim](https://github.com/tamago324/lir-mmv.nvim)
+* [tamago324/lir-bookmark.nvim](https://github.com/tamago324/lir-bookmark.nvim)
+
+
 ## Credit
 
 * [mattn/vim-molder](https://github.com/mattn/vim-molder)
