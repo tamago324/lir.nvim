@@ -1,0 +1,240 @@
+*lir.nvim*
+
+
+==============================================================================
+INTRODUCTION                                               *lir-instroduction*
+
+simple file explorer
+
+
+==============================================================================
+REQUIREMENTS                                                *lir-requirements*
+
+- Neovim Nightly (0.5)
+
+
+==============================================================================
+INTERFACE                                                      *lir-interface*
+
+------------------------------------------------------------------------------
+FUNCTIONS                                                      *lir-functions*
+
+lir.setup([{opts}])                                              *lir.setup()*
+   Set up the lir.
+   Please see |lir-settings|.
+
+lir.get_context([{bufnr}])                                 *lir.get_context()*
+    Returns |lir-context|.
+
+lir.float.init([{dir}])                                     *lir.float.init()*
+    If `dir` is nil, then `vim.fn.expand('%:p:h')` is used.
+
+lir.float.toggle([{dir}])                                 *lir.float.toggle()*
+    Toggles between showing and hiding.
+
+    If `dir` is nil, then `vim.fn.expand('%:p:h')` is used.
+
+
+==============================================================================
+CONTEXT                                                          *lir-context*
+
+The table returned by |lir.get_context()|.
+
+
+context.dir                                                  *lir-context.dir*
+    Current directory of lir.
+
+context.files                                              *lir-context.files*
+    List of |lir-file-item|.
+
+context:current()                                      *lir-context:current()*
+    Returns the |lir-file-item| under the cursor.
+
+context:current_value()                          *lir-context:current_value()*
+    Returns the `value` of |lir-file-item| under the cursor.
+
+context:indexof(value)                                 *lir-context:indexof()*
+    Returns the index of `value` in |lir-context.files|.
+    Returns the result of comparing |lir-file-item|.value and `value`.
+
+context:is_dir_current()                        *lir-context:is_dir_current()*
+    Is the |lir-file-item| under the cursor a directory?
+
+
+------------------------------------------------------------------------------
+LIR-FILE-ITEM                                                  *lir-file-item*
+
+A table about the file.
+This table can be retrieved with |context:current()| or |context.files|.
+
+
+LIR-FILE-ITEM-ATTRIBUTES                            *lir-file-item-attributes*
+
+value                                          *lir-file-item-attribute-value*
+    A file or directory name.
+
+is_dir                                        *lir-file-item-attribute-is_dir*
+    Is it a directory?
+
+fullpath                                    *lir-file-item-attribute-fullpath*
+    Full path.
+
+display                                      *lir-file-item-attribute-display*
+    Value to be displayed in the line
+
+devicons                                    *lir-file-item-attribute-devicons*
+    A table about devicons.
+    If devicons is disabled, it will be set to `nil`.
+
+devicons.icon                          *lir-file-item-attribute-devicons-icon*
+    The text of the devicon.
+
+devicons.highlight_name      *lir-file-item-attribute-devicons-highlight_name*
+    Highlight name.
+    Value passed to |nvim_buf_add_highlight()|.
+
+
+==============================================================================
+SETTINGS                                                        *lir-settings*
+
+You can set it with |lir.setup()|.
+
+default value: >
+
+    {
+      show_hidden_files = false,
+      devicons_enable = false,
+      mappings = {},
+      float = {
+        size_percentage = 0.5,
+        winblend = 15,
+        border = false,
+        borderchars = {"═" , "║" , "═" , "║" , "╔" , "╗" , "╝" , "╚"},
+      },
+      hide_cursor = false
+    }
+<
+
+show_hidden_files                             *lir-settings-show_hidden_files*
+    Show files whose file names start with `.` by default?
+
+devicons_enable                                 *lir-settings-devicons_enable*
+    Show devicons?
+
+mappings                                               *lir-settings-mappings*
+    Specify the table to be used for mapping.
+    You can also specify a function that you define yourself.
+
+float.size_percentage                     *lir-settings-float.size_percentage*
+    Percentage of the window size to be displayed in the floating window.
+
+float.winblend                                   *lir-settings-float.winblend*
+    The degree of transparency of the window displayed by the floating
+    window.
+
+float.border                                       *lir-settings-float.border*
+    Show a border around the floating window?
+
+float.borderchars                             *lir-settings-float.borderchars*
+    A list of characters to be used for the border.
+
+hide_cursor                                         *lir-settings-hide_cursor*
+    Hide the cursor in lir?
+    If the cursor is shown, it will be prefixed with a space.
+
+
+Example: >
+
+    local actions = require'lir.actions'
+    
+    require'lir'.setup {
+      show_hidden_files = false,
+      devicons_enable = true,
+      mappings = {
+        ['l']     = actions.edit,
+        ['<C-s>'] = actions.split,
+        ['<C-v>'] = actions.vsplit,
+        ['<C-t>'] = actions.tabedit,
+    
+        ['h']     = actions.up,
+        ['q']     = actions.quit,
+    
+        ['K']     = actions.mkdir,
+        ['N']     = actions.newfile,
+        ['R']     = actions.rename,
+        ['@']     = actions.cd,
+        ['Y']     = actions.yank_path,
+        ['.']     = actions.toggle_show_hidden,
+      },
+      float = {
+        size_percentage = 0.5,
+        winblend = 15,
+        border = true,
+        borderchars = {"═" , "║" , "═" , "║" , "╔" , "╗" , "╝" , "╚"},
+      }
+    }
+    
+    -- custom folder icon
+    require'nvim-web-devicons'.setup({
+      override = {
+        lir_folder_icon = {
+          icon = "",
+          color = "#7ebae4",
+          name = "LirFolderNode"
+        },
+      }
+    })
+<
+
+==============================================================================
+ACTIONS                                                          *lir-actions*
+
+A list of functions for use in mapping.
+
+
+lir.actions.edit()                                        *lir.actions.edit()*
+    Use |:edit| to open the file under the cursor.
+
+lir.actions.split()                                      *lir.actions.split()*
+    Use |:new| to open the file under the cursor.
+
+lir.actions.vsplit()                                    *lir.actions.vsplit()*
+    Use |:vnew| to open the file under the cursor.
+
+lir.actions.tabedit()                                  *lir.actions.tabedit()*
+    Use |:tabedit| to open the file under the cursor.
+
+lir.actions.up()                                            *lir.actions.up()*
+    Move to the parent directory.
+
+lir.actions.quit()                                        *lir.actions.quit()*
+    Close lir.
+
+lir.actions.mkdir()                                      *lir.actions.mkdir()*
+    Create the directory.
+
+lir.actions.rename()                                    *lir.actions.rename()*
+    Rename a file.
+
+lir.actions.delete()                                    *lir.actions.delete()*
+    Delete a file.
+
+lir.actions.newfile()                                  *lir.actions.newfile()*
+    Create a new file.
+
+lir.actions.cd()                                            *lir.actions.cd()*
+    Change the current directory of Vim to |lir-context.dir|.
+    Use |:lcd| or |:cd|.
+
+lir.actions.reload()                                    *lir.actions.reload()*
+    Reload the lir.
+
+lir.actions.yank_path()                              *lir.actions.yank_path()*
+    Yank the file path under the cursor into the register of |v:register|.
+
+lir.actions.toggle_show_hidden()            *lir.actions.toggle_show_hidden()*
+    Toggles between showing and hiding files whose file names start with `.`.
+
+
+==============================================================================
+vim:tw=78:sw=4:sts=4:ts=4:ft=help:norl:et
