@@ -15,6 +15,8 @@ local ICON_WIDTH = 0
 -----------------------------
 -- Export
 -----------------------------
+
+-- @class lir_devicons
 local devicons = {}
 
 function devicons.setup()
@@ -41,7 +43,9 @@ function devicons.setup()
   ICON_WIDTH = vim.fn.strlen(icon)
 end
 
---- get_devicons
+-- @param filename string
+-- @param is_dir   boolean
+-- @return string, string
 function devicons.get_devicons(filename, is_dir)
   if is_dir then
     filename = FOLDER_ICON_NAME
@@ -50,7 +54,7 @@ function devicons.get_devicons(filename, is_dir)
                            {default = true})
 end
 
---- update_highlight
+-- @param files lir_item[]
 function devicons.update_highlight(files)
   local col_start, col_end = #' ', ICON_WIDTH + #' '
 

@@ -1,25 +1,31 @@
 -----------------------------
 -- Export
 -----------------------------
+
+-- @class lir_context
+-- @field dir   string
+-- @field files lir_item[]
 local Context = {}
 
---- Context.new
+
+-- @class lir_item
+-- @field value string
+-- @field is_dir boolean
+-- @field fullpath string
+-- @field display string
+-- @field devicons table
+
+
+-- @param dir string
+-- @return lir_context
 function Context.new(dir)
   local self = setmetatable({}, {__index = Context})
   self.dir = dir
-  self.files = {
-    {
-      -- value
-      -- is_dir
-      -- fullpath
-      -- display
-      -- devicons
-    }
-  }
+  self.files = nil
   return self
 end
 
---- Context:current
+-- @return table
 function Context:current()
   local file = self.files[vim.fn.line('.')]
   if file then
@@ -28,7 +34,7 @@ function Context:current()
   return nil
 end
 
---- Context:current_value
+-- @return string
 function Context:current_value()
   local file = self.files[vim.fn.line('.')]
   if file then
@@ -37,8 +43,8 @@ function Context:current_value()
   return nil
 end
 
---- Context:indexof
--- from microlight
+-- @param value string
+-- @return number
 function Context:indexof(value)
   for i = 1, #self.files do
     local v = self.files[i]
@@ -48,13 +54,13 @@ function Context:indexof(value)
   end
 end
 
---- Context:is_dir_current
+-- @return boolean
 function Context:is_dir_current()
   local file = self.files[vim.fn.line('.')]
   if file then
     return file.is_dir
   end
-  return nil
+  return false
 end
 
 return Context
