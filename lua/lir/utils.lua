@@ -4,10 +4,10 @@
 -- Export
 -----------------------------
 
--- @class lir_utils
+---@class lir_utils
 local utils = {}
 
--- @param msg string
+---@param msg string
 function utils.error(msg)
   vim.cmd([[redraw]])
   vim.cmd([[echohl Error]])

@@ -19,11 +19,11 @@ local defaults_values = {
 -- Export
 -----------------------------
 
--- @class lir_config
+---@class lir_config
 local config = {}
 config.values = {}
 
--- @param opts table
+---@param opts table
 function config.set_default_values(opts)
   config.values = vim.tbl_deep_extend('force', defaults_values, opts or {})
 end

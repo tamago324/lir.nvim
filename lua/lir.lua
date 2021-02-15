@@ -16,8 +16,8 @@ local a = vim.api
 -- Private
 -----------------------------
 
--- @param path string
--- @return lir_item[]
+---@param path string
+---@return lir_item[]
 local function readdir(path)
   local files = {}
   local handle = uv.fs_scandir(path)
@@ -32,7 +32,7 @@ local function readdir(path)
     end
     local p = Path:new(path):joinpath(name)
     local is_dir = p:is_dir()
-    -- @type lir_item
+    ---@type lir_item
     local file = {
       value = name,
       is_dir = is_dir,
@@ -57,8 +57,8 @@ local function readdir(path)
   return files
 end
 
--- @param lhs lir_item
--- @param rhs lir_item
+---@param lhs lir_item
+---@param rhs lir_item
 local function sort(lhs, rhs)
   if lhs.is_dir and not rhs.is_dir then
     return true
@@ -69,10 +69,10 @@ local function sort(lhs, rhs)
 end
 
 ---  Return values like slice
--- @param t table
--- @param i2 number
--- @return number
--- @see https://luarocks.org/modules/steved/microlight, https://github.com/EvandroLG/array.lua
+---@param t table
+---@param i2 number
+---@return number
+---@see https://luarocks.org/modules/steved/microlight, https://github.com/EvandroLG/array.lua
 local function upper(t, i2)
   if not i2 or i2 > #t then
     return #t
@@ -84,9 +84,9 @@ local function upper(t, i2)
   end
 end
 
--- @param t table
--- @param i1 number
--- @param i2 number
+---@param t table
+---@param i1 number
+---@param i2 number
 local function tbl_sub(t, i1, i2)
   i2 = upper(t, i2)
   local res = {}
@@ -99,8 +99,8 @@ end
 
 
 --- Set the lines while adjusting the cursor to feel good
--- @param dir string
--- @param lines string[]
+---@param dir string
+---@param lines string[]
 local function setlines(dir, lines)
   local lnum = 1
   if history.exists(dir) then
@@ -137,14 +137,14 @@ local function setlines(dir, lines)
 end
 
 
--- @param path string
--- @return boolean
+---@param path string
+---@return boolean
 local function is_symlink(path)
   return uv.fs_lstat(path).type == 'link'
 end
 
--- @param dir string
--- @param files lir_item[]
+---@param dir string
+---@param files lir_item[]
 local function set_virtual_text_symlink(dir, files)
   for i, file in ipairs(files) do
     if is_symlink(dir .. file.value) then
@@ -154,7 +154,7 @@ local function set_virtual_text_symlink(dir, files)
   end
 end
 
--- @param devicon_enable boolean
+---@param devicon_enable boolean
 local function set_nocontent_text(devicon_enable)
   -- From vim-clap
   local text = string.format(' %s Directory is empty',
@@ -167,7 +167,7 @@ end
 -- Export
 -----------------------------
 
--- @class lir
+---@class lir
 local lir = {}
 
 function lir.init()
@@ -230,7 +230,7 @@ function lir.init()
   a.nvim_buf_set_option(0, 'filetype', 'lir')
 end
 
--- @param prefs table
+---@param prefs table
 function lir.setup(prefs)
   -- Set preferences
   config.set_default_values(prefs)

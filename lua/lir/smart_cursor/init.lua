@@ -34,7 +34,7 @@ end
 -- Export
 -----------------------------
 
--- @class lir_smart_cursor
+---@class lir_smart_cursor
 local M = {}
 
 function M._hide()

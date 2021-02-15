@@ -7,8 +7,8 @@ local a = vim.api
 -- Private
 -----------------------------
 
--- @param bufnr number
--- @param win_id number
+---@param bufnr number
+---@param win_id number
 local function setup_autocmd(bufnr, win_id)
   -- By delaying it a bit, we can make it look like it's not closed when we move the directory.
   vim.cmd(string.format(
@@ -19,12 +19,12 @@ local function setup_autocmd(bufnr, win_id)
               bufnr, win_id))
 end
 
--- @return string
+---@return string
 local function get_curdir()
   return vim.fn.fnamemodify(lvim.get_context().dir, ':~')
 end
 
--- @param content_win_id number
+---@param content_win_id number
 local function create_curdir_window(content_win_id)
   local content_bufnr = a.nvim_get_current_buf()
   local content_win_config = a.nvim_win_get_config(content_win_id)
@@ -48,7 +48,7 @@ end
 -- Export
 -----------------------------
 
--- @class lir_curdir_window
+---@class lir_curdir_window
 local curdir_window = {}
 
 function curdir_window.new()

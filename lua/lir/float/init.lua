@@ -10,7 +10,7 @@ local a = vim.api
 -- Private
 -----------------------------
 
--- @return number
+---@return number
 local function find_lir_float_win()
   for _, win in ipairs(a.nvim_tabpage_list_wins(0)) do
     local buf = a.nvim_win_get_buf(win)
@@ -27,10 +27,10 @@ end
 -- Export
 -----------------------------
 
--- @class lir_float
+---@class lir_float
 local float = {}
 
--- @param dir string
+---@param dir string
 function float.toggle(dir)
   local float_win = find_lir_float_win()
   if float_win then
@@ -41,7 +41,7 @@ function float.toggle(dir)
   end
 end
 
--- @param dir_path? string
+---@param dir_path? string
 function float.init(dir_path)
   local dir, file, old_win
   if vim.bo.filetype == 'lir' then

@@ -2,22 +2,22 @@
 -- Export
 -----------------------------
 
--- @class lir_context
--- @field dir   string
--- @field files lir_item[]
+---@class lir_context
+---@field dir   string
+---@field files lir_item[]
 local Context = {}
 
 
--- @class lir_item
--- @field value string
--- @field is_dir boolean
--- @field fullpath string
--- @field display string
--- @field devicons table
+---@class lir_item
+---@field value string
+---@field is_dir boolean
+---@field fullpath string
+---@field display string
+---@field devicons table
 
 
--- @param dir string
--- @return lir_context
+---@param dir string
+---@return lir_context
 function Context.new(dir)
   local self = setmetatable({}, {__index = Context})
   self.dir = dir
@@ -25,7 +25,7 @@ function Context.new(dir)
   return self
 end
 
--- @return table
+---@return table
 function Context:current()
   local file = self.files[vim.fn.line('.')]
   if file then
@@ -34,7 +34,7 @@ function Context:current()
   return nil
 end
 
--- @return string
+---@return string
 function Context:current_value()
   local file = self.files[vim.fn.line('.')]
   if file then
@@ -43,8 +43,8 @@ function Context:current_value()
   return nil
 end
 
--- @param value string
--- @return number
+---@param value string
+---@return number
 function Context:indexof(value)
   for i = 1, #self.files do
     local v = self.files[i]
@@ -54,7 +54,7 @@ function Context:indexof(value)
   end
 end
 
--- @return boolean
+---@return boolean
 function Context:is_dir_current()
   local file = self.files[vim.fn.line('.')]
   if file then
