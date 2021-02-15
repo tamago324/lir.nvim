@@ -20,8 +20,11 @@ end
 -----------------------------
 -- Export
 -----------------------------
+
+-- @class lir_mappings
 local M = {}
 
+-- @param mappings table
 function M.apply_mappings(mappings)
   local bufnr = a.nvim_get_current_buf()
   local options = {}
@@ -47,6 +50,8 @@ function M.apply_mappings(mappings)
   end
 end
 
+-- @param bufnr number
+-- @param escaped string
 function M.execute_keymap(bufnr, escaped)
   local func = buf_keymap[bufnr][escaped]
   func()

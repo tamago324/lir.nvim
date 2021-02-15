@@ -11,8 +11,11 @@ local ns = a.nvim_create_namespace('lir_dir')
 -----------------------------
 -- Export
 -----------------------------
+
+-- @class lir_highlight
 local highlight = {}
 
+-- @param files lir_item[]
 function highlight.update_highlight(files)
   if config.values.devicons_enable then
     devicons.update_highlight(files)

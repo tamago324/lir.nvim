@@ -8,6 +8,7 @@ local vim = vim
 local uv = vim.loop
 local a = vim.api
 
+-- @class lir_actions
 local actions = {}
 
 -----------------------------
@@ -15,6 +16,7 @@ local actions = {}
 -----------------------------
 local get_context = lvim.get_context
 
+-- @param cmd string
 local function open(cmd)
   local ctx = get_context()
   if not ctx:current_value() then
