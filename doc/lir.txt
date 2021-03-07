@@ -50,15 +50,41 @@ context.files                                              *lir-context.files*
 context:current()                                      *lir-context:current()*
     Returns the |lir-file-item| under the cursor.
 
+        Return: ~
+            (table) |lir-file-item|
+
+context:current_items({mode})                    *lir-context:current_items()*
+    If {mode} is `'v'`, returns a list of the last selected |lir-file-items|,
+    if {mode} is `'n'` or `nil`, returns a list of only the |lir-file-items|
+    under the cursor
+
+        Return: ~
+            (table) |lir-file-item|[]
+
 context:current_value()                          *lir-context:current_value()*
     Returns the `value` of |lir-file-item| under the cursor.
 
-context:indexof(value)                                 *lir-context:indexof()*
-    Returns the index of `value` in |lir-context.files|.
-    Returns the result of comparing |lir-file-item|.value and `value`.
+        Return: ~
+            (string) |lir-file-item|.value
+
+context:indexof({value})                               *lir-context:indexof()*
+    Returns the index of {value} in |lir-context.files|.
+    Returns the result of comparing |lir-file-item|.value and {value}.
+
+        Return: ~
+            (number)
 
 context:is_dir_current()                        *lir-context:is_dir_current()*
     Is the |lir-file-item| under the cursor a directory?
+
+        Return: ~
+            (boolean)
+
+context:get_marked_items()                    *lir-context:get_marked_items()*
+    Returns a list of marked |lir-file-item|.
+
+        Return: ~
+            (table) |lir-file-item|[]
 
 
 ------------------------------------------------------------------------------
@@ -81,6 +107,9 @@ fullpath                                    *lir-file-item-attribute-fullpath*
 
 display                                      *lir-file-item-attribute-display*
     Value to be displayed in the line
+
+marked                                        *lir-file-item-attribute-marked*
+    Is it marked?
 
 devicons                                    *lir-file-item-attribute-devicons*
     A table about devicons.
@@ -146,6 +175,8 @@ hide_cursor                                         *lir-settings-hide_cursor*
 Example: >
 
     local actions = require'lir.actions'
+    local mark_actions = require 'lir.mark.actions'
+    local clipboard_actions = require'lir.clipboard.actions'
     
     require'lir'.setup {
       show_hidden_files = false,
@@ -165,6 +196,14 @@ Example: >
         ['@']     = actions.cd,
         ['Y']     = actions.yank_path,
         ['.']     = actions.toggle_show_hidden,
+
+        ['J'] = function()
+          mark_actions.toggle_mark()
+          vim.cmd('normal! j')
+        end,
+        ['C'] = clipboard_actions.copy,
+        ['X'] = clipboard_actions.cut,
+        ['P'] = clipboard_actions.paste,
       },
       float = {
         size_percentage = 0.5,
@@ -184,6 +223,18 @@ Example: >
         },
       }
     })
+
+    -- use visual mode
+    function _G.LirSettings()
+      vim.api.nvim_buf_set_keymap(
+        0, 'x', 'J',
+        ':<C-u>lua require"lir.mark.actions".toggle_mark("v")<CR>', {noremap = true, silent = true})
+    end
+
+    vim.cmd [[augroup lir-settings]]
+    vim.cmd [[  autocmd!]]
+    vim.cmd [[  autocmd Filetype lir :lua LirSettings()]]
+    vim.cmd [[augroup END]]
 <
 
 ==============================================================================
@@ -191,49 +242,87 @@ ACTIONS                                                          *lir-actions*
 
 A list of functions for use in mapping.
 
+------------------------------------------------------------------------------
+Lua module: lir.acitons                                          *lir-actions*
 
-lir.actions.edit()                                        *lir.actions.edit()*
+edit()                                                    *lir.actions.edit()*
     Use |:edit| to open the file under the cursor.
 
-lir.actions.split()                                      *lir.actions.split()*
+split()                                                  *lir.actions.split()*
     Use |:new| to open the file under the cursor.
 
-lir.actions.vsplit()                                    *lir.actions.vsplit()*
+vsplit()                                                *lir.actions.vsplit()*
     Use |:vnew| to open the file under the cursor.
 
-lir.actions.tabedit()                                  *lir.actions.tabedit()*
+tabedit()                                              *lir.actions.tabedit()*
     Use |:tabedit| to open the file under the cursor.
 
-lir.actions.up()                                            *lir.actions.up()*
+up()                                                        *lir.actions.up()*
     Move to the parent directory.
 
-lir.actions.quit()                                        *lir.actions.quit()*
+quit()                                                    *lir.actions.quit()*
     Close lir.
 
-lir.actions.mkdir()                                      *lir.actions.mkdir()*
+mkdir()                                                  *lir.actions.mkdir()*
     Create the directory.
 
-lir.actions.rename()                                    *lir.actions.rename()*
+rename()                                                *lir.actions.rename()*
     Rename a file.
 
-lir.actions.delete()                                    *lir.actions.delete()*
+delete()                                                *lir.actions.delete()*
     Delete a file.
 
-lir.actions.newfile()                                  *lir.actions.newfile()*
+newfile()                                              *lir.actions.newfile()*
     Create a new file.
 
-lir.actions.cd()                                            *lir.actions.cd()*
+cd()                                                        *lir.actions.cd()*
     Change the current directory of Vim to |lir-context.dir|.
     Use |:lcd| or |:cd|.
 
-lir.actions.reload()                                    *lir.actions.reload()*
+reload()                                                *lir.actions.reload()*
     Reload the lir.
 
-lir.actions.yank_path()                              *lir.actions.yank_path()*
+yank_path()                                          *lir.actions.yank_path()*
     Yank the file path under the cursor into the register of |v:register|.
 
-lir.actions.toggle_show_hidden()            *lir.actions.toggle_show_hidden()*
+toggle_show_hidden()                        *lir.actions.toggle_show_hidden()*
     Toggles between showing and hiding files whose file names start with `.`.
+
+------------------------------------------------------------------------------
+Lua module: lir.mark.acitons                                *lir-mark-actions*
+
+mark({mode})                                         *lir.mark.actions.mark()*
+    Marking items.
+
+        Parameters: ~
+            {mode} (string) A single character describing the mode.
+                    Either `'n'` or `'v'`. Default is `'n'`.
+
+unmark({mode})                                       *lir.mark.actions.mark()*
+    Unmark items.
+    
+        Parameters: ~
+            {mode} (string) A single character describing the mode.
+                    Either `'n'` or `'v'`. Default is `'n'`.
+
+toggle({mode})                                     *lir.mark.actions.toggle()*
+    Toggle item marks.
+    
+        Parameters: ~
+            {mode} (string) A single character describing the mode.
+                    Either `'n'` or `'v'`. Default is `'n'`.
+
+------------------------------------------------------------------------------
+Lua module: lir.clipboard.acitons                                *lir-actions*
+
+copy()                                          *lir.clipboard.actions.copy()*
+    Save the marked item to the clipboard as a `copy` target.
+
+cut()                                            *lir.clipboard.actions.cut()*
+    Save the marked item to the clipboard as a `cut` target.
+
+paste()                                        *lir.clipboard.actions.paste()*
+    Paste an item saved in the clipboard.
 
 
 ==============================================================================

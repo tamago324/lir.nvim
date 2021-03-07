@@ -50,15 +50,41 @@ context.files                                              *lir-context.files*
 context:current()                                      *lir-context:current()*
     カーソル下の |lir-file-item| を返します
 
+        Return: ~
+            (table) |lir-file-item|
+
+context:current_items({mode})                    *lir-context:current_items()*
+    {mode} が `'v'` なら、最後に選択されていた |lir-file-item| のリストを返し、
+    {mode} が `'n'` か `nil` なら、カーソル下の |lir-file-item| のみのリスト
+    を返します
+
+        Return: ~
+            (table) |lir-file-item| のリスト
+
 context:current_value()                          *lir-context:current_value()*
     カーソル下の |lir-file-item| の `value` を返します
 
-context:indexof(value)                                 *lir-context:indexof()*
-    `value` が |lir-context.files| の中で、何番目にあるかを返します
-    files[n].value (|lir-file-item|.value) と value を比較します
+        Return: ~
+            (string) |lir-file-item| の `value`
+
+context:indexof({value})                               *lir-context:indexof()*
+    {value} が |lir-context.files| の中で、何番目にあるかを返します
+    files[n].value (|lir-file-item|.value) と {value} を比較します
+
+        Return: ~
+            (number)
 
 context:is_dir_current()                        *lir-context:is_dir_current()*
-    カーソル下の |lir-file-item| がディレクトリか？
+    カーソル下の |lir-file-item| がディレクトリかを返します
+
+        Return: ~
+            (boolean) ディレクトリかどうか
+
+context:get_marked_items()                    *lir-context:get_marked_items()*
+    マークされている |lir-file-item| のリストを返します
+
+        Return: ~
+            (table) |lir-file-item| のリスト
 
 
 ------------------------------------------------------------------------------
@@ -81,6 +107,9 @@ fullpath                                    *lir-file-item-attribute-fullpath*
 
 display                                      *lir-file-item-attribute-display*
     行に表示する値
+
+marked                                        *lir-file-item-attribute-marked*
+    マークされているかどうか
 
 devicons                                    *lir-file-item-attribute-devicons*
     devicons のテーブル
@@ -145,6 +174,8 @@ hide_cursor                                         *lir-settings-hide_cursor*
 設定例: >
 
     local actions = require'lir.actions'
+    local mark_actions = require 'lir.mark.actions'
+    local clipboard_actions = require'lir.clipboard.actions'
     
     require'lir'.setup {
       show_hidden_files = false,
@@ -164,6 +195,14 @@ hide_cursor                                         *lir-settings-hide_cursor*
         ['@']     = actions.cd,
         ['Y']     = actions.yank_path,
         ['.']     = actions.toggle_show_hidden,
+
+        ['J'] = function()
+          mark_actions.toggle_mark()
+          vim.cmd('normal! j')
+        end,
+        ['C'] = clipboard_actions.copy,
+        ['X'] = clipboard_actions.cut,
+        ['P'] = clipboard_actions.paste,
       },
       float = {
         size_percentage = 0.5,
@@ -183,6 +222,18 @@ hide_cursor                                         *lir-settings-hide_cursor*
         },
       }
     })
+
+    -- use visual mode
+    function _G.LirSettings()
+      vim.api.nvim_buf_set_keymap(
+        0, 'x', 'J',
+        ':<C-u>lua require"lir.mark.actions".toggle_mark("v")<CR>', {noremap = true, silent = true})
+    end
+
+    vim.cmd [[augroup lir-settings]]
+    vim.cmd [[  autocmd!]]
+    vim.cmd [[  autocmd Filetype lir :lua LirSettings()]]
+    vim.cmd [[augroup END]]
 <
 
 ==============================================================================
@@ -190,50 +241,89 @@ ACTIONS                                                          *lir-actions*
 
 マッピングに使用するための関数
 
+------------------------------------------------------------------------------
+Lua module: lir.acitons                                          *lir-actions*
 
-lir.actions.edit()                                        *lir.actions.edit()*
+edit()                                                    *lir.actions.edit()*
     カーソル下のファイルを|:edit| を使って開く。
 
-lir.actions.split()                                      *lir.actions.split()*
+split()                                                  *lir.actions.split()*
     カーソル下のファイルを|:new| を使って開く。
 
-lir.actions.vsplit()                                    *lir.actions.vsplit()*
+vsplit()                                                *lir.actions.vsplit()*
     カーソル下のファイルを|:vnew| を使って開く。
 
-lir.actions.tabedit()                                  *lir.actions.tabedit()*
+tabedit()                                              *lir.actions.tabedit()*
     カーソル下のファイルを|:tabedit| を使って開く。
 
-lir.actions.up()                                            *lir.actions.up()*
+up()                                                        *lir.actions.up()*
     ひとつ上のディレクトリに移動する。
 
-lir.actions.quit()                                        *lir.actions.quit()*
+quit()                                                    *lir.actions.quit()*
     lir を閉じる。
 
-lir.actions.mkdir()                                      *lir.actions.mkdir()*
+mkdir()                                                  *lir.actions.mkdir()*
     ディレクトリを作成する。
 
-lir.actions.rename()                                    *lir.actions.rename()*
+rename()                                                *lir.actions.rename()*
     ファイル名を変更する。
 
-lir.actions.delete()                                    *lir.actions.delete()*
+delete()                                                *lir.actions.delete()*
     ファイルを削除する。
 
-lir.actions.newfile()                                  *lir.actions.newfile()*
+newfile()                                              *lir.actions.newfile()*
     ファイルを新規作成する。
 
-lir.actions.cd()                                            *lir.actions.cd()*
+cd()                                                        *lir.actions.cd()*
     Vim のカレントディレクトリを lir のディレクトリ (|lir-context.dir|) に変更
     する。
     |:lcd| か |:cd| を使う
 
-lir.actions.reload()                                    *lir.actions.reload()*
+reload()                                                *lir.actions.reload()*
     lir を再表示します。
 
-lir.actions.yank_path()                              *lir.actions.yank_path()*
+yank_path()                                          *lir.actions.yank_path()*
     カーソル下のファイルパスを |v:register| のレジスタにヤンクします。
 
-lir.actions.toggle_show_hidden()            *lir.actions.toggle_show_hidden()*
+toggle_show_hidden()                        *lir.actions.toggle_show_hidden()*
     先頭が `.` のファイルの表示/非表示を切り替える。
+
+
+------------------------------------------------------------------------------
+Lua module: lir.mark.acitons                                *lir-mark-actions*
+
+mark({mode})                                         *lir.mark.actions.mark()*
+    マークを付ける
+
+        Parameters: ~
+            {mode} (string) モードを表す1文字。
+                    `'n'` か `'v'` のどちらか。デフォルトは `'n'`
+
+unmark({mode})                                       *lir.mark.actions.mark()*
+    マークを外す
+    
+        Parameters: ~
+            {mode} (string) モードを表す1文字。
+                    `'n'` か `'v'` のどちらか。デフォルトは `'n'`
+
+toggle({mode})                                     *lir.mark.actions.toggle()*
+    マークを切り替える
+    
+        Parameters: ~
+            {mode} (string) モードを表す1文字。
+                    `'n'` か `'v'` のどちらか。デフォルトは `'n'`
+
+------------------------------------------------------------------------------
+Lua module: lir.clipboard.acitons                                *lir-actions*
+
+copy()                                          *lir.clipboard.actions.copy()*
+    マークしているアイテムをコピー対象としてクリップボードに保存する
+
+cut()                                            *lir.clipboard.actions.cut()*
+    マークしているアイテムを切り取り対象としてクリップボードに保存する
+
+paste()                                        *lir.clipboard.actions.paste()*
+    クリップボードに保存されているアイテムを貼り付ける
 
 
 ==============================================================================
