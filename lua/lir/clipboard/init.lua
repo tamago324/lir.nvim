@@ -1,5 +1,4 @@
 local utils = require 'lir.utils'
-local mark_utils = require 'lir.mark.utils'
 
 -----------------------------
 -- Private

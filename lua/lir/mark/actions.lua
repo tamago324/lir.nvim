@@ -1,6 +1,5 @@
 local config = require 'lir.config'
 local a = vim.api
-local mark_utils = require 'lir.mark.utils'
 local lir = require 'lir'
 
 -----------------------------

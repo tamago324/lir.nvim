@@ -13,7 +13,7 @@ local uv = vim.loop
 -----------------------------
 
 ---
----@param status 
+---@param status any
 ---@vararg any
 ---@return any
 local function ok_or_nil(status, ...)

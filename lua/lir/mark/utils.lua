@@ -44,7 +44,8 @@ end
 ---@return lir_item[]
 M.get_marked_items = function(context)
   vim.api.nvim_echo({
-    {"`lir.mark.get_marked_items()` is deprecated. Use require('lir').get_context():get_marked_items() instead", 'WarningMsg'}
+    {"`lir.mark.get_marked_items()` is deprecated."
+    .. " Use require('lir').get_context():get_marked_items() instead", 'WarningMsg'}
   }, true, {})
 
   context = context or lir.get_context()
