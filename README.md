@@ -16,6 +16,8 @@ Plug 'kyazdani42/nvim-web-devicons'
 
 ```lua
 local actions = require'lir.actions'
+local mark_actions = require 'lir.mark.actions'
+local clipboard_actions = require'lir.clipboard.actions'
 
 require'lir'.setup {
   show_hidden_files = false,
@@ -35,6 +37,14 @@ require'lir'.setup {
     ['@']     = actions.cd,
     ['Y']     = actions.yank_path,
     ['.']     = actions.toggle_show_hidden,
+
+    ['J'] = function()
+      mark_actions.toggle_mark()
+      vim.cmd('normal! j')
+    end,
+    ['C'] = clipboard_actions.copy,
+    ['X'] = clipboard_actions.cut,
+    ['P'] = clipboard_actions.paste,
   },
   float = {
     size_percentage = 0.5,
@@ -55,6 +65,16 @@ require'nvim-web-devicons'.setup({
     },
   }
 })
+
+-- use visual mode
+function _G.LirSettings()
+  vim.api.nvim_buf_set_keymap(0, 'x', 'J', ':<C-u>lua require"lir.mark.actions".toggle_mark("v")<CR>', {noremap = true, silent = true})
+end
+
+vim.cmd [[augroup lir-settings]]
+vim.cmd [[  autocmd!]]
+vim.cmd [[  autocmd Filetype lir :lua LirSettings()]]
+vim.cmd [[augroup END]]
 ```
 
 
@@ -87,7 +107,6 @@ hi LirFloatBorder guifg=#7c6f64
 
 ### Extensions
 
-* [tamago324/lir-mark.nvim](https://github.com/tamago324/lir-mark.nvim)
 * [tamago324/lir-mmv.nvim](https://github.com/tamago324/lir-mmv.nvim)
 * [tamago324/lir-bookmark.nvim](https://github.com/tamago324/lir-bookmark.nvim)
 

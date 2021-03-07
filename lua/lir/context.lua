@@ -14,6 +14,7 @@ local Context = {}
 ---@field fullpath string
 ---@field display string
 ---@field devicons table
+---@field marked boolean
 
 
 ---@param dir string
@@ -25,13 +26,31 @@ function Context.new(dir)
   return self
 end
 
----@return table
+---@return lir_item|nil
 function Context:current()
   local file = self.files[vim.fn.line('.')]
   if file then
     return file
   end
   return nil
+end
+
+
+---@param mode? 'n'|'v'
+---@return lir_item[]
+function Context:current_items(mode)
+  local s, e
+  if mode == 'v' then
+    s, e = vim.fn.line("'<"), vim.fn.line("'>")
+  else
+    s, e = vim.fn.line('.'), vim.fn.line('.')
+  end
+
+  local results = {}
+  for i = s, e do
+    table.insert(results, self.files[i])
+  end
+  return results
 end
 
 ---@return string
@@ -62,5 +81,18 @@ function Context:is_dir_current()
   end
   return false
 end
+
+
+---@return lir_item[]
+function Context:get_marked_items()
+  local results = {}
+  for _, f in ipairs(self.files) do
+    if f.marked then
+      table.insert(results, f)
+    end
+  end
+  return results
+end
+
 
 return Context
