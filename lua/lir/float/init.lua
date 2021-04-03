@@ -63,7 +63,9 @@ function float.init(dir_path)
 
   vim.t.lir_float_winid = info.win_id
   -- To move the cursor
-  vim.w.lir_file_jump_cursor = file
+  if file then
+    vim.w.lir_file_jump_cursor = file
+  end
   vim.cmd('edit ' .. vim.fn.fnameescape(dir))
   vim.w.lir_is_float = true
 
