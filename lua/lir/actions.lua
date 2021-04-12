@@ -39,14 +39,12 @@ function actions.edit()
     return
   end
 
-  local cmd
   if vim.w.lir_is_float and not ctx:is_dir_current() then
     -- 閉じてから開く
     actions.quit()
-    cmd = 'edit'
-  else
-    cmd = 'keepalt edit'
   end
+
+  local cmd = (vim.api.nvim_buf_get_option(0, 'modified') and 'split') or 'edit'
 
   vim.cmd(cmd .. ' ' .. vim.fn.fnameescape(dir .. file))
   history.add(dir, file)
