@@ -9,7 +9,7 @@ local defaults_values = {
     size_percentage = 0.5,
     winblend = 15,
     border = false,
-    borderchars = {"═" , "║" , "═" , "║" , "╔" , "╗" , "╝" , "╚"},
+    borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
   },
   hide_cursor = false,
 }

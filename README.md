@@ -50,7 +50,7 @@ require'lir'.setup {
     size_percentage = 0.5,
     winblend = 15,
     border = true,
-    borderchars = {"═" , "║" , "═" , "║" , "╔" , "╗" , "╝" , "╚"},
+    borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
   },
   hide_cursor = true,
 }
