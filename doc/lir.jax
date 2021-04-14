@@ -138,7 +138,7 @@ SETTINGS                                                        *lir-settings*
         size_percentage = 0.5,
         winblend = 15,
         border = false,
-        borderchars = {"═" , "║" , "═" , "║" , "╔" , "╗" , "╝" , "╚"},
+        borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
       },
       hide_cursor = false
     }
@@ -165,6 +165,7 @@ float.border                                       *lir-settings-float.border*
 
 float.borderchars                             *lir-settings-float.borderchars*
     ボーダーの文字
+    左上から時計回りに指定する
 
 hide_cursor                                         *lir-settings-hide_cursor*
     カーソルを非表示にするか
@@ -208,7 +209,7 @@ hide_cursor                                         *lir-settings-hide_cursor*
         size_percentage = 0.5,
         winblend = 15,
         border = true,
-        borderchars = {"═" , "║" , "═" , "║" , "╔" , "╗" , "╝" , "╚"},
+        borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
       }
     }
     

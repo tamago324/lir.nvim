@@ -1,14 +1,77 @@
-local win_float = require 'plenary.window.float'
 local actions = require 'lir.actions'
 local lvim = require 'lir.vim'
 local config = require 'lir.config'
 
 local a = vim.api
 
+---@class lir_float
+local float = {}
 
------------------------------
--- Private
------------------------------
+--- borderchars にハイライトをつけたテーブルを返す
+--- { {'=', 'LirFloatBorder'}, {'|', 'LirFloatBorder'}, ... } のようなテーブルを作る
+---@param borderchars table
+local make_border_opts = function(borderchars)
+  return vim.tbl_map(function(char)
+    return { char, 'LirFloatBorder' }
+  end, borderchars)
+end
+
+--- オプションのデフォルト値を返す
+---@param opts table
+---@return table
+local function default_opts(opts)
+  vim.validate {
+    percentage = { opts.percentage, 'n' },
+    borderchars = { opts.borderchars, 't' },
+  }
+
+  local width = math.floor(vim.o.columns * opts.percentage)
+  local height = math.floor(vim.o.lines * opts.percentage)
+
+  local top = math.floor(((vim.o.lines - height) / 2) - 1)
+  local left = math.floor((vim.o.columns - width) / 2)
+
+  local result = {
+    relative = 'editor',
+    row      = top,
+    col      = left,
+    width    = width,
+    height   = height,
+    style    = 'minimal',
+    border   = make_border_opts(opts.borderchars)
+  }
+
+  return result
+end
+
+--- 中央配置のウィンドウを開く
+---@param opts table
+---@return number win_id
+local function open_centered_win(opts)
+  vim.validate {
+    percentage = { opts.percentage, 'n' },
+    winblend = { opts.winblend, 'n' },
+    borderchars = { opts.borderchars, 't' },
+  }
+
+  local win_opts = default_opts(opts)
+
+  local bufnr = a.nvim_create_buf(false, true)
+  local win_id = a.nvim_open_win(bufnr, true, win_opts)
+
+  vim.cmd('setlocal nocursorcolumn')
+  a.nvim_win_set_option(win_id, 'winblend', opts.winblend)
+
+  vim.cmd(
+    string.format(
+      "autocmd WinLeave <buffer> silent! execute 'bdelete! %s'",
+      bufnr
+    )
+  )
+
+  return win_id
+end
+
 
 ---@return number
 local function find_lir_float_win()
@@ -21,14 +84,6 @@ local function find_lir_float_win()
   end
   return nil
 end
-
-
------------------------------
--- Export
------------------------------
-
----@class lir_float
-local float = {}
 
 ---@param dir string
 function float.toggle(dir)
@@ -56,12 +111,13 @@ function float.init(dir_path)
     file = vim.fn.expand('%:p')
   end
 
-  local info = win_float.centered({
+  local win_id = open_centered_win({
     percentage = config.values.float.size_percentage,
     winblend = config.values.float.winblend,
+    borderchars = config.values.float.borderchars,
   })
 
-  vim.t.lir_float_winid = info.win_id
+  vim.t.lir_float_winid = win_id
   -- To move the cursor
   if file then
     vim.w.lir_file_jump_cursor = file
@@ -69,7 +125,7 @@ function float.init(dir_path)
   vim.cmd('edit ' .. vim.fn.fnameescape(dir))
   vim.w.lir_is_float = true
 
-  a.nvim_win_set_option(info.win_id, 'winhl', 'Normal:LirFloatNormal')
+  a.nvim_win_set_option(win_id, 'winhl', 'Normal:LirFloatNormal')
 
   -- 空バッファに置き換える
   if old_win then
