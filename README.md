@@ -69,6 +69,12 @@ require'nvim-web-devicons'.setup({
 -- use visual mode
 function _G.LirSettings()
   vim.api.nvim_buf_set_keymap(0, 'x', 'J', ':<C-u>lua require"lir.mark.actions".toggle_mark("v")<CR>', {noremap = true, silent = true})
+
+  -- echo cwd
+  vim.cmd [[augroup lir-echo-cwd]]
+  vim.cmd [[  autocmd!]]
+  vim.cmd [[  autocmd CursorHold <buffer> echo expand('%:p')]]
+  vim.cmd [[augroup END]]
 end
 
 vim.cmd [[augroup lir-settings]]
