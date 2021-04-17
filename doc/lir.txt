@@ -139,6 +139,7 @@ default value: >
         winblend = 15,
         border = false,
         borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
+        shadow = false,
       },
       hide_cursor = false
     }
@@ -166,6 +167,10 @@ float.border                                       *lir-settings-float.border*
 
 float.borderchars                             *lir-settings-float.borderchars*
     A list of characters to be used for the border.
+
+float.shadow                                       *lir-settings-float.border*
+    Use `shadow` for |nvim_open_win()|.
+    If this option is `true`, the value of |float.borderchars| will be ignored.
 
 hide_cursor                                         *lir-settings-hide_cursor*
     Hide the cursor in lir?
@@ -210,6 +215,7 @@ Example: >
         winblend = 15,
         border = true,
         borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
+        shadow = false,
       }
     }
     
@@ -238,6 +244,24 @@ Example: >
 <
 
 ==============================================================================
+HIGHLIGHTS                                                    *lir-highlights*
+
+LirFloatNormal                                                *LirFloatNormal*
+
+  Default: `highlight def link LirFloatNormal Normal``
+
+  The highlight for float window.
+
+
+LirFloatBorder                                                *LirFloatBorder*
+
+  Default: `highlight def link LirFloatBorder LirFloatNormal`
+
+  The highlight for float window border.
+
+
+==============================================================================
+
 ACTIONS                                                          *lir-actions*
 
 A list of functions for use in mapping.

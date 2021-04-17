@@ -52,9 +52,14 @@ local function open_centered_win(opts)
     percentage = { opts.percentage, 'n' },
     winblend = { opts.winblend, 'n' },
     borderchars = { opts.borderchars, 't' },
+    shadow = { opts.shadow, 'b' },
   }
 
   local win_opts = default_opts(opts)
+
+  if opts.shadow then
+    win_opts.border = 'shadow'
+  end
 
   local bufnr = a.nvim_create_buf(false, true)
   local win_id = a.nvim_open_win(bufnr, true, win_opts)
@@ -115,6 +120,7 @@ function float.init(dir_path)
     percentage = config.values.float.size_percentage,
     winblend = config.values.float.winblend,
     borderchars = config.values.float.borderchars,
+    shadow = config.values.float.shadow,
   })
 
   vim.t.lir_float_winid = win_id
@@ -125,7 +131,7 @@ function float.init(dir_path)
   vim.cmd('edit ' .. vim.fn.fnameescape(dir))
   vim.w.lir_is_float = true
 
-  a.nvim_win_set_option(win_id, 'winhl', 'Normal:LirFloatNormal')
+  a.nvim_win_set_option(win_id, 'winhl', 'Normal:LirFloatNormal,EndOfBuffer:LirFloatNormal')
 
   -- 空バッファに置き換える
   if old_win then

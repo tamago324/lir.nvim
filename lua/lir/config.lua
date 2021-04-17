@@ -10,6 +10,7 @@ local defaults_values = {
     winblend = 15,
     border = false,
     borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
+    shadow = false,
   },
   hide_cursor = false,
 }

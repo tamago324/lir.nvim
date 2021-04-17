@@ -139,6 +139,7 @@ SETTINGS                                                        *lir-settings*
         winblend = 15,
         border = false,
         borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
+        shadow = false,
       },
       hide_cursor = false
     }
@@ -166,6 +167,10 @@ float.border                                       *lir-settings-float.border*
 float.borderchars                             *lir-settings-float.borderchars*
     ボーダーの文字
     左上から時計回りに指定する
+
+float.shadow                                       *lir-settings-float.border*
+    |nvim_open_win()| の shadow を使用するか
+    このオプションが `true` の場合、`float.borderchars` の値は無視されます。
 
 hide_cursor                                         *lir-settings-hide_cursor*
     カーソルを非表示にするか
@@ -210,6 +215,7 @@ hide_cursor                                         *lir-settings-hide_cursor*
         winblend = 15,
         border = true,
         borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
+        shadow = false,
       }
     }
     
@@ -236,6 +242,25 @@ hide_cursor                                         *lir-settings-hide_cursor*
     vim.cmd [[  autocmd Filetype lir :lua LirSettings()]]
     vim.cmd [[augroup END]]
 <
+
+==============================================================================
+HIGHLIGHTS                                                    *lir-highlights*
+
+LirFloatNormal                                                *LirFloatNormal*
+
+  デフォルト: `highlight def link LirFloatNormal Normal``
+
+  The highlight for float window.
+  floating window のハイライト。
+
+
+LirFloatBorder                                                *LirFloatBorder*
+
+  デフォルト: `highlight def link LirFloatBorder LirFloatNormal`
+
+  The highlight for float window border.
+  floating window の枠線のハイライト。
+
 
 ==============================================================================
 ACTIONS                                                          *lir-actions*
