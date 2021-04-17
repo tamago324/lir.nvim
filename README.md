@@ -51,6 +51,7 @@ require'lir'.setup {
     winblend = 15,
     border = true,
     borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
+    shadow = true,
   },
   hide_cursor = true,
 }
