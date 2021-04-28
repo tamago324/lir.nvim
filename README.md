@@ -121,6 +121,12 @@ hi LirFloatBorder guifg=#7c6f64
 * [norcalli/nvim_utils](https://github.com/norcalli/nvim_utils)
 * [lambdalisue/fern.vim](https://github.com/lambdalisue/fern.vim)
 
+## Screenshots
+
+![](https://github.com/tamago324/images/blob/master/lir.nvim/lir-normal.png)
+
+![](https://github.com/tamago324/images/blob/master/lir.nvim/lir-float.png)
+
 
 ## License
 
