@@ -50,7 +50,10 @@ require'lir'.setup {
     winblend = 15,
     border = true,
     borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
-    shadow = true,
+
+    -- -- If you want to use `shadow`, set `shadow` to `true`.
+    -- -- Also, if you set shadow to true, the value of `borderchars` will be ignored.
+    -- shadow = false,
   },
   hide_cursor = true,
 }

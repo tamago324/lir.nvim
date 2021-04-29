@@ -215,7 +215,10 @@ hide_cursor                                         *lir-settings-hide_cursor*
         winblend = 15,
         border = true,
         borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
-        shadow = false,
+
+        -- -- If you want to use `shadow`, set `shadow` to `true`.
+        -- -- Also, if you set shadow to true, the value of `borderchars` will be ignored.
+        -- shadow = false,
       }
     }
     
@@ -241,6 +244,7 @@ hide_cursor                                         *lir-settings-hide_cursor*
     vim.cmd [[  autocmd!]]
     vim.cmd [[  autocmd Filetype lir :lua LirSettings()]]
     vim.cmd [[augroup END]]
+
 <
 
 ==============================================================================
