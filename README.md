@@ -87,6 +87,8 @@ vim.cmd [[augroup END]]
 
 ## Usage
 
+### Use normal buffer (like dirvish)
+
 ```sh
 $ nvim /path/to/directory/
 ```
