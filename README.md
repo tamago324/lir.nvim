@@ -128,9 +128,9 @@ hi LirFloatBorder guifg=#7c6f64
 
 ## Screenshots
 
-![](https://github.com/tamago324/images/blob/master/lir.nvim/lir-normal.png)
+![lir-normal](https://user-images.githubusercontent.com/16581287/116564659-247b6600-a940-11eb-9cb0-e8a746a0fc10.png)
 
-![](https://github.com/tamago324/images/blob/master/lir.nvim/lir-float.png)
+![lir-float](https://user-images.githubusercontent.com/16581287/116564754-3a892680-a940-11eb-9333-b67a1c45727f.png)
 
 
 ## License
