@@ -36,6 +36,7 @@ require'lir'.setup {
     ['@']     = actions.cd,
     ['Y']     = actions.yank_path,
     ['.']     = actions.toggle_show_hidden,
+    ['D']     = actions.delete,
 
     ['J'] = function()
       mark_actions.toggle_mark()
@@ -85,6 +86,8 @@ vim.cmd [[augroup END]]
 
 
 ## Usage
+
+### Use normal buffer (like dirvish)
 
 ```sh
 $ nvim /path/to/directory/
