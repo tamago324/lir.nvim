@@ -1,7 +1,6 @@
 # lir.nvim
 
-
-[WIP] simple file explorer
+A simple file explorer
 
 ```vim
 Plug 'tamago324/lir.nvim'
