@@ -2,6 +2,11 @@
 
 A simple file explorer
 
+Note: lir.nvim does not define any default mappings, you need to configure them yourself by referring to [help](doc/lir.txt).
+
+
+## Installation
+
 ```vim
 Plug 'tamago324/lir.nvim'
 Plug 'nvim-lua/plenary.nvim'
