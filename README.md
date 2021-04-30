@@ -116,6 +116,9 @@ Change highlights groups.
 ```viml
 hi LirFloatNormal guibg=#32302f
 hi LirFloatBorder guifg=#7c6f64
+hi LirDir guifg=#7ebae4
+hi LirSymLink guifg=#7c6f64
+hi LirEmptyDirText guifg=#7c6f64
 ```
 
 
