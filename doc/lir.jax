@@ -182,7 +182,7 @@ hide_cursor                                         *lir-settings-hide_cursor*
     local actions = require'lir.actions'
     local mark_actions = require 'lir.mark.actions'
     local clipboard_actions = require'lir.clipboard.actions'
-    
+
     require'lir'.setup {
       show_hidden_files = false,
       devicons_enable = true,
@@ -191,10 +191,10 @@ hide_cursor                                         *lir-settings-hide_cursor*
         ['<C-s>'] = actions.split,
         ['<C-v>'] = actions.vsplit,
         ['<C-t>'] = actions.tabedit,
-    
+
         ['h']     = actions.up,
         ['q']     = actions.quit,
-    
+
         ['K']     = actions.mkdir,
         ['N']     = actions.newfile,
         ['R']     = actions.rename,
@@ -221,7 +221,7 @@ hide_cursor                                         *lir-settings-hide_cursor*
         -- shadow = false,
       }
     }
-    
+
     -- custom folder icon
     require'nvim-web-devicons'.setup({
       override = {
@@ -272,7 +272,7 @@ ACTIONS                                                          *lir-actions*
 マッピングに使用するための関数
 
 ------------------------------------------------------------------------------
-Lua module: lir.acitons                                          *lir-actions*
+Lua module: lir.actions                                          *lir-actions*
 
 edit()                                                    *lir.actions.edit()*
     カーソル下のファイルを|:edit| を使って開く。
@@ -320,7 +320,7 @@ toggle_show_hidden()                        *lir.actions.toggle_show_hidden()*
 
 
 ------------------------------------------------------------------------------
-Lua module: lir.mark.acitons                                *lir-mark-actions*
+Lua module: lir.mark.actions                                *lir-mark-actions*
 
 mark({mode})                                         *lir.mark.actions.mark()*
     マークを付ける
@@ -331,20 +331,20 @@ mark({mode})                                         *lir.mark.actions.mark()*
 
 unmark({mode})                                       *lir.mark.actions.mark()*
     マークを外す
-    
+
         Parameters: ~
             {mode} (string) モードを表す1文字。
                     `'n'` か `'v'` のどちらか。デフォルトは `'n'`
 
 toggle({mode})                                     *lir.mark.actions.toggle()*
     マークを切り替える
-    
+
         Parameters: ~
             {mode} (string) モードを表す1文字。
                     `'n'` か `'v'` のどちらか。デフォルトは `'n'`
 
 ------------------------------------------------------------------------------
-Lua module: lir.clipboard.acitons                                *lir-actions*
+Lua module: lir.clipboard.actions                                *lir-actions*
 
 copy()                                          *lir.clipboard.actions.copy()*
     マークしているアイテムをコピー対象としてクリップボードに保存する
