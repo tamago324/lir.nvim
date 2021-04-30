@@ -182,7 +182,7 @@ Example: >
     local actions = require'lir.actions'
     local mark_actions = require 'lir.mark.actions'
     local clipboard_actions = require'lir.clipboard.actions'
-    
+
     require'lir'.setup {
       show_hidden_files = false,
       devicons_enable = true,
@@ -191,10 +191,10 @@ Example: >
         ['<C-s>'] = actions.split,
         ['<C-v>'] = actions.vsplit,
         ['<C-t>'] = actions.tabedit,
-    
+
         ['h']     = actions.up,
         ['q']     = actions.quit,
-    
+
         ['K']     = actions.mkdir,
         ['N']     = actions.newfile,
         ['R']     = actions.rename,
@@ -221,7 +221,7 @@ Example: >
         -- shadow = false,
       }
     }
-    
+
     -- custom folder icon
     require'nvim-web-devicons'.setup({
       override = {
@@ -270,7 +270,7 @@ ACTIONS                                                          *lir-actions*
 A list of functions for use in mapping.
 
 ------------------------------------------------------------------------------
-Lua module: lir.acitons                                          *lir-actions*
+Lua module: lir.actions                                          *lir-actions*
 
 edit()                                                    *lir.actions.edit()*
     Use |:edit| to open the file under the cursor.
@@ -316,7 +316,7 @@ toggle_show_hidden()                        *lir.actions.toggle_show_hidden()*
     Toggles between showing and hiding files whose file names start with `.`.
 
 ------------------------------------------------------------------------------
-Lua module: lir.mark.acitons                                *lir-mark-actions*
+Lua module: lir.mark.actions                                *lir-mark-actions*
 
 mark({mode})                                         *lir.mark.actions.mark()*
     Marking items.
@@ -327,20 +327,20 @@ mark({mode})                                         *lir.mark.actions.mark()*
 
 unmark({mode})                                       *lir.mark.actions.mark()*
     Unmark items.
-    
+
         Parameters: ~
             {mode} (string) A single character describing the mode.
                     Either `'n'` or `'v'`. Default is `'n'`.
 
 toggle({mode})                                     *lir.mark.actions.toggle()*
     Toggle item marks.
-    
+
         Parameters: ~
             {mode} (string) A single character describing the mode.
                     Either `'n'` or `'v'`. Default is `'n'`.
 
 ------------------------------------------------------------------------------
-Lua module: lir.clipboard.acitons                                *lir-actions*
+Lua module: lir.clipboard.actions                                *lir-actions*
 
 copy()                                          *lir.clipboard.actions.copy()*
     Save the marked item to the clipboard as a `copy` target.
