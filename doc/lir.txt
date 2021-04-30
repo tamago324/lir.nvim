@@ -251,17 +251,37 @@ HIGHLIGHTS                                                    *lir-highlights*
 
 LirFloatNormal                                                *LirFloatNormal*
 
-  Default: `highlight def link LirFloatNormal Normal``
+    Default: `highlight def link LirFloatNormal Normal``
 
-  The highlight for float window.
+    The highlight for float window.
 
 
 LirFloatBorder                                                *LirFloatBorder*
 
-  Default: `highlight def link LirFloatBorder LirFloatNormal`
+    Default: `highlight def link LirFloatBorder LirFloatNormal`
 
-  The highlight for float window border.
+    The highlight for float window border.
 
+
+LirDir                                                                *LirDir*
+
+    Default: `highlight def link LirDir PreProc`
+
+    The highlighting a directory when `devicons_enable` is `false`.
+
+
+LirSymLink                                                        *LirSymLink*
+
+    Default: `highlight def link LirSymLink PreProc`
+
+    The highlighting for symbolic.
+
+
+LirEmptyDirText                                              *LirEmptyDirText*
+
+    Default: `highlight def link LirEmptyDirText BlueSign`
+
+    The highlighting for text to be displayed when the directory is empty.
 
 ==============================================================================
 

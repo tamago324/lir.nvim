@@ -149,7 +149,7 @@ local function set_virtual_text_symlink(dir, files)
   for i, file in ipairs(files) do
     if is_symlink(dir .. file.value) then
       local text = '-> ' .. uv.fs_readlink(dir .. file.value)
-      a.nvim_buf_set_virtual_text(0, -1, i - 1, {{text, "PreProc"}}, {})
+      a.nvim_buf_set_virtual_text(0, -1, i - 1, {{text, "LirSymLink"}}, {})
     end
   end
 end
@@ -157,9 +157,9 @@ end
 ---@param devicon_enable boolean
 local function set_nocontent_text(devicon_enable)
   -- From vim-clap
-  local text = string.format(' %s Directory is empty',
-                             (devicon_enable and '' or ''))
-  a.nvim_buf_set_virtual_text(0, -1, 0, {{text, "BlueSign"}}, {})
+  local text = string.format(' %sDirectory is empty',
+                             (devicon_enable and '' or ' '))
+  a.nvim_buf_set_virtual_text(0, -1, 0, {{text, "LirEmptyDirText"}}, {})
 end
 
 

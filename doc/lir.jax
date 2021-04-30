@@ -252,18 +252,37 @@ HIGHLIGHTS                                                    *lir-highlights*
 
 LirFloatNormal                                                *LirFloatNormal*
 
-  デフォルト: `highlight def link LirFloatNormal Normal``
+    デフォルト: `highlight def link LirFloatNormal Normal``
 
-  The highlight for float window.
-  floating window のハイライト。
+    floating window のハイライト。
 
 
 LirFloatBorder                                                *LirFloatBorder*
 
   デフォルト: `highlight def link LirFloatBorder LirFloatNormal`
 
-  The highlight for float window border.
-  floating window の枠線のハイライト。
+   floating window の枠線のハイライト。
+
+
+LirDir                                                                *LirDir*
+
+    Default: `highlight def link LirDir PreProc`
+
+    `devicons_enable` が `false` のときのディレクトリのハイライト。
+
+
+LirSymLink                                                        *LirSymLink*
+
+    Default: `highlight def link LirSymLink PreProc`
+
+    シンボリックリンクのハイライト。
+
+
+LirEmptyDirText                                              *LirEmptyDirText*
+
+    Default: `highlight def link LirEmptyDirText BlueSign`
+
+    ディレクトリが空のときに表示されるテキストのハイライト。
 
 
 ==============================================================================
