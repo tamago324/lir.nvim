@@ -39,6 +39,8 @@ function actions.edit()
     return
   end
 
+  local keepalt = (vim.w.lir_is_float and '') or 'keepalt'
+
   if vim.w.lir_is_float and not ctx:is_dir_current() then
     -- 閉じてから開く
     actions.quit()
@@ -46,7 +48,7 @@ function actions.edit()
 
   local cmd = (vim.api.nvim_buf_get_option(0, 'modified') and 'split') or 'edit'
 
-  vim.cmd(cmd .. ' ' .. vim.fn.fnameescape(dir .. file))
+  vim.cmd(string.format('%s %s %s', keepalt, cmd, vim.fn.fnameescape(dir .. file)))
   history.add(dir, file)
 end
 
@@ -181,7 +183,7 @@ function actions.newfile()
   if vim.w.lir_is_float then
     a.nvim_feedkeys(':close | :edit ' .. ctx.dir, 'n', true)
   else
-    a.nvim_feedkeys(':edit ' .. ctx.dir, 'n', true)
+    a.nvim_feedkeys(':keepalt edit ' .. ctx.dir, 'n', true)
   end
 end
 
