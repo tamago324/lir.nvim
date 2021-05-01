@@ -168,7 +168,7 @@ float.border                                       *lir-settings-float.border*
 float.borderchars                             *lir-settings-float.borderchars*
     A list of characters to be used for the border.
 
-float.shadow                                       *lir-settings-float.border*
+float.shadow                                       *lir-settings-float.shadow*
     Use `shadow` for |nvim_open_win()|.
     If this option is `true`, the value of |float.borderchars| will be ignored.
 
@@ -284,8 +284,7 @@ LirEmptyDirText                                              *LirEmptyDirText*
     The highlighting for text to be displayed when the directory is empty.
 
 ==============================================================================
-
-ACTIONS                                                          *lir-actions*
+ACTIONS                                                     *lir-actions-list*
 
 A list of functions for use in mapping.
 
@@ -345,7 +344,7 @@ mark({mode})                                         *lir.mark.actions.mark()*
             {mode} (string) A single character describing the mode.
                     Either `'n'` or `'v'`. Default is `'n'`.
 
-unmark({mode})                                       *lir.mark.actions.mark()*
+unmark({mode})                                     *lir.mark.actions.unmark()*
     Unmark items.
 
         Parameters: ~
@@ -360,7 +359,7 @@ toggle({mode})                                     *lir.mark.actions.toggle()*
                     Either `'n'` or `'v'`. Default is `'n'`.
 
 ------------------------------------------------------------------------------
-Lua module: lir.clipboard.actions                                *lir-actions*
+Lua module: lir.clipboard.actions                      *lir-clipboard-actions*
 
 copy()                                          *lir.clipboard.actions.copy()*
     Save the marked item to the clipboard as a `copy` target.

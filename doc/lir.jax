@@ -168,7 +168,7 @@ float.borderchars                             *lir-settings-float.borderchars*
     ボーダーの文字
     左上から時計回りに指定する
 
-float.shadow                                       *lir-settings-float.border*
+float.shadow                                       *lir-settings-float.shadow*
     |nvim_open_win()| の shadow を使用するか
     このオプションが `true` の場合、`float.borderchars` の値は無視されます。
 
@@ -286,7 +286,7 @@ LirEmptyDirText                                              *LirEmptyDirText*
 
 
 ==============================================================================
-ACTIONS                                                          *lir-actions*
+ACTIONS                                                     *lir-actions-list*
 
 マッピングに使用するための関数
 
@@ -348,7 +348,7 @@ mark({mode})                                         *lir.mark.actions.mark()*
             {mode} (string) モードを表す1文字。
                     `'n'` か `'v'` のどちらか。デフォルトは `'n'`
 
-unmark({mode})                                       *lir.mark.actions.mark()*
+unmark({mode})                                     *lir.mark.actions.unmark()*
     マークを外す
 
         Parameters: ~
@@ -363,7 +363,7 @@ toggle({mode})                                     *lir.mark.actions.toggle()*
                     `'n'` か `'v'` のどちらか。デフォルトは `'n'`
 
 ------------------------------------------------------------------------------
-Lua module: lir.clipboard.actions                                *lir-actions*
+Lua module: lir.clipboard.actions                      *lir-clipboard-actions*
 
 copy()                                          *lir.clipboard.actions.copy()*
     マークしているアイテムをコピー対象としてクリップボードに保存する
