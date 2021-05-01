@@ -26,6 +26,9 @@ local M = {}
 
 ---@param mappings table
 function M.apply_mappings(mappings)
+  if mappings == nil then
+    return
+  end
   local bufnr = a.nvim_get_current_buf()
   local options = {}
   options.noremap = true
