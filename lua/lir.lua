@@ -107,8 +107,8 @@ local function setlines(dir, lines)
     lnum = lvim.get_context():indexof(history.get(dir))
   end
 
-  -- 前が lir ではない場合、
-  if not vim.w.lir_before_lir_buffer then
+  -- 前が lir ではない場合
+  if vim.w.lir_prev_filetype ~= 'lir' then
     -- ジャンプ対象のファイルが指定されていれば、そのファイルの位置にカーソルを移動する
     -- そうでなければ、代替ファイルの位置にカーソルを移動する
     local file = vim.w.lir_file_jump_cursor or vim.fn.expand('#')

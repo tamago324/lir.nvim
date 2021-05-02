@@ -15,8 +15,9 @@ augroup lir
   autocmd!
   autocmd VimEnter *   call s:shutup_netrw()
   autocmd BufEnter *   lua require('lir').init()
-  autocmd FileType lir let w:lir_before_lir_buffer = v:true
-  autocmd BufLeave *   let w:lir_before_lir_buffer = &filetype !=# 'lir'
+  " BufLeave したバッファに対して処理が走る
+  " 1つ前のバッファが lir かどうかを保持
+  autocmd BufLeave *   let w:lir_prev_filetype = &filetype
 augroup END
 
 
