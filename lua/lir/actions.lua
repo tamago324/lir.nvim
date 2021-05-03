@@ -25,6 +25,7 @@ local function open(cmd)
   local filename = vim.fn.fnameescape(ctx.dir .. ctx:current_value())
   actions.quit()
   vim.cmd(cmd .. ' ' .. filename)
+  history.add(ctx.dir, ctx:current_value())
 end
 
 -----------------------------
