@@ -131,7 +131,7 @@ function float.init(dir_path)
   vim.cmd('edit ' .. vim.fn.fnameescape(dir))
   vim.w.lir_is_float = true
 
-  a.nvim_win_set_option(win_id, 'winhl', 'Normal:LirFloatNormal,EndOfBuffer:LirFloatNormal')
+  vim.cmd [[setlocal winhl=Normal:LirFloatNormal,EndOfBuffer:LirFloatNormal]]
 
   -- 空バッファに置き換える
   if old_win then
