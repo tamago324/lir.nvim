@@ -15,6 +15,8 @@ augroup lir
   autocmd!
   autocmd VimEnter *   call s:shutup_netrw()
   autocmd BufEnter *   lua require('lir').init()
+  " setlocal を使っているため、毎回セットする必要がある
+  autocmd BufWinEnter * lua require('lir.float').setlocal_winhl()
   " BufLeave したバッファに対して処理が走る
   " 1つ前のバッファが lir かどうかを保持
   autocmd BufLeave *   let w:lir_prev_filetype = &filetype

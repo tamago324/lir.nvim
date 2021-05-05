@@ -101,6 +101,13 @@ function float.toggle(dir)
   end
 end
 
+-- setlocal を使っているため、毎回セットする必要があるため BufWinEnter で呼び出す
+function float.setlocal_winhl()
+  if vim.w.lir_is_float then
+    vim.cmd [[setlocal winhl=Normal:LirFloatNormal,EndOfBuffer:LirFloatNormal]]
+  end
+end
+
 ---@param dir_path? string
 function float.init(dir_path)
   local dir, file, old_win
@@ -131,7 +138,7 @@ function float.init(dir_path)
   vim.cmd('edit ' .. vim.fn.fnameescape(dir))
   vim.w.lir_is_float = true
 
-  vim.cmd [[setlocal winhl=Normal:LirFloatNormal,EndOfBuffer:LirFloatNormal]]
+  float.setlocal_winhl()
 
   -- 空バッファに置き換える
   if old_win then
