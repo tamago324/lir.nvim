@@ -372,4 +372,57 @@ paste()                                        *lir.clipboard.actions.paste()*
 
 
 ==============================================================================
+FAQ                                                                  *lir-faq*
+
+Q: What is the mapping to open the parent directory of the current buffer
+like `-` in vim-dirvish?
+
+A: >
+    lua vim.api.nvim_set_keymap(
+      'n',
+      '-',
+      [[<Cmd>execute 'e ' .. expand('%:p:h')<CR>]],
+      { noremap = true }
+    )
+<
+
+Q: How do I disable netrw when invoked with `$ nvim /path/to/directory` ?
+
+A:
+>
+    vim.g.loaded_netrw = 1
+    vim.g.loaded_netrwPlugin = 1
+
+NOTE: see |netrw-noload|
+
+
+Q: How can I pass a file name to a command like xdg-open for a specific
+file type and execute the process?
+
+A: You can use the information obtained from |lir.get_context()| to execute
+commands.
+
+For example, if the file type is `mp4` and you want to open it with `xdg-open`
+>
+    local lir = require'lir'
+
+    lir.setup {
+      mappings = {
+        -- ['l'] = actions.edit,
+        ['l'] = function()
+          local current = lir.get_context():current()
+
+          if string.match(current.value, '[^.]+$') == 'mp4' then
+            vim.fn.system('xdg-open ' .. current.fullpath)
+            return
+          end
+
+          actions.edit()
+        end,
+      }
+      --...
+    }
+<
+
+==============================================================================
 vim:tw=78:sw=4:sts=4:ts=4:ft=help:norl:et

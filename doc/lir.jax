@@ -376,4 +376,54 @@ paste()                                        *lir.clipboard.actions.paste()*
 
 
 ==============================================================================
+FAQ                                                                  *lir-faq*
+
+Q: vim-dirvish の `-` ようにカレントバッファの親ディレクトリを開くマッピングは？
+
+A: >
+    lua vim.api.nvim_set_keymap(
+      'n',
+      '-',
+      [[<Cmd>execute 'e ' .. expand('%:p:h')<CR>]],
+      { noremap = true }
+    )
+<
+
+Q: `$ nvim /path/to/directory` で起動したときに netrw を無効化するには？
+
+A: >
+    vim.g.loaded_netrw = 1
+    vim.g.loaded_netrwPlugin = 1
+<
+NOTE: see |netrw-noload|
+
+
+Q: 特定のファイルタイプのときに xdg-open のようなコマンドにファイル名を渡して
+処理を実行するには？
+
+A: |lir.get_context()| で取得した情報を使って、コマンドを実行できます。
+
+例えば、ファイルタイプが `mp4` のとき `xdg-open` で開く場合
+>
+    local lir = require'lir'
+
+    lir.setup {
+      mappings = {
+        -- ['l'] = actions.edit,
+        ['l'] = function()
+          local current = lir.get_context():current()
+
+          if string.match(current.value, '[^.]+$') == 'mp4' then
+            vim.fn.system('xdg-open ' .. current.fullpath)
+            return
+          end
+
+          actions.edit()
+        end,
+      }
+      --...
+    }
+<
+
+==============================================================================
 vim:tw=78:sw=4:sts=4:ts=4:ft=help:norl:et
