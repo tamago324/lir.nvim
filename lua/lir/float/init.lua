@@ -111,7 +111,7 @@ end
 ---@param dir_path? string
 function float.init(dir_path)
   local dir, file, old_win
-  if vim.bo.filetype == 'lir' then
+  if vim.bo.filetype == 'lir' and dir_path == nil then
     dir = lvim.get_context().dir
     file = lvim.get_context():current_value()
 
