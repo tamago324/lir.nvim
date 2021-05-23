@@ -33,6 +33,7 @@ function M.apply_mappings(mappings)
   local options = {}
   options.noremap = true
   options.silent = true
+  options.nowait = true
 
   for lhs, rhs in pairs(mappings) do
     local escaped = escape_keymap(lhs)
