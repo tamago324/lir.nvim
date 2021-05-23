@@ -20,13 +20,26 @@ end
 ---@param opts table
 ---@return table
 local function default_opts(opts)
-  vim.validate {
-    percentage = { opts.percentage, 'n' },
-    borderchars = { opts.borderchars, 't' },
-  }
+  vim.validate { borderchars = { opts.borderchars, 't' } }
 
-  local width = math.floor(vim.o.columns * opts.percentage)
-  local height = math.floor(vim.o.lines * opts.percentage)
+  local width_percentage, height_percentage
+  if type(opts.percentage) == "number" then
+    width_percentage = opts.percentage
+    height_percentage = opts.percentage
+  elseif type(opts.percentage) == "table" then
+    width_percentage = opts.percentage.width
+    height_percentage = opts.percentage.height
+  else
+    error(
+      string.format(
+        "'size_percentage' can be either number or table: %s",
+        vim.inspect(opts.percentage)
+      )
+    )
+  end
+
+  local width = math.floor(vim.o.columns * width_percentage)
+  local height = math.floor(vim.o.lines * height_percentage)
 
   local top = math.floor(((vim.o.lines - height) / 2) - 1)
   local left = math.floor((vim.o.columns - width) / 2)
@@ -49,7 +62,6 @@ end
 ---@return number win_id
 local function open_centered_win(opts)
   vim.validate {
-    percentage = { opts.percentage, 'n' },
     winblend = { opts.winblend, 'n' },
     borderchars = { opts.borderchars, 't' },
     shadow = { opts.shadow, 'b' },

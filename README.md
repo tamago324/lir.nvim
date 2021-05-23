@@ -52,6 +52,8 @@ require'lir'.setup {
     ['P'] = clipboard_actions.paste,
   },
   float = {
+    -- If you want to configure the height and width of the window individually,
+    -- pass in a table like so: { width = 0.5, height = 0.8 }
     size_percentage = 0.5,
     winblend = 15,
     border = true,
