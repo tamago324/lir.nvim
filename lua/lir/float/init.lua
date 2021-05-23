@@ -22,19 +22,20 @@ end
 local function default_opts(opts)
   vim.validate { borderchars = { opts.borderchars, 't' } }
 
-  local width_percentage = opts.percentage
-  local height_percentage = opts.percentage
-  if type(opts.percentage) == "table" then
+  local width_percentage, height_percentage
+  if type(opts.percentage) == "number" then
+    width_percentage = opts.percentage
+    height_percentage = opts.percentage
+  elseif type(opts.percentage) == "table" then
     width_percentage = opts.percentage.width
     height_percentage = opts.percentage.height
   else
-    vim.validate {
-      percentage = {
-        opts.percentage,
-        'n',
-        "'size_percentage' can either be a number or a table with 'width' and 'height' keys"
-      }
-    }
+    error(
+      string.format(
+        "'size_percentage' can be either number or table: %s",
+        vim.inspect(opts.percentage)
+      )
+    )
   end
 
   local width = math.floor(vim.o.columns * width_percentage)
