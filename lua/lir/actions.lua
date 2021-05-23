@@ -158,18 +158,16 @@ function actions.delete()
   local ctx = get_context()
   local name = ctx:current_value()
 
-  if vim.fn.confirm('Delete?: ' .. name, '&Yes\n&No\n&Force', 2) == 2 then
+  if vim.fn.confirm('Delete?: ' .. name, '&Yes\n&No', 1) ~= 1 then
+    -- Esc は 0 を返す
     return
   end
 
-  local path = ctx.dir .. name
-  if vim.fn.isdirectory(path) == 1 then
-    if not uv.fs_rmdir(path) then
-      utils.error('Delete directory failed')
-      return
-    end
+  local path = Path:new(ctx.dir .. name)
+  if path:is_dir() then
+    path:rm({recursive = true})
   else
-    if not uv.fs_unlink(path) then
+    if not uv.fs_unlink(path:absolute()) then
       utils.error('Delete file failed')
       return
     end
