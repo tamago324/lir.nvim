@@ -157,6 +157,7 @@ mappings                                               *lir-settings-mappings*
 
 float.size_percentage                     *lir-settings-float.size_percentage*
     Percentage of the window size to be displayed in the floating window.
+    You can either specify a `number` or a `table` with width and height keys.
 
 float.winblend                                   *lir-settings-float.winblend*
     The degree of transparency of the window displayed by the floating
