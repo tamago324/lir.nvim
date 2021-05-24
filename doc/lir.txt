@@ -289,6 +289,9 @@ ACTIONS                                                     *lir-actions-list*
 
 A list of functions for use in mapping.
 
+Also, actions can be added easily.
+NOTE: see https://github.com/tamago324/lir.nvim/wiki/Custom-actions
+
 ------------------------------------------------------------------------------
 Lua module: lir.actions                                          *lir-actions*
 

@@ -91,6 +91,7 @@ vim.cmd [[  autocmd Filetype lir :lua LirSettings()]]
 vim.cmd [[augroup END]]
 ```
 
+NOTE: Actions can be added easily (see [wiki](https://github.com/tamago324/lir.nvim/wiki/Custom-actions))
 
 ## Usage
 

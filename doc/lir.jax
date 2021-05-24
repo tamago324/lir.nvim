@@ -290,6 +290,9 @@ ACTIONS                                                     *lir-actions-list*
 
 マッピングに使用するための関数
 
+また、アクションは簡単に追加できます。
+NOTE: see https://github.com/tamago324/lir.nvim/wiki/Custom-actions
+
 ------------------------------------------------------------------------------
 Lua module: lir.actions                                          *lir-actions*
 
