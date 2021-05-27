@@ -81,7 +81,7 @@ function actions.up()
   dir = vim.fn.fnamemodify(path, ':p:h:h')
   history.add(path, cur_file)
   history.add(dir, name)
-  vim.cmd('edit ' .. dir)
+  vim.cmd('keepalt edit ' .. dir)
   if vim.endswith(dir, '/') then
     vim.cmd('doautocmd BufEnter')
   end
