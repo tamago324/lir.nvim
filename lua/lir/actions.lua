@@ -92,7 +92,9 @@ function actions.quit()
   if vim.w.lir_is_float then
     a.nvim_win_close(0, true)
   else
-    vim.cmd('edit ' .. vim.w.lir_file_quit_on_edit)
+    if vim.w.lir_file_quit_on_edit ~= nil then
+      vim.cmd('edit ' .. vim.w.lir_file_quit_on_edit)
+    end
   end
 end
 
