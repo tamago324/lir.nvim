@@ -428,5 +428,31 @@ A: |lir.get_context()| で取得した情報を使って、コマンドを実行
     }
 <
 
+Q: 次のように `:lua vim.cmd('edit /')` を実行すると何も表示されません。
+どうすればいいですか？
+>
+    require'lir'.setup {
+      mappings = {
+        ["`"] = function()
+          vim.cmd("edit /")
+        end,
+      }
+    }
+<
+
+A: おそらく、Neovim 本体の問題です。(https://github.com/neovim/neovim/issues/13726)
+|vim.cmd()| で `:edit /` を実行したときには |BufEnter| が実行されません。
+なので、次のようにします。
+>
+    require'lir'.setup {
+      mappings = {
+        ["`"] = function()
+          vim.cmd("edit /")
+          vim.cmd('duautocmd BufEnter')
+        end,
+      }
+    }
+<
+
 ==============================================================================
 vim:tw=78:sw=4:sts=4:ts=4:ft=help:norl:et

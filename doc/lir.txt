@@ -428,5 +428,31 @@ For example, if the file type is `mp4` and you want to open it with `xdg-open`
     }
 <
 
+Q: If I run `:lua vim.cmd('edit /')`  as follows, nothing will be displayed.
+What do I do?
+>
+    require'lir'.setup {
+      mappings = {
+        ["`"] = function()
+          vim.cmd("edit /")
+        end,
+      }
+    }
+<
+
+A: It is a problem with Neovim itself. (https://github.com/neovim/neovim/issues/13726)
+When `:edit /` is executed in |vim.cmd()|, |BufEnter| will not be executed.
+So, do the following.
+>
+    require'lir'.setup {
+      mappings = {
+        ["`"] = function()
+          vim.cmd("edit /")
+          vim.cmd('duautocmd BufEnter')
+        end,
+      }
+    }
+<
+
 ==============================================================================
 vim:tw=78:sw=4:sts=4:ts=4:ft=help:norl:et
