@@ -129,6 +129,7 @@ hi LirEmptyDirText guifg=#7c6f64
 
 * [tamago324/lir-mmv.nvim](https://github.com/tamago324/lir-mmv.nvim)
 * [tamago324/lir-bookmark.nvim](https://github.com/tamago324/lir-bookmark.nvim)
+* [tamago324/lir-git-status.nvim](https://github.com/tamago324/lir-git-status.nvim)
 
 
 ## Credit
