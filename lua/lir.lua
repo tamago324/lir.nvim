@@ -97,6 +97,13 @@ local function tbl_sub(t, i1, i2)
   return res
 end
 
+--- Use vim.F.npcall() to return the result of nvim_win_get_var()
+---@param win any
+---@param name any
+---@return any
+local win_get_var = function(win, name)
+  return vim.F.npcall(vim.api.nvim_win_get_var, win, name)
+end
 
 --- Set the lines while adjusting the cursor to feel good
 ---@param dir string
@@ -111,7 +118,7 @@ local function setlines(dir, lines)
   if vim.w.lir_prev_filetype ~= 'lir' then
     -- ジャンプ対象のファイルが指定されていれば、そのファイルの位置にカーソルを移動する
     -- そうでなければ、代替ファイルの位置にカーソルを移動する
-    local file = vim.w.lir_file_jump_cursor or vim.fn.expand('#')
+    local file = win_get_var(0, 'lir_file_jump_cursor') or vim.fn.expand('#')
     file = vim.fn.fnamemodify(file, ':p:t')
     if file then
       local alt_dir = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:h')
