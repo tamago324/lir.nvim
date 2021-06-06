@@ -237,7 +237,7 @@ function lir.init()
   a.nvim_buf_set_option(0, 'filetype', 'lir')
 end
 
----@param prefs table
+---@param prefs lir.config.values
 function lir.setup(prefs)
   -- Set preferences
   config.set_default_values(prefs)
