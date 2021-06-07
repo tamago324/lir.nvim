@@ -1,12 +1,12 @@
-local devicons = require 'lir.devicons'
-local history = require 'lir.history'
-local config = require 'lir.config'
-local mappings = require 'lir.mappings'
-local highlight = require 'lir.highlight'
-local smart_cursor = require 'lir.smart_cursor'
-local Context = require 'lir.context'
-local lvim = require 'lir.vim'
-local Path = require 'plenary.path'
+local devicons = require("lir.devicons")
+local history = require("lir.history")
+local config = require("lir.config")
+local mappings = require("lir.mappings")
+local highlight = require("lir.highlight")
+local smart_cursor = require("lir.smart_cursor")
+local Context = require("lir.context")
+local lvim = require("lir.vim")
+local Path = require("plenary.path")
 
 local vim = vim
 local uv = vim.loop
@@ -41,15 +41,14 @@ local function readdir(path)
       devicons = nil,
     }
 
-    local prefix = config.values.hide_cursor and '' or ' '
+    local prefix = config.values.hide_cursor and "" or " "
 
     if config.values.devicons_enable then
       local icon, highlight_name = devicons.get_devicons(name, is_dir)
-      file.display = string.format('%s%s %s%s', prefix, icon, name,
-                                   (is_dir and '/' or ''))
-      file.devicons = {icon = icon, highlight_name = highlight_name}
+      file.display = string.format("%s%s %s%s", prefix, icon, name, (is_dir and "/" or ""))
+      file.devicons = { icon = icon, highlight_name = highlight_name }
     else
-      file.display = prefix .. name .. (is_dir and '/' or '')
+      file.display = prefix .. name .. (is_dir and "/" or "")
     end
 
     table.insert(files, file)
@@ -115,39 +114,38 @@ local function setlines(dir, lines)
   end
 
   -- 前が lir ではない場合
-  if vim.w.lir_prev_filetype ~= 'lir' then
+  if vim.w.lir_prev_filetype ~= "lir" then
     -- ジャンプ対象のファイルが指定されていれば、そのファイルの位置にカーソルを移動する
     -- そうでなければ、代替ファイルの位置にカーソルを移動する
-    local file = win_get_var(0, 'lir_file_jump_cursor') or vim.fn.expand('#')
-    file = vim.fn.fnamemodify(file, ':p:t')
+    local file = win_get_var(0, "lir_file_jump_cursor") or vim.fn.expand("#")
+    file = vim.fn.fnamemodify(file, ":p:t")
     if file then
-      local alt_dir = vim.fn.fnamemodify(vim.fn.expand('#'), ':p:h')
-      if string.gsub(dir, '/$', '') == alt_dir then
+      local alt_dir = vim.fn.fnamemodify(vim.fn.expand("#"), ":p:h")
+      if string.gsub(dir, "/$", "") == alt_dir then
         lnum = lvim.get_context():indexof(file)
       end
     end
-    a.nvim_win_set_var(0, 'lir_file_jump_cursor', nil)
+    a.nvim_win_set_var(0, "lir_file_jump_cursor", nil)
   end
 
   if lnum == nil or lnum == 1 then
     a.nvim_buf_set_lines(0, 0, -1, true, lines)
     -- move cursor
     vim.schedule(function()
-      vim.cmd('normal! 0')
+      vim.cmd("normal! 0")
     end)
     return
   end
 
   local before, after = tbl_sub(lines, 1, lnum - 1), tbl_sub(lines, lnum)
-  a.nvim_put(before, 'l', false, true)
+  a.nvim_put(before, "l", false, true)
   a.nvim_buf_set_lines(0, lnum - 1, -1, true, after)
 end
-
 
 ---@param path string
 ---@return boolean
 local function is_symlink(path)
-  return uv.fs_lstat(path).type == 'link'
+  return uv.fs_lstat(path).type == "link"
 end
 
 ---@param dir string
@@ -155,8 +153,8 @@ end
 local function set_virtual_text_symlink(dir, files)
   for i, file in ipairs(files) do
     if is_symlink(dir .. file.value) then
-      local text = '-> ' .. uv.fs_readlink(dir .. file.value)
-      a.nvim_buf_set_virtual_text(0, -1, i - 1, {{text, "LirSymLink"}}, {})
+      local text = "-> " .. uv.fs_readlink(dir .. file.value)
+      a.nvim_buf_set_virtual_text(0, -1, i - 1, { { text, "LirSymLink" } }, {})
     end
   end
 end
@@ -164,11 +162,9 @@ end
 ---@param devicon_enable boolean
 local function set_nocontent_text(devicon_enable)
   -- From vim-clap
-  local text = string.format(' %s Directory is empty',
-                             (devicon_enable and '' or ' '))
-  a.nvim_buf_set_virtual_text(0, -1, 0, {{text, "LirEmptyDirText"}}, {})
+  local text = string.format(" %s Directory is empty", (devicon_enable and "" or " "))
+  a.nvim_buf_set_virtual_text(0, -1, 0, { { text, "LirEmptyDirText" } }, {})
 end
-
 
 -----------------------------
 -- Export
@@ -178,39 +174,39 @@ end
 local lir = {}
 
 function lir.init()
-  local path = vim.fn.resolve(vim.fn.expand('%:p'))
+  local path = vim.fn.resolve(vim.fn.expand("%:p"))
 
-  if path == '' or not Path:new(path):is_dir() then
+  if path == "" or not Path:new(path):is_dir() then
     return
   end
 
-  local alt_f = vim.fn.expand('#:p')
-  if alt_f ~= '' then
+  local alt_f = vim.fn.expand("#:p")
+  if alt_f ~= "" then
     vim.w.lir_file_quit_on_edit = alt_f
   end
 
   local dir = path
-  if not vim.endswith(path, '/') then
-    dir = path .. '/'
+  if not vim.endswith(path, "/") then
+    dir = path .. "/"
   end
 
   local context = Context.new(dir)
   lvim.set_context(context)
 
   -- nvim_buf_set_lines() するため
-  a.nvim_buf_set_option(0, 'modifiable', true)
+  a.nvim_buf_set_option(0, "modifiable", true)
 
-  a.nvim_buf_set_option(0, 'buftype', 'nofile')
-  a.nvim_buf_set_option(0, 'bufhidden', 'wipe')
-  a.nvim_buf_set_option(0, 'buflisted', false)
-  a.nvim_buf_set_option(0, 'swapfile', false)
+  a.nvim_buf_set_option(0, "buftype", "nofile")
+  a.nvim_buf_set_option(0, "bufhidden", "wipe")
+  a.nvim_buf_set_option(0, "buflisted", false)
+  a.nvim_buf_set_option(0, "swapfile", false)
 
   smart_cursor.init()
 
   local files = readdir(path)
   if not config.values.show_hidden_files then
     files = vim.tbl_filter(function(val)
-      return string.match(val.value, '^[^.]') ~= nil
+      return string.match(val.value, "^[^.]") ~= nil
     end, files)
   end
   table.sort(files, sort)
@@ -232,9 +228,9 @@ function lir.init()
 
   mappings.apply_mappings(config.values.mappings)
 
-  a.nvim_buf_set_option(0, 'modified', false)
-  a.nvim_buf_set_option(0, 'modifiable', false)
-  a.nvim_buf_set_option(0, 'filetype', 'lir')
+  a.nvim_buf_set_option(0, "modified", false)
+  a.nvim_buf_set_option(0, "modifiable", false)
+  a.nvim_buf_set_option(0, "filetype", "lir")
 end
 
 ---@param prefs lir.config.values

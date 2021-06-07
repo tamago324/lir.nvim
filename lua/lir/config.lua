@@ -9,12 +9,11 @@ local defaults_values = {
     size_percentage = { width = 0.5, height = 0.5 },
     winblend = 15,
     border = false,
-    borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
+    borderchars = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" },
     shadow = false,
   },
   hide_cursor = false,
 }
-
 
 -----------------------------
 -- Export
@@ -45,7 +44,7 @@ config.values = {}
 
 ---@param opts lir.config.values
 function config.set_default_values(opts)
-  config.values = vim.tbl_deep_extend('force', defaults_values, opts or {})
+  config.values = vim.tbl_deep_extend("force", defaults_values, opts or {})
 end
 
 return config

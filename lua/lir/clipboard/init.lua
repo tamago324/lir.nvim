@@ -1,4 +1,4 @@
-local utils = require 'lir.utils'
+local utils = require("lir.utils")
 
 -----------------------------
 -- Private
@@ -14,7 +14,6 @@ local _clipboard = {
   kind = nil,
 }
 
-
 -----------------------------
 -- Export
 -----------------------------
@@ -22,26 +21,23 @@ local _clipboard = {
 ---@class lir_clipboard
 local M = {}
 
-
 ---@return lir_clipboard__data
 M.get = function()
   return _clipboard
 end
 
-
 ---@param files lir_item[]
 ---@param kind lir_clipboard__kind
 M.set = function(files, kind)
-  _clipboard = {files = files, kind = kind}
+  _clipboard = { files = files, kind = kind }
 end
-
 
 ---@param kind lir_clipboard
 ---@param context lir_context
 M.set_marked_items = function(kind, context)
   local marked_items = context:get_marked_items()
   if #marked_items == 0 then
-    utils.error('Please mark one or more.')
+    utils.error("Please mark one or more.")
     return
   end
 

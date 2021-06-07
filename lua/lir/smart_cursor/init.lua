@@ -5,7 +5,7 @@ This was written based on fern.vim under the MIT License.
 Original code: https://git.io/Jt4L9
 ]]
 
-local config = require 'lir.config'
+local config = require("lir.config")
 
 -----------------------------
 -- Private
@@ -17,7 +17,6 @@ local function highlight()
 end
 highlight()
 
-
 local function hide_cursor_init()
   vim.cmd([[augroup lir-smart-cursor]])
   vim.cmd([[  autocmd! * <buffer>]])
@@ -28,7 +27,6 @@ local function hide_cursor_init()
   vim.cmd([[  autocmd VimLeave <buffer> lua require'lir.smart_cursor'._restore()]])
   vim.cmd([[augroup END]])
 end
-
 
 -----------------------------
 -- Export
@@ -55,4 +53,3 @@ function M.init()
 end
 
 return M
-

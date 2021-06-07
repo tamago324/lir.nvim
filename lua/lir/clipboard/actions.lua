@@ -1,10 +1,10 @@
-local Path = require 'plenary.path'
+local Path = require("plenary.path")
 
-local lir = require 'lir'
-local clipboard = require 'lir.clipboard'
-local utils = require 'lir.utils'
-local actions = require 'lir.actions'
-local mark_utils = require 'lir.mark.utils'
+local lir = require("lir")
+local clipboard = require("lir.clipboard")
+local utils = require("lir.utils")
+local actions = require("lir.actions")
+local mark_utils = require("lir.mark.utils")
 
 local uv = vim.loop
 
@@ -42,7 +42,7 @@ local PASTE_ACTIONS = {
 
 ---@return string name
 function Path:name()
-  return string.match(self:absolute(), '[^/]+$')
+  return string.match(self:absolute(), "[^/]+$")
 end
 
 --- 指定のディレクトリを再帰的にコピー
@@ -50,10 +50,10 @@ end
 ---@param to string
 local copy_dir_recurse
 copy_dir_recurse = function(from, to)
-  vim.validate {
-    from = { from, 'string', false },
-    to = { to, 'string', false }
-  }
+  vim.validate({
+    from = { from, "string", false },
+    to = { to, "string", false },
+  })
 
   local from_path = Path:new(from)
   local to_path = Path:new(to)
@@ -61,7 +61,7 @@ copy_dir_recurse = function(from, to)
   -- まずは、ディレクトリ自体を作成する
   if not to_path:exists() then
     to_path:mkdir({
-      mode = tonumber('744', 8),
+      mode = tonumber("744", 8),
       parents = true,
     })
   end
@@ -119,12 +119,11 @@ local function ask_action(path, kind)
   -- (Q)uit
 
   -- copy のときのみ、 force を出す
-  local force_text = kind == 'copy' and ', \n&Force replace' or ''
+  local force_text = kind == "copy" and ", \n&Force replace" or ""
 
-  vim.cmd('redraw!')
-  local question = string.format('&Skip\n&Rename%s\n&Quit', force_text)
-  local res = vim.fn.confirm(
-                  string.format('Paste: %s is already exists.', path), question)
+  vim.cmd("redraw!")
+  local question = string.format("&Skip\n&Rename%s\n&Quit", force_text)
+  local res = vim.fn.confirm(string.format("Paste: %s is already exists.", path), question)
   return res
 end
 
@@ -142,28 +141,24 @@ local function _paste(from, to, kind)
 
     if res == PASTE_ACTIONS.CANCEL or res == PASTE_ACTIONS.QUIT then
       return true
-
     elseif res == PASTE_ACTIONS.SKIP then
       return false
-
     elseif res == PASTE_ACTIONS.RENAME then
       vim.cmd([[redraw!]])
-      local prompt = string.format('Rename: %s -> ', to_path:absolute())
+      local prompt = string.format("Rename: %s -> ", to_path:absolute())
       vim.cmd([[noautocmd normal! :]])
       local new_path = npcall(vim.fn.input, prompt, to_path:absolute())
       if not (new_path and #new_path > 0) then
         return true
       end
       to_path = Path:new(new_path)
-
     elseif res == PASTE_ACTIONS.FORCE then
       is_error_if_exists = false
     end
   end
 
-  if not paste_funcs[kind](from_path:absolute(), to_path:absolute(),
-                           is_error_if_exists) then
-    utils.error('Paste failed')
+  if not paste_funcs[kind](from_path:absolute(), to_path:absolute(), is_error_if_exists) then
+    utils.error("Paste failed")
     return true
   end
 
@@ -179,14 +174,14 @@ local M = {}
 
 M.copy = function()
   local context = lir.get_context()
-  clipboard.set_marked_items('copy', context)
-  mark_utils.change_mark_text('C', context)
+  clipboard.set_marked_items("copy", context)
+  mark_utils.change_mark_text("C", context)
 end
 
 M.cut = function()
   local context = lir.get_context()
-  clipboard.set_marked_items('cut', context)
-  mark_utils.change_mark_text('X', context)
+  clipboard.set_marked_items("cut", context)
+  mark_utils.change_mark_text("X", context)
 end
 
 M.paste = function()

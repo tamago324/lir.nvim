@@ -1,12 +1,12 @@
-local config = require 'lir.config'
-local devicons = require 'lir.devicons'
+local config = require("lir.config")
+local devicons = require("lir.devicons")
 
 local a = vim.api
 
 -----------------------------
 -- Private
 -----------------------------
-local ns = a.nvim_create_namespace('lir_dir')
+local ns = a.nvim_create_namespace("lir_dir")
 
 -----------------------------
 -- Export
@@ -23,7 +23,7 @@ function highlight.update_highlight(files)
     a.nvim_buf_clear_namespace(0, ns, 0, -1)
     for i, file in ipairs(files) do
       if file.is_dir then
-        a.nvim_buf_add_highlight(0, ns, 'LirDir', i - 1, 0, -1)
+        a.nvim_buf_add_highlight(0, ns, "LirDir", i - 1, 0, -1)
       end
     end
   end

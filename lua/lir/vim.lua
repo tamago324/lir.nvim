@@ -20,7 +20,7 @@ end
 local Vim = setmetatable({}, {
   __index = function(_, key)
     local bufnr
-    if type(key) == 'number' then
+    if type(key) == "number" then
       -- lvim[12]
       bufnr = key
       return get_or_empty(bufnr)
@@ -29,7 +29,6 @@ local Vim = setmetatable({}, {
       bufnr = vim.fn.bufnr()
       return get_or_empty(bufnr)[key]
     end
-
   end,
 })
 

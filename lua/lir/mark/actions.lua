@@ -1,12 +1,12 @@
-local config = require 'lir.config'
+local config = require("lir.config")
 local a = vim.api
-local lir = require 'lir'
+local lir = require("lir")
 
 -----------------------------
 -- Private
 -----------------------------
-local MARK_TEXT = '* '
-local SPACES = '  '
+local MARK_TEXT = "* "
+local SPACES = "  "
 
 ---@return number
 local get_start_col = function()
@@ -20,13 +20,13 @@ end
 
 local clear_marks = function()
   for i = 1, a.nvim_buf_line_count(0) do
-    a.nvim_buf_set_text(0, i - 1, get_start_col(), i - 1, get_end_col(), {''})
+    a.nvim_buf_set_text(0, i - 1, get_start_col(), i - 1, get_end_col(), { "" })
   end
 end
 
 ---@param old_marked_items lir_item[]
 local redraw_marks = function(old_marked_items)
-  a.nvim_buf_set_option(0, 'modifiable', true)
+  a.nvim_buf_set_option(0, "modifiable", true)
 
   if #old_marked_items > 0 then
     clear_marks()
@@ -38,11 +38,11 @@ local redraw_marks = function(old_marked_items)
     local col = get_start_col()
     for i = 1, #context.files do
       local text = context.files[i].marked and MARK_TEXT or SPACES
-      a.nvim_buf_set_text(0, i - 1, col, i - 1, col, {text})
+      a.nvim_buf_set_text(0, i - 1, col, i - 1, col, { text })
     end
   end
 
-  a.nvim_buf_set_option(0, 'modifiable', false)
+  a.nvim_buf_set_option(0, "modifiable", false)
 end
 
 ---@param func function

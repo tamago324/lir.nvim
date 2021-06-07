@@ -9,12 +9,12 @@ local a = vim.api
 -----------------------------
 
 -- { bufnr = { esc_key = function } }
-local buf_keymap =  {}
+local buf_keymap = {}
 
 --- escape_keymap
 local function escape_keymap(key)
   -- Prepend with a letter so it can be used as a dictionary key
-  return 'k' .. key:gsub('.', string.byte)
+  return "k" .. key:gsub(".", string.byte)
 end
 
 -----------------------------
@@ -48,9 +48,8 @@ function M.apply_mappings(mappings)
       })
     end
     buf_keymap[bufnr][escaped] = rhs
-    key_mapping =
-        ([[<Cmd>lua require"lir.mappings".execute_keymap(%d, "%s")<CR>]]):format(bufnr, escaped)
-    a.nvim_buf_set_keymap(bufnr, 'n', lhs, key_mapping, options)
+    key_mapping = ([[<Cmd>lua require"lir.mappings".execute_keymap(%d, "%s")<CR>]]):format(bufnr, escaped)
+    a.nvim_buf_set_keymap(bufnr, "n", lhs, key_mapping, options)
   end
 end
 
