@@ -62,6 +62,14 @@ require'lir'.setup {
     -- -- If you want to use `shadow`, set `shadow` to `true`.
     -- -- Also, if you set shadow to true, the value of `borderchars` will be ignored.
     -- shadow = false,
+
+    -- -- You can customize the config passed to nvim_open_win().
+    -- -- see :h nvim_open_win()
+    -- make_win_config = function(default_config)
+    --   return vim.tbl_extend(default_config, {
+    --     row = 5,
+    --   })
+    -- end,
   },
   hide_cursor = true,
 }

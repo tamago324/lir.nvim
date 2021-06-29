@@ -19,18 +19,25 @@ end
 --- オプションのデフォルト値を返す
 ---@param opts table
 ---@return table
-local function default_opts(opts)
-  vim.validate({ borderchars = { opts.borderchars, "t" } })
+local function make_default_win_config(opts)
+  vim.validate({
+    border = { opts.border, "b" },
+    borderchars = { opts.borderchars, "t" },
+    shadow = { opts.shadow, "b", true },
+  })
 
   local width_percentage, height_percentage
-  if type(opts.percentage) == "number" then
-    width_percentage = opts.percentage
-    height_percentage = opts.percentage
-  elseif type(opts.percentage) == "table" then
-    width_percentage = opts.percentage.width
-    height_percentage = opts.percentage.height
+  if type(opts.size_percentage) == "number" then
+    width_percentage = opts.size_percentage
+    height_percentage = opts.size_percentage
+  elseif type(opts.size_percentage) == "table" then
+    width_percentage = opts.size_percentage.width
+    height_percentage = opts.size_percentage.height
   else
-    error(string.format("'size_percentage' can be either number or table: %s", vim.inspect(opts.percentage)))
+    error(string.format(
+      "'size_percentage' can be either number or table: %s",
+      vim.inspect(opts.size_percentage)
+    ))
   end
 
   local width = math.floor(vim.o.columns * width_percentage)
@@ -46,33 +53,27 @@ local function default_opts(opts)
     width = width,
     height = height,
     style = "minimal",
-    border = make_border_opts(opts.borderchars),
   }
+
+  if opts.border then
+    if opts.shadow then
+      result.border = "shadow"
+    else
+      result.border = make_border_opts(opts.borderchars)
+    end
+  end
 
   return result
 end
 
 --- 中央配置のウィンドウを開く
----@param opts table
 ---@return number win_id
-local function open_centered_win(opts)
-  vim.validate({
-    winblend = { opts.winblend, "n" },
-    borderchars = { opts.borderchars, "t" },
-    shadow = { opts.shadow, "b" },
-  })
-
-  local win_opts = default_opts(opts)
-
-  if opts.shadow then
-    win_opts.border = "shadow"
-  end
-
+local function open_win(opts, winblend)
   local bufnr = a.nvim_create_buf(false, true)
-  local win_id = a.nvim_open_win(bufnr, true, win_opts)
+  local win_id = a.nvim_open_win(bufnr, true, opts)
 
   vim.cmd("setlocal nocursorcolumn")
-  a.nvim_win_set_option(win_id, "winblend", opts.winblend)
+  a.nvim_win_set_option(win_id, "winblend", winblend)
 
   vim.cmd(string.format("autocmd WinLeave <buffer> silent! execute 'bdelete! %s'", bufnr))
 
@@ -124,12 +125,12 @@ function float.init(dir_path)
     file = vim.fn.expand("%:p")
   end
 
-  local win_id = open_centered_win({
-    percentage = config.values.float.size_percentage,
-    winblend = config.values.float.winblend,
-    borderchars = config.values.float.borderchars,
-    shadow = config.values.float.shadow,
-  })
+  local win_config = make_default_win_config(config.values.float)
+  if type(config.values.float.make_win_config) == "function" then
+    win_config = config.values.float.make_win_config(win_config)
+  end
+
+  local win_id = open_win(win_config, config.values.float.winblend)
 
   vim.t.lir_float_winid = win_id
   -- To move the cursor
