@@ -1,12 +1,40 @@
 local actions = require("lir.actions")
 local lvim = require("lir.vim")
 local config = require("lir.config")
-local helper = require("lir.float.helper")
+local F = require("plenary.functional")
 
 local a = vim.api
 
 ---@class lir_float
 local float = {}
+
+local default_win_opts = {
+  width = 0.5,
+  height = 0.5,
+  border = "double",
+}
+
+--- Return the default value of the option
+---@return table
+local make_default_win_config = function()
+  local width = math.floor(vim.o.columns * default_win_opts.width)
+  local height = math.floor(vim.o.lines * default_win_opts.height)
+
+  local top = math.floor(((vim.o.lines - height) / 2) - 1)
+  local left = math.floor((vim.o.columns - width) / 2)
+
+  local result = {
+    relative = "editor",
+    row = top,
+    col = left,
+    width = width,
+    height = height,
+    style = "minimal",
+    border = default_win_opts.border,
+  }
+
+  return result
+end
 
 --- 中央配置のウィンドウを開く
 ---@return number win_id
@@ -67,13 +95,12 @@ function float.init(dir_path)
     file = vim.fn.expand("%:p")
   end
 
-  local win_config
-  if type(config.values.float.make_win_config) == "function" then
-    win_config = config.values.float.make_win_config()
-  else
-    win_config = helper.make_default_win_config()
+  local user_win_opts = {}
+  if type(config.values.float.win_opts) == "function" then
+    user_win_opts = config.values.float.win_opts()
   end
 
+  win_config = vim.tbl_extend("force", make_default_win_config(), user_win_opts)
   local win_id = open_win(win_config, config.values.float.winblend)
 
   vim.t.lir_float_winid = win_id

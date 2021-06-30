@@ -24,7 +24,6 @@ augroup END
 
 
 highlight def link LirFloatNormal  Normal
-highlight def link LirFloatBorder  LirFloatNormal
 highlight def link LirDir          PreProc
 highlight def link LirSymLink      PreProc
 highlight def link LirEmptyDirText BlueSign

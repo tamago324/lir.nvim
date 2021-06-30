@@ -52,29 +52,18 @@ require'lir'.setup {
     ['P'] = clipboard_actions.paste,
   },
   float = {
-    winblend = 15,
+    winblend = 0,
 
-    make_win_config = function()
-      local default_config = f_helper.make_default_win_config({
-       -- If you want to configure the height and width of the window individually,
-       -- pass in a table like so: { width = 0.5, height = 0.8 }
-        size_percentage = { width = 0.5, height = 0.5 },
-      })
-
-      -- You can customize the config passed to nvim_open_win.
-      return vim.tbl_extend("force", default_config, {
-        border = f_helper.make_border_opts({
-          "+",
-          "─",
-          "+",
-          "│",
-          "+",
-          "─",
-          "+",
-          "│",
-        }, "LirFloatBorder"),
-      })
-    end,
+    -- -- You can define a function that returns a table to be passed as the third
+    -- -- argument of nvim_open_win().
+    -- win_opts = function()
+    --   return {
+    --     row = 1,
+    --     border = require'lir.float.helper'.make_border_opts({
+    --       "+", "─", "+", "│", "+", "─", "+", "│",
+    --     }, "Normal"),
+    --   }
+    -- end,
   },
   hide_cursor = true,
 }
@@ -131,7 +120,6 @@ Change highlights groups.
 
 ```viml
 hi LirFloatNormal guibg=#32302f
-hi LirFloatBorder guifg=#7c6f64
 hi LirDir guifg=#7ebae4
 hi LirSymLink guifg=#7c6f64
 hi LirEmptyDirText guifg=#7c6f64
