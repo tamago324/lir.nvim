@@ -52,24 +52,29 @@ require'lir'.setup {
     ['P'] = clipboard_actions.paste,
   },
   float = {
-    -- If you want to configure the height and width of the window individually,
-    -- pass in a table like so: { width = 0.5, height = 0.8 }
-    size_percentage = 0.5,
     winblend = 15,
-    border = true,
-    borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
 
-    -- -- If you want to use `shadow`, set `shadow` to `true`.
-    -- -- Also, if you set shadow to true, the value of `borderchars` will be ignored.
-    -- shadow = false,
+    make_win_config = function()
+      local default_config = f_helper.make_default_win_config({
+       -- If you want to configure the height and width of the window individually,
+       -- pass in a table like so: { width = 0.5, height = 0.8 }
+        size_percentage = { width = 0.5, height = 0.5 },
+      })
 
-    -- -- You can customize the config passed to nvim_open_win().
-    -- -- see :h nvim_open_win()
-    -- make_win_config = function(default_config)
-    --   return vim.tbl_extend(default_config, {
-    --     row = 5,
-    --   })
-    -- end,
+      -- You can customize the config passed to nvim_open_win.
+      return vim.tbl_extend("force", default_config, {
+        border = f_helper.make_border_opts({
+          "+",
+          "─",
+          "+",
+          "│",
+          "+",
+          "─",
+          "+",
+          "│",
+        }, "LirFloatBorder"),
+      })
+    end,
   },
   hide_cursor = true,
 }

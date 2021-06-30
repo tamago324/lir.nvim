@@ -6,11 +6,7 @@ local defaults_values = {
   devicons_enable = false,
   mappings = {},
   float = {
-    size_percentage = { width = 0.5, height = 0.5 },
     winblend = 15,
-    border = false,
-    borderchars = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" },
-    shadow = false,
   },
   hide_cursor = false,
 }

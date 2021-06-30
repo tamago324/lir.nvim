@@ -1,70 +1,12 @@
 local actions = require("lir.actions")
 local lvim = require("lir.vim")
 local config = require("lir.config")
+local helper = require("lir.float.helper")
 
 local a = vim.api
 
 ---@class lir_float
 local float = {}
-
---- borderchars にハイライトをつけたテーブルを返す
---- { {'=', 'LirFloatBorder'}, {'|', 'LirFloatBorder'}, ... } のようなテーブルを作る
----@param borderchars table
-local make_border_opts = function(borderchars)
-  return vim.tbl_map(function(char)
-    return { char, "LirFloatBorder" }
-  end, borderchars)
-end
-
---- オプションのデフォルト値を返す
----@param opts table
----@return table
-local function make_default_win_config(opts)
-  vim.validate({
-    border = { opts.border, "b" },
-    borderchars = { opts.borderchars, "t" },
-    shadow = { opts.shadow, "b", true },
-  })
-
-  local width_percentage, height_percentage
-  if type(opts.size_percentage) == "number" then
-    width_percentage = opts.size_percentage
-    height_percentage = opts.size_percentage
-  elseif type(opts.size_percentage) == "table" then
-    width_percentage = opts.size_percentage.width
-    height_percentage = opts.size_percentage.height
-  else
-    error(string.format(
-      "'size_percentage' can be either number or table: %s",
-      vim.inspect(opts.size_percentage)
-    ))
-  end
-
-  local width = math.floor(vim.o.columns * width_percentage)
-  local height = math.floor(vim.o.lines * height_percentage)
-
-  local top = math.floor(((vim.o.lines - height) / 2) - 1)
-  local left = math.floor((vim.o.columns - width) / 2)
-
-  local result = {
-    relative = "editor",
-    row = top,
-    col = left,
-    width = width,
-    height = height,
-    style = "minimal",
-  }
-
-  if opts.border then
-    if opts.shadow then
-      result.border = "shadow"
-    else
-      result.border = make_border_opts(opts.borderchars)
-    end
-  end
-
-  return result
-end
 
 --- 中央配置のウィンドウを開く
 ---@return number win_id
@@ -125,9 +67,11 @@ function float.init(dir_path)
     file = vim.fn.expand("%:p")
   end
 
-  local win_config = make_default_win_config(config.values.float)
+  local win_config
   if type(config.values.float.make_win_config) == "function" then
     win_config = config.values.float.make_win_config(win_config)
+  else
+    win_config = helper.make_default_win_config()
   end
 
   local win_id = open_win(win_config, config.values.float.winblend)
