@@ -1,7 +1,6 @@
 local actions = require("lir.actions")
 local lvim = require("lir.vim")
 local config = require("lir.config")
-local F = require("plenary.functional")
 
 local a = vim.api
 
@@ -100,7 +99,7 @@ function float.init(dir_path)
     user_win_opts = config.values.float.win_opts()
   end
 
-  win_config = vim.tbl_extend("force", make_default_win_config(), user_win_opts)
+  local win_config = vim.tbl_extend("force", make_default_win_config(), user_win_opts)
   local win_id = open_win(win_config, config.values.float.winblend)
 
   vim.t.lir_float_winid = win_id
