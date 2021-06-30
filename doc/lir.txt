@@ -34,6 +34,28 @@ lir.float.toggle([{dir}])                                 *lir.float.toggle()*
 
     If `dir` is nil, then `vim.fn.expand('%:p:h')` is used.
 
+                                         *lir.float.helper.make_border_opts()*
+lir.float.helper.make_border_opts({borderchars}, {highlight})
+    Generate the value of `border` to be passed to config as the third
+    argument of |nvim_open_win()|.
+>
+    local border = require("lir.float.helper").make_border_opts({
+      "+", "─", "+", "│", "+", "─", "+", "│",
+    }, "Normal")
+
+    -- The following values are returned.
+    {
+      { "+", "Normal" },
+      { "─", "Normal" },
+      { "+", "Normal" },
+      { "│", "Normal" },
+      { "+", "Normal" },
+      { "─", "Normal" },
+      { "+", "Normal" },
+      { "│", "Normal" },
+    }
+<
+
 
 ==============================================================================
 CONTEXT                                                          *lir-context*
@@ -135,11 +157,8 @@ default value: >
       devicons_enable = false,
       mappings = {},
       float = {
-        size_percentage = 0.5,
         winblend = 15,
-        border = false,
-        borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
-        shadow = false,
+        win_opts = nil
       },
       hide_cursor = false
     }
@@ -159,24 +178,31 @@ float.size_percentage                     *lir-settings-float.size_percentage*
     Percentage of the window size to be displayed in the floating window.
     You can either specify a `number` or a `table` with width and height keys.
 
-float.winblend                                   *lir-settings-float.winblend*
-    The degree of transparency of the window displayed by the floating
-    window.
-
-float.border                                       *lir-settings-float.border*
-    Show a border around the floating window?
-
-float.borderchars                             *lir-settings-float.borderchars*
-    A list of characters to be used for the border.
-
-float.shadow                                       *lir-settings-float.shadow*
-    Use `shadow` for |nvim_open_win()|.
-    If this option is `true`, the value of |float.borderchars| will be ignored.
-
 hide_cursor                                         *lir-settings-hide_cursor*
     Hide the cursor in lir?
     If the cursor is shown, it will be prefixed with a space.
 
+float.winblend                                   *lir-settings-float.winblend*
+    The degree of transparency of the window displayed by the floating
+    window.
+
+float.win_opts                                   *lir-settings-float.win_opts*
+    Specifies the function that returns the table to be passed as the
+    third argument of |nvim_open_win()|.
+    Use this when you want to override the default configs below.
+    See the configuration example for details.
+
+    Default config: >
+      {
+        relative = "editor",
+        row = math.floor((vim.o.lines - (vim.o.lines * 0.5)) / 2) - 1,
+        col = math.floor((vim.o.lines - (vim.o.columns * 0.5)) / 2),
+        width = math.floor(vim.o.columns * 0.5),
+        height = math.floor(vim.o.lines * 0.5),
+        style = "minimal",
+        border = "bouble",
+      }
+<
 
 Example: >
 
@@ -212,14 +238,23 @@ Example: >
         ['P'] = clipboard_actions.paste,
       },
       float = {
-        size_percentage = 0.5,
         winblend = 15,
-        border = true,
-        borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
 
-        -- -- If you want to use `shadow`, set `shadow` to `true`.
-        -- -- Also, if you set shadow to true, the value of `borderchars` will be ignored.
-        -- shadow = false,
+        -- You can define a function that returns a table to be passed as the third
+        -- argument of nvim_open_win().
+        win_opts = function()
+          local width = math.floor(vim.o.columns * 0.6)
+          local height = math.floor(vim.o.lines * 0.8)
+          return {
+            border = require("lir.float.helper").make_border_opts({
+              "+", "─", "+", "│", "+", "─", "+", "│",
+            }, "Normal"),
+            width = width,
+            height = height,
+            row = 10,
+            col = math.floor((vim.o.columns - width) / 2),
+          }
+        end,
       }
     }
 
@@ -255,13 +290,6 @@ LirFloatNormal                                                *LirFloatNormal*
     Default: `highlight def link LirFloatNormal Normal``
 
     The highlight for float window.
-
-
-LirFloatBorder                                                *LirFloatBorder*
-
-    Default: `highlight def link LirFloatBorder LirFloatNormal`
-
-    The highlight for float window border.
 
 
 LirDir                                                                *LirDir*
@@ -449,6 +477,34 @@ So, do the following.
         ["`"] = function()
           vim.cmd("edit /")
           vim.cmd('duautocmd BufEnter')
+        end,
+      }
+    }
+<
+
+Q: How do I set the size of the floating window as a percentage and set the
+border?
+
+A: It can be set by `float.win_opts` in |lir.setup()|.
+    Example:
+        Width is 60%, height is 80%, centered.
+        Set the border line and set the highlight to Normal.
+>
+    require'lir'.setup {
+      -- ...
+      float = {
+        win_opts = function()
+          local width = math.floor(vim.o.columns * 0.6)
+          local height = math.floor(vim.o.lines * 0.8)
+          return {
+            border = require("lir.float.helper").make_border_opts({
+              "+", "─", "+", "│", "+", "─", "+", "│",
+            }, "Normal"),
+            width = width,
+            height = height,
+            row = math.floor((vim.o.columns - width) / 2) - 1,
+            col = math.floor((vim.o.columns - width) / 2),
+          }
         end,
       }
     }
