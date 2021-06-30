@@ -69,7 +69,7 @@ function float.init(dir_path)
 
   local win_config
   if type(config.values.float.make_win_config) == "function" then
-    win_config = config.values.float.make_win_config(win_config)
+    win_config = config.values.float.make_win_config()
   else
     win_config = helper.make_default_win_config()
   end
