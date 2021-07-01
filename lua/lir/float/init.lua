@@ -19,13 +19,8 @@ local make_default_win_config = function()
   local width = math.floor(vim.o.columns * default_win_opts.width)
   local height = math.floor(vim.o.lines * default_win_opts.height)
 
-  local top = math.floor(((vim.o.lines - height) / 2) - 1)
-  local left = math.floor((vim.o.columns - width) / 2)
-
   local result = {
     relative = "editor",
-    row = top,
-    col = left,
     width = width,
     height = height,
     style = "minimal",
@@ -33,6 +28,20 @@ local make_default_win_config = function()
   }
 
   return result
+end
+
+--- Calculate the floating window position according to the given width and
+--- height if the user didn't define them.
+---@param win_config table
+---@return table
+local function calculate_position(win_config)
+  if not win_config.row then
+    win_config.row = (vim.o.lines / 2) - (win_config.height / 2) - 1
+  end
+  if not win_config.col then
+    win_config.col = (vim.o.columns / 2) - (win_config.width / 2)
+  end
+  return win_config
 end
 
 --- 中央配置のウィンドウを開く
@@ -100,6 +109,7 @@ function float.init(dir_path)
   end
 
   local win_config = vim.tbl_extend("force", make_default_win_config(), user_win_opts)
+  win_config = calculate_position(win_config)
   local win_id = open_win(win_config, config.values.float.winblend)
 
   vim.t.lir_float_winid = win_id
