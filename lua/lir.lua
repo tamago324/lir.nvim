@@ -240,7 +240,7 @@ function lir.init()
   a.nvim_buf_set_option(0, "filetype", "lir")
 end
 
-function is_use_removed_config(prefs)
+local function is_use_removed_config(prefs)
   local float = prefs.float
   if vim.tbl_isempty(float) then
     return false
@@ -259,8 +259,12 @@ end
 ---@param prefs lir.config.values
 function lir.setup(prefs)
   if is_use_removed_config(prefs) then
+    -- stylua: ignore
     local msg =
-      string.format([[[lir.nvim] You are using a removed setting value. Please use float.win_opts. (see :h lir-settings-float.win_opts)]])
+      string.format(
+        '[lir.nvim] You are using a removed setting value. Please use float.win_opts.' ..
+        '(see :h lir-settings-float.win_opts)'
+      )
     a.nvim_echo({ { msg, "WarningMsg" } }, true, {})
   end
 
