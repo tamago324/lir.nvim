@@ -45,7 +45,13 @@ local function readdir(path)
 
     if config.values.devicons_enable then
       local icon, highlight_name = devicons.get_devicons(name, is_dir)
-      file.display = string.format("%s%s %s%s", prefix, icon, name, (is_dir and "/" or ""))
+      file.display = string.format(
+        "%s%s %s%s",
+        prefix,
+        icon,
+        name,
+        (is_dir and "/" or "")
+      )
       file.devicons = { icon = icon, highlight_name = highlight_name }
     else
       file.display = prefix .. name .. (is_dir and "/" or "")
@@ -162,7 +168,8 @@ end
 ---@param devicon_enable boolean
 local function set_nocontent_text(devicon_enable)
   -- From vim-clap
-  local text = string.format(" %s Directory is empty", (devicon_enable and "" or " "))
+  local text =
+    string.format(" %s Directory is empty", (devicon_enable and "" or " "))
   a.nvim_buf_set_virtual_text(0, -1, 0, { { text, "LirEmptyDirText" } }, {})
 end
 
@@ -233,8 +240,30 @@ function lir.init()
   a.nvim_buf_set_option(0, "filetype", "lir")
 end
 
+function is_use_removed_config(prefs)
+  local float = prefs.float
+  if vim.tbl_isempty(float) then
+    return false
+  end
+
+  local deprecated_opts = { "size_percentage", "border", "borderchars", "shadow" }
+  for _, v in ipairs(deprecated_opts) do
+    if vim.tbl_contains(vim.tbl_keys(float), v) then
+      return true
+    end
+  end
+
+  return false
+end
+
 ---@param prefs lir.config.values
 function lir.setup(prefs)
+  if is_use_removed_config(prefs) then
+    local msg =
+      string.format([[[lir.nvim] You are using a removed setting value. Please use float.win_opts. (see :h lir-settings-float.win_opts)]])
+    a.nvim_echo({ { msg, "WarningMsg" } }, true, {})
+  end
+
   -- Set preferences
   config.set_default_values(prefs)
 
