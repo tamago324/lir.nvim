@@ -241,7 +241,7 @@ function lir.init()
 end
 
 local function is_use_removed_config(prefs)
-  local float = prefs.float
+  local float = prefs.float or {}
   if vim.tbl_isempty(float) then
     return false
   end
