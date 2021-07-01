@@ -30,12 +30,15 @@ local make_default_win_config = function()
   return result
 end
 
---- Calculate the floating window position according to the given width and height.
+--- Calculate the floating window position according to the given width and
+--- height if the user didn't define them.
 ---@param win_config table
 ---@return table
 local function calculate_position(win_config)
-  win_config.row = (vim.o.lines / 2) - (win_config.height / 2) - 1
-  win_config.col = (vim.o.columns / 2) - (win_config.width / 2)
+  if not (win_config.row or win_config.col) then
+    win_config.row = (vim.o.lines / 2) - (win_config.height / 2) - 1
+    win_config.col = (vim.o.columns / 2) - (win_config.width / 2)
+  end
   return win_config
 end
 
