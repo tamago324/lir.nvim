@@ -34,6 +34,26 @@ lir.float.toggle([{dir}])                                 *lir.float.toggle()*
 
     `dir` が nil の場合、`vim.fn.expand('%:p:h')` が使われます。
 
+                                         *lir.float.helper.make_border_opts()*
+lir.float.helper.make_border_opts({borderchars}, {highlight})
+    |nvim_open_win()| の第3引数の config に渡す `border` の値を生成します。
+>
+    local border = require("lir.float.helper").make_border_opts({
+      "+", "─", "+", "│", "+", "─", "+", "│",
+    }, "Normal")
+
+    -- 以下の値が返されます。
+    {
+      { "+", "Normal" },
+      { "─", "Normal" },
+      { "+", "Normal" },
+      { "│", "Normal" },
+      { "+", "Normal" },
+      { "─", "Normal" },
+      { "+", "Normal" },
+      { "│", "Normal" },
+    }
+<
 
 ==============================================================================
 CONTEXT                                                          *lir-context*
@@ -135,11 +155,8 @@ SETTINGS                                                        *lir-settings*
       devicons_enable = false,
       mappings = {},
       float = {
-        size_percentage = 0.5,
         winblend = 15,
-        border = false,
-        borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
-        shadow = false,
+        win_opts = nil
       },
       hide_cursor = false
     }
@@ -155,26 +172,29 @@ mappings                                               *lir-settings-mappings*
     table を指定する。
     自分で定義した関数を使用することもできます。
 
-float.size_percentage                     *lir-settings-float.size_percentage*
-    floating window で表示するウィンドウサイズの割合
+hide_cursor                                         *lir-settings-hide_cursor*
+    カーソルを非表示にするか
+    カーソルを表示する場合、先頭に空白が入る
 
 float.winblend                                   *lir-settings-float.winblend*
     floating window で表示するウィンドウの透過度合い
 
-float.border                                       *lir-settings-float.border*
-    ボーダーを表示するか
+float.win_opts                                   *lir-settings-float.win_opts*
+    |nvim_open_win()|の第3引数に渡すテーブルを返す関数を指定します。
+    以下のデフォルトの設定を上書きしたいときに使用します。
+    詳しくは設定例を見てください。
 
-float.borderchars                             *lir-settings-float.borderchars*
-    ボーダーの文字
-    左上から時計回りに指定する
-
-float.shadow                                       *lir-settings-float.shadow*
-    |nvim_open_win()| の shadow を使用するか
-    このオプションが `true` の場合、`float.borderchars` の値は無視されます。
-
-hide_cursor                                         *lir-settings-hide_cursor*
-    カーソルを非表示にするか
-    カーソルを表示する場合、先頭に空白が入る
+    デフォルト値: >
+      {
+        relative = "editor",
+        row = math.floor((vim.o.lines - (vim.o.lines * 0.5)) / 2) - 1,
+        col = math.floor((vim.o.lines - (vim.o.columns * 0.5)) / 2),
+        width = math.floor(vim.o.columns * 0.5),
+        height = math.floor(vim.o.lines * 0.5),
+        style = "minimal",
+        border = "bouble",
+      }
+<
 
 
 設定例: >
@@ -211,14 +231,23 @@ hide_cursor                                         *lir-settings-hide_cursor*
         ['P'] = clipboard_actions.paste,
       },
       float = {
-        size_percentage = 0.5,
         winblend = 15,
-        border = true,
-        borderchars = {"╔" , "═" , "╗" , "║" , "╝" , "═" , "╚", "║"},
 
-        -- -- If you want to use `shadow`, set `shadow` to `true`.
-        -- -- Also, if you set shadow to true, the value of `borderchars` will be ignored.
-        -- shadow = false,
+        -- You can define a function that returns a table to be passed as the third
+        -- argument of nvim_open_win().
+        win_opts = function()
+          local width = math.floor(vim.o.columns * 0.6)
+          local height = math.floor(vim.o.lines * 0.8)
+          return {
+            border = require("lir.float.helper").make_border_opts({
+              "+", "─", "+", "│", "+", "─", "+", "│",
+            }, "Normal"),
+            width = width,
+            height = height,
+            row = 10,
+            col = math.floor((vim.o.columns - width) / 2),
+          }
+        end,
       }
     }
 
@@ -255,13 +284,6 @@ LirFloatNormal                                                *LirFloatNormal*
     デフォルト: `highlight def link LirFloatNormal Normal``
 
     floating window のハイライト。
-
-
-LirFloatBorder                                                *LirFloatBorder*
-
-  デフォルト: `highlight def link LirFloatBorder LirFloatNormal`
-
-   floating window の枠線のハイライト。
 
 
 LirDir                                                                *LirDir*
@@ -449,6 +471,33 @@ A: おそらく、Neovim 本体の問題です。(https://github.com/neovim/neov
         ["`"] = function()
           vim.cmd("edit /")
           vim.cmd('duautocmd BufEnter')
+        end,
+      }
+    }
+<
+
+Q: floating window のサイズを割合で設定し、borderの設定をするにはどうすれば
+いいですか？
+
+A: |lir.setup()| の `float.win_opts` で設定可能です。
+    例) 横幅は60%、高さは80%、中央に配置。
+        border の線を設定し、ハイライトを Normal に設定
+>
+    require'lir'.setup {
+      -- ...
+      float = {
+        win_opts = function()
+          local width = math.floor(vim.o.columns * 0.6)
+          local height = math.floor(vim.o.lines * 0.8)
+          return {
+            border = require("lir.float.helper").make_border_opts({
+              "+", "─", "+", "│", "+", "─", "+", "│",
+            }, "Normal"),
+            width = width,
+            height = height,
+            row = math.floor((vim.o.columns - width) / 2) - 1,
+            col = math.floor((vim.o.columns - width) / 2),
+          }
         end,
       }
     }

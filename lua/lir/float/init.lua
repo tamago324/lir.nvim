@@ -7,34 +7,17 @@ local a = vim.api
 ---@class lir_float
 local float = {}
 
---- borderchars にハイライトをつけたテーブルを返す
---- { {'=', 'LirFloatBorder'}, {'|', 'LirFloatBorder'}, ... } のようなテーブルを作る
----@param borderchars table
-local make_border_opts = function(borderchars)
-  return vim.tbl_map(function(char)
-    return { char, "LirFloatBorder" }
-  end, borderchars)
-end
+local default_win_opts = {
+  width = 0.5,
+  height = 0.5,
+  border = "double",
+}
 
---- オプションのデフォルト値を返す
----@param opts table
+--- Return the default value of the option
 ---@return table
-local function default_opts(opts)
-  vim.validate({ borderchars = { opts.borderchars, "t" } })
-
-  local width_percentage, height_percentage
-  if type(opts.percentage) == "number" then
-    width_percentage = opts.percentage
-    height_percentage = opts.percentage
-  elseif type(opts.percentage) == "table" then
-    width_percentage = opts.percentage.width
-    height_percentage = opts.percentage.height
-  else
-    error(string.format("'size_percentage' can be either number or table: %s", vim.inspect(opts.percentage)))
-  end
-
-  local width = math.floor(vim.o.columns * width_percentage)
-  local height = math.floor(vim.o.lines * height_percentage)
+local make_default_win_config = function()
+  local width = math.floor(vim.o.columns * default_win_opts.width)
+  local height = math.floor(vim.o.lines * default_win_opts.height)
 
   local top = math.floor(((vim.o.lines - height) / 2) - 1)
   local left = math.floor((vim.o.columns - width) / 2)
@@ -46,33 +29,20 @@ local function default_opts(opts)
     width = width,
     height = height,
     style = "minimal",
-    border = make_border_opts(opts.borderchars),
+    border = default_win_opts.border,
   }
 
   return result
 end
 
 --- 中央配置のウィンドウを開く
----@param opts table
 ---@return number win_id
-local function open_centered_win(opts)
-  vim.validate({
-    winblend = { opts.winblend, "n" },
-    borderchars = { opts.borderchars, "t" },
-    shadow = { opts.shadow, "b" },
-  })
-
-  local win_opts = default_opts(opts)
-
-  if opts.shadow then
-    win_opts.border = "shadow"
-  end
-
+local function open_win(opts, winblend)
   local bufnr = a.nvim_create_buf(false, true)
-  local win_id = a.nvim_open_win(bufnr, true, win_opts)
+  local win_id = a.nvim_open_win(bufnr, true, opts)
 
   vim.cmd("setlocal nocursorcolumn")
-  a.nvim_win_set_option(win_id, "winblend", opts.winblend)
+  a.nvim_win_set_option(win_id, "winblend", winblend)
 
   vim.cmd(string.format("autocmd WinLeave <buffer> silent! execute 'bdelete! %s'", bufnr))
 
@@ -124,12 +94,13 @@ function float.init(dir_path)
     file = vim.fn.expand("%:p")
   end
 
-  local win_id = open_centered_win({
-    percentage = config.values.float.size_percentage,
-    winblend = config.values.float.winblend,
-    borderchars = config.values.float.borderchars,
-    shadow = config.values.float.shadow,
-  })
+  local user_win_opts = {}
+  if type(config.values.float.win_opts) == "function" then
+    user_win_opts = config.values.float.win_opts()
+  end
+
+  local win_config = vim.tbl_extend("force", make_default_win_config(), user_win_opts)
+  local win_id = open_win(win_config, config.values.float.winblend)
 
   vim.t.lir_float_winid = win_id
   -- To move the cursor
