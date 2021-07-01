@@ -35,8 +35,10 @@ end
 ---@param win_config table
 ---@return table
 local function calculate_position(win_config)
-  if not (win_config.row or win_config.col) then
+  if not win_config.row then
     win_config.row = (vim.o.lines / 2) - (win_config.height / 2) - 1
+  end
+  if not win_config.col then
     win_config.col = (vim.o.columns / 2) - (win_config.width / 2)
   end
   return win_config
