@@ -4,6 +4,8 @@ local config = require("lir.config")
 local lvim = require("lir.vim")
 local Path = require("plenary.path")
 
+local sep = Path.path.sep
+
 local vim = vim
 local uv = vim.loop
 local a = vim.api
@@ -26,6 +28,16 @@ local function open(cmd)
   actions.quit()
   vim.cmd(cmd .. " " .. filename)
   history.add(ctx.dir, ctx:current_value())
+end
+
+
+---@param pathname string
+---@return boolean
+local function is_root(pathname)
+  if sep == '\\' then
+    return string.match(pathname, '^[A-Z]:\\?$')
+  end
+  return pathname == '/'
 end
 
 -----------------------------
@@ -73,7 +85,7 @@ function actions.up()
   local cur_file, path, name, dir
   local ctx = get_context()
   cur_file = ctx:current_value()
-  path = string.gsub(ctx.dir, "/$", "")
+  path = string.gsub(ctx.dir, sep.."$", "")
   name = vim.fn.fnamemodify(path, ":t")
   if name == "" then
     return
@@ -82,7 +94,7 @@ function actions.up()
   history.add(path, cur_file)
   history.add(dir, name)
   vim.cmd("keepalt edit " .. dir)
-  if vim.endswith(dir, "/") then
+  if is_root(dir) then
     vim.cmd("doautocmd BufEnter")
   end
 end
@@ -137,7 +149,7 @@ end
 --- rename
 function actions.rename()
   local ctx = get_context()
-  local old = string.gsub(ctx:current_value(), "/$", "")
+  local old = string.gsub(ctx:current_value(), sep.."$", "")
   local new = vim.fn.input("Rename: ", old)
   if new == "" or new == old then
     return
