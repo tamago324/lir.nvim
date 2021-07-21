@@ -8,6 +8,8 @@ local Context = require("lir.context")
 local lvim = require("lir.vim")
 local Path = require("plenary.path")
 
+local sep = Path.path.sep
+
 local vim = vim
 local uv = vim.loop
 local a = vim.api
@@ -151,7 +153,12 @@ end
 ---@param path string
 ---@return boolean
 local function is_symlink(path)
-  return uv.fs_lstat(path).type == "link"
+  -- If it is not accessible, it returns nil, so check it.
+  local res, err = uv.fs_lstat(path)
+  if res then
+    return uv.fs_lstat(path).type == "link"
+  end
+  return false
 end
 
 ---@param dir string
@@ -193,8 +200,8 @@ function lir.init()
   end
 
   local dir = path
-  if not vim.endswith(path, "/") then
-    dir = path .. "/"
+  if not vim.endswith(path, sep) then
+    dir = path .. sep
   end
 
   local context = Context.new(dir)
