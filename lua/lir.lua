@@ -154,7 +154,7 @@ end
 ---@return boolean
 local function is_symlink(path)
   -- If it is not accessible, it returns nil, so check it.
-  local res, err = uv.fs_lstat(path)
+  local res, _ = uv.fs_lstat(path)
   if res then
     return uv.fs_lstat(path).type == "link"
   end
