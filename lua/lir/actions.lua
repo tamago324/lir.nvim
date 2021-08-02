@@ -168,11 +168,11 @@ function actions.rename()
 end
 
 --- delete
-function actions.delete()
+function actions.delete(force)
   local ctx = get_context()
   local name = ctx:current_value()
 
-  if vim.fn.confirm("Delete?: " .. name, "&Yes\n&No", 1) ~= 1 then
+  if not force and vim.fn.confirm("Delete?: " .. name, "&Yes\n&No", 1) ~= 1 then
     -- Esc は 0 を返す
     return
   end
@@ -188,6 +188,24 @@ function actions.delete()
   end
 
   actions.reload()
+end
+
+--- wipeout
+function actions.wipeout()
+  local ctx = get_context()
+  if not ctx:is_dir_current() then
+    local name = ctx:current_value()
+    local bufnr = vim.fn.bufnr(name)
+    if vim.fn.confirm("Delete?: " .. name, "&Yes\n&No", 1) ~= 1 then
+      return
+    end
+    if bufnr ~= -1 then
+      a.nvim_buf_delete(bufnr, {force = true})
+    end
+    actions.delete(true)
+  else
+    actions.delete()
+  end
 end
 
 --- newfile
