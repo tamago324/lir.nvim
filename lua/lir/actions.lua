@@ -194,13 +194,13 @@ end
 function actions.wipeout()
   local ctx = get_context()
   if not ctx:is_dir_current() then
-    local name = ctx:current_value()
+    local name = ctx:current().fullpath
     local bufnr = vim.fn.bufnr(name)
     if vim.fn.confirm("Delete?: " .. name, "&Yes\n&No", 1) ~= 1 then
       return
     end
     if bufnr ~= -1 then
-      a.nvim_buf_delete(bufnr, {force = true})
+      a.nvim_buf_delete(bufnr, { force = true })
     end
     actions.delete(true)
   else
