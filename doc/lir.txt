@@ -200,7 +200,7 @@ float.win_opts                                   *lir-settings-float.win_opts*
         width = math.floor(vim.o.columns * 0.5),
         height = math.floor(vim.o.lines * 0.5),
         style = "minimal",
-        border = "bouble",
+        border = "double",
       }
 <
 
@@ -347,8 +347,15 @@ mkdir()                                                  *lir.actions.mkdir()*
 rename()                                                *lir.actions.rename()*
     Rename a file.
 
-delete()                                                *lir.actions.delete()*
+delete([{force}])                                       *lir.actions.delete()*
     Delete a file.
+    To delete the file and buffer simultaneously, see |lir.actions.wipeout()|
+
+        Parameters: ~
+            {force} (boolean) If `true`, do not ask for confirmation.
+
+wipeout()                                              *lir.actions.wipeout()*
+    Delete a file and the respective buffer simultaneously.
 
 newfile()                                              *lir.actions.newfile()*
     Create a new file.
