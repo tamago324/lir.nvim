@@ -117,7 +117,7 @@ function actions.mkdir()
     return
   end
 
-  if name == "." or name == ".." or string.match(name, "[/\\]") then
+  if name == "." or name == ".." then
     utils.error("Invalid directory name: " .. name)
     return
   end
@@ -134,7 +134,7 @@ function actions.mkdir()
     return
   end
 
-  path:mkdir()
+  path:mkdir({ parents = true })
 
   actions.reload()
 
