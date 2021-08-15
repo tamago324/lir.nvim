@@ -342,7 +342,8 @@ quit()                                                    *lir.actions.quit()*
     Close lir.
 
 mkdir()                                                  *lir.actions.mkdir()*
-    Create the directory.
+    Create directories recursively i.e., if the path has missing parents, then
+    they will be created as well. Similar to `mkdir -p`
 
 rename()                                                *lir.actions.rename()*
     Rename a file.
