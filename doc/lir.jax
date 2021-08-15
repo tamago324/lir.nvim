@@ -192,7 +192,7 @@ float.win_opts                                   *lir-settings-float.win_opts*
         width = math.floor(vim.o.columns * 0.5),
         height = math.floor(vim.o.lines * 0.5),
         style = "minimal",
-        border = "bouble",
+        border = "double",
       }
 <
 
@@ -337,13 +337,23 @@ quit()                                                    *lir.actions.quit()*
     lir を閉じる。
 
 mkdir()                                                  *lir.actions.mkdir()*
-    ディレクトリを作成する。
+    ディレクトリを再帰的に作成する。
+    指定したディレクトリの親ディレクトリが存在しない場合、その親ディレクトリも作成
+    されます。`mkdir -p`に似ています。
 
 rename()                                                *lir.actions.rename()*
     ファイル名を変更する。
 
-delete()                                                *lir.actions.delete()*
+delete([{force}])                                       *lir.actions.delete()*
     ファイルを削除する。
+    ファイルとバッファを同時に削除するには、|lir.actions.wipeout()| を参照してく
+    ださい。
+
+        Parameters: ~
+            {force} (boolean) `true` の場合、削除の確認をせずに削除します。
+
+wipeout()                                              *lir.actions.wipeout()*
+    ファイルとそのバッファを同時に削除します。
 
 newfile()                                              *lir.actions.newfile()*
     ファイルを新規作成する。
