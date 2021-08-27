@@ -39,7 +39,7 @@ function devicons.setup()
     })
   end
 
-  local icon, _ = Devicons.get_icon("default_icon")
+  local icon = Devicons.get_icon("default_icon", "", { default = true })
   ICON_WIDTH = vim.fn.strlen(icon)
 end
 
