@@ -27,7 +27,7 @@ function devicons.setup()
     return
   end
   local _, hi_name = Devicons.get_icon(FOLDER_ICON_NAME)
-  if hi_name ~= nil and hi_name:match("IconDefault$") then
+  if icon == nil then
     Devicons.set_icon({
       [FOLDER_ICON_NAME] = {
         icon = "",
