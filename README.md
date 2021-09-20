@@ -74,13 +74,11 @@ require'lir'.setup {
 }
 
 -- custom folder icon
-require'nvim-web-devicons'.setup({
-  override = {
-    lir_folder_icon = {
-      icon = "",
-      color = "#7ebae4",
-      name = "LirFolderNode"
-    },
+require'nvim-web-devicons'.set_icon({
+  lir_folder_icon = {
+    icon = "",
+    color = "#7ebae4",
+    name = "LirFolderNode"
   }
 })
 
