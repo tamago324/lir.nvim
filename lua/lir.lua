@@ -47,13 +47,7 @@ local function readdir(path)
 
     if config.values.devicons_enable then
       local icon, highlight_name = devicons.get_devicons(name, is_dir)
-      file.display = string.format(
-        "%s%s %s%s",
-        prefix,
-        icon,
-        name,
-        (is_dir and "/" or "")
-      )
+      file.display = string.format("%s%s %s%s", prefix, icon, name, (is_dir and "/" or ""))
       file.devicons = { icon = icon, highlight_name = highlight_name }
     else
       file.display = prefix .. name .. (is_dir and "/" or "")
@@ -175,8 +169,7 @@ end
 ---@param devicon_enable boolean
 local function set_nocontent_text(devicon_enable)
   -- From vim-clap
-  local text =
-    string.format(" %s Directory is empty", (devicon_enable and "" or " "))
+  local text = string.format(" %s Directory is empty", (devicon_enable and "" or " "))
   a.nvim_buf_set_virtual_text(0, -1, 0, { { text, "LirEmptyDirText" } }, {})
 end
 
@@ -226,9 +219,12 @@ function lir.init()
   table.sort(files, sort)
 
   context.files = files
-  setlines(dir, vim.tbl_map(function(item)
-    return item.display
-  end, files))
+  setlines(
+    dir,
+    vim.tbl_map(function(item)
+      return item.display
+    end, files)
+  )
 
   highlight.update_highlight(files)
 

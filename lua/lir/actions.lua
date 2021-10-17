@@ -30,14 +30,13 @@ local function open(cmd)
   history.add(ctx.dir, ctx:current_value())
 end
 
-
 ---@param pathname string
 ---@return boolean
 local function is_root(pathname)
-  if sep == '\\' then
-    return string.match(pathname, '^[A-Z]:\\?$')
+  if sep == "\\" then
+    return string.match(pathname, "^[A-Z]:\\?$")
   end
-  return pathname == '/'
+  return pathname == "/"
 end
 
 -----------------------------
@@ -85,7 +84,7 @@ function actions.up()
   local cur_file, path, name, dir
   local ctx = get_context()
   cur_file = ctx:current_value()
-  path = string.gsub(ctx.dir, sep.."$", "")
+  path = string.gsub(ctx.dir, sep .. "$", "")
   name = vim.fn.fnamemodify(path, ":t")
   if name == "" then
     return
@@ -149,7 +148,7 @@ end
 --- rename
 function actions.rename()
   local ctx = get_context()
-  local old = string.gsub(ctx:current_value(), sep.."$", "")
+  local old = string.gsub(ctx:current_value(), sep .. "$", "")
   local new = vim.fn.input("Rename: ", old)
   if new == "" or new == old then
     return
