@@ -26,8 +26,8 @@ function devicons.setup()
     -- config.values.devicons_enable = false
     return
   end
-  local _, hi_name = Devicons.get_icon(FOLDER_ICON_NAME)
-  if icon == nil then
+  local folder_icon, _ = Devicons.get_icon(FOLDER_ICON_NAME)
+  if folder_icon == nil then
     Devicons.set_icon({
       [FOLDER_ICON_NAME] = {
         icon = "",

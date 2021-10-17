@@ -7,6 +7,7 @@ local defaults_values = {
   mappings = {},
   float = {
     winblend = 15,
+    curdir_window_enable = false,
   },
   hide_cursor = false,
 }
@@ -33,6 +34,7 @@ config.values = {}
 ---@field border          boolean
 ---@field borderchars     string[]
 ---@field shadow          boolean
+---@field curdir_window_enable boolean
 
 ---@class lir.config.values.float.size_percentage
 ---@field width  number

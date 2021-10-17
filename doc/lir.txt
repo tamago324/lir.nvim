@@ -158,6 +158,7 @@ default value: >
       mappings = {},
       float = {
         winblend = 15,
+        curdir_window_enable = false,
         win_opts = nil
       },
       hide_cursor = false
@@ -185,6 +186,9 @@ hide_cursor                                         *lir-settings-hide_cursor*
 float.winblend                                   *lir-settings-float.winblend*
     The degree of transparency of the window displayed by the floating
     window.
+
+float.curdir_window_enable           *lir-settings-float.curdir_window_enable*
+    Show current directory window?
 
 float.win_opts                                   *lir-settings-float.win_opts*
     Specifies the function that returns the table to be passed as the
@@ -239,6 +243,7 @@ Example: >
       },
       float = {
         winblend = 15,
+        curdir_window_enable = false,
 
         -- You can define a function that returns a table to be passed as the third
         -- argument of nvim_open_win().
@@ -311,6 +316,14 @@ LirEmptyDirText                                              *LirEmptyDirText*
     Default: `highlight def link LirEmptyDirText BlueSign`
 
     The highlighting for text to be displayed when the directory is empty.
+
+
+LirFloatCurdirWindowNormal                        *LirFloatCurdirWindowNormal*
+
+    Default: `highlight def link LirFloatCurdirWindowNormal Normal`
+
+    The highlight for current directory window.
+
 
 ==============================================================================
 ACTIONS                                                     *lir-actions-list*

@@ -1,6 +1,7 @@
 local actions = require("lir.actions")
 local lvim = require("lir.vim")
 local config = require("lir.config")
+local CurdirWindow = require("lir.float.curdir_window")
 
 local a = vim.api
 
@@ -119,6 +120,11 @@ function float.init(dir_path)
   end
   vim.cmd("edit " .. vim.fn.fnameescape(dir))
   vim.w.lir_is_float = true
+
+  -- current directory window
+  if config.values.float.curdir_window_enable then
+    vim.w.lir_curdir_win = CurdirWindow.new(win_id, user_win_opts)
+  end
 
   float.setlocal_winhl()
 

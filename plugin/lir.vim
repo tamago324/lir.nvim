@@ -23,7 +23,8 @@ augroup lir
 augroup END
 
 
-highlight def link LirFloatNormal  Normal
-highlight def link LirDir          PreProc
-highlight def link LirSymLink      PreProc
-highlight def link LirEmptyDirText BlueSign
+highlight def link LirFloatNormal             Normal
+highlight def link LirDir                     PreProc
+highlight def link LirSymLink                 PreProc
+highlight def link LirEmptyDirText            BlueSign
+highlight def link LirFloatCurdirWindowNormal Normal
