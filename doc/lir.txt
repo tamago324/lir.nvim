@@ -158,8 +158,11 @@ default value: >
       mappings = {},
       float = {
         winblend = 15,
-        curdir_window_enable = false,
         win_opts = nil
+        curdir_window = {
+          enable = false,
+          highlight_name = false
+        }
       },
       hide_cursor = false
     }
@@ -187,9 +190,6 @@ float.winblend                                   *lir-settings-float.winblend*
     The degree of transparency of the window displayed by the floating
     window.
 
-float.curdir_window_enable           *lir-settings-float.curdir_window_enable*
-    Show current directory window?
-
 float.win_opts                                   *lir-settings-float.win_opts*
     Specifies the function that returns the table to be passed as the
     third argument of |nvim_open_win()|.
@@ -207,6 +207,14 @@ float.win_opts                                   *lir-settings-float.win_opts*
         border = "double",
       }
 <
+float.curdir_window.enable           *lir-settings-float.curdir_window.enable*
+    Show current directory window?
+
+float.curdir_window.highlight_dirname
+                          *lir-settings-float.curdir_window.highlight_dirname*
+    Highlight a directory in the current directory window in a floating
+    window?
+
 
 Example: >
 
@@ -243,7 +251,10 @@ Example: >
       },
       float = {
         winblend = 15,
-        curdir_window_enable = false,
+        curdir_window = {
+          enable = false,
+          highlight_name = false
+        }
 
         -- You can define a function that returns a table to be passed as the third
         -- argument of nvim_open_win().

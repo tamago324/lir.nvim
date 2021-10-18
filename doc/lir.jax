@@ -156,8 +156,11 @@ SETTINGS                                                        *lir-settings*
       mappings = {},
       float = {
         winblend = 15,
-        curdir_window_enable = false,
         win_opts = nil
+        curdir_window = {
+          enable = false,
+          highlight_name = false
+        }
       },
       hide_cursor = false
     }
@@ -180,9 +183,6 @@ hide_cursor                                         *lir-settings-hide_cursor*
 float.winblend                                   *lir-settings-float.winblend*
     floating window で表示するウィンドウの透過度合い
 
-float.curdir_window_enable           *lir-settings-float.curdir_window_enable*
-    floating window でカレントディレクトリウィンドウを表示するか
-
 float.win_opts                                   *lir-settings-float.win_opts*
     |nvim_open_win()|の第3引数に渡すテーブルを返す関数を指定します。
     以下のデフォルトの設定を上書きしたいときに使用します。
@@ -199,6 +199,13 @@ float.win_opts                                   *lir-settings-float.win_opts*
         border = "double",
       }
 <
+float.curdir_window.enable           *lir-settings-float.curdir_window.enable*
+    floating window でカレントディレクトリウィンドウを表示するか
+
+float.curdir_window.highlight_dirname
+                          *lir-settings-float.curdir_window.highlight_dirname*
+    floating window でカレントディレクトリウィンドウのディレクトリをハイライト
+    するか
 
 
 設定例: >
@@ -236,7 +243,10 @@ float.win_opts                                   *lir-settings-float.win_opts*
       },
       float = {
         winblend = 15,
-        curdir_window_enable = false,
+        curdir_window = {
+          enable = false,
+          highlight_dirname = false
+        },
 
         -- You can define a function that returns a table to be passed as the third
         -- argument of nvim_open_win().

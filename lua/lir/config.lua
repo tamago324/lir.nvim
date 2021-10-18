@@ -7,7 +7,10 @@ local defaults_values = {
   mappings = {},
   float = {
     winblend = 15,
-    curdir_window_enable = false,
+    curdir_window = {
+      enable = false,
+      highlight_dirname = false
+    },
   },
   hide_cursor = false,
 }
@@ -29,16 +32,17 @@ local config = {}
 config.values = {}
 
 ---@class lir.config.values.float
----@field size_percentage lir.config.values.float.size_percentage
 ---@field winblend        number
----@field border          boolean
----@field borderchars     string[]
----@field shadow          boolean
----@field curdir_window_enable boolean
+---@field winopts         table
+---@field curdir_window   lir.config.values.float.curdir_window
 
 ---@class lir.config.values.float.size_percentage
 ---@field width  number
 ---@field height number
+
+---@class lir.config.values.float.curdir_window
+---@field enable  boolean
+---@field highlight_dirname boolean
 
 ---@param opts lir.config.values
 function config.set_default_values(opts)

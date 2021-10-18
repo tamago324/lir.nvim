@@ -122,7 +122,7 @@ function float.init(dir_path)
   vim.w.lir_is_float = true
 
   -- current directory window
-  if config.values.float.curdir_window_enable then
+  if config.values.float.curdir_window.enable then
     vim.w.lir_curdir_win = CurdirWindow.new(win_id, user_win_opts)
   end
 

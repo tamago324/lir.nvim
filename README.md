@@ -53,7 +53,10 @@ require'lir'.setup {
   },
   float = {
     winblend = 0,
-    curdir_window_enable = false,
+    curdir_window = {
+      enable = false,
+      highlight_dirname = false
+    },
 
     -- -- You can define a function that returns a table to be passed as the third
     -- -- argument of nvim_open_win().
