@@ -325,6 +325,13 @@ LirFloatCurdirWindowNormal                        *LirFloatCurdirWindowNormal*
     The highlight for current directory window.
 
 
+LirFloatCurdirWindowDirName                      *LirFloatCurdirWindowDirName*
+
+    Default: `highlight def link LirFloatCurdirWindowDirName PreProc`
+
+    The Highlight for directory name in the current directory window.
+
+
 ==============================================================================
 ACTIONS                                                     *lir-actions-list*
 

@@ -128,6 +128,7 @@ hi LirDir guifg=#7ebae4
 hi LirSymLink guifg=#7c6f64
 hi LirEmptyDirText guifg=#7c6f64
 hi LirFloatCurdirWindowNormal guibg=#32302f
+hi LirFloatCurdirWindowDirName guifg=#7ebae4
 ```
 
 

@@ -319,6 +319,13 @@ LirFloatCurdirWindowNormal                        *LirFloatCurdirWindowNormal*
     カレントディレクトリウィンドウの背景色のハイライト。
 
 
+LirFloatCurdirWindowDirName                      *LirFloatCurdirWindowDirName*
+
+    Default: `highlight def link LirFloatCurdirWindowDirName PreProc`
+
+    カレントディレクトリウィンドウのディレクトリ名のハイライト
+
+
 ==============================================================================
 ACTIONS                                                     *lir-actions-list*
 
