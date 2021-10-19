@@ -70,12 +70,12 @@ local hl_curdir_name = function(bufnr)
   api.nvim_buf_add_highlight(bufnr, ns, "LirFloatCurdirWindowDirName", 0, start - 1, _end)
 end
 
-function CurdirWindow.new(content_win_id, user_win_opts)
+function CurdirWindow.new(content_win_id, win_config)
   local self = setmetatable({}, { __index = CurdirWindow })
   local context_win_config = api.nvim_win_get_config(content_win_id)
 
   local border_line = 0
-  if user_win_opts.border ~= nil and user_win_opts.border ~= "none" and user_win_opts.border ~= "shadow" then
+  if win_config.border ~= nil and win_config.border ~= "none" and win_config.border ~= "shadow" then
     -- none 以外なら、1増やす
     border_line = 1
   end
@@ -91,7 +91,7 @@ function CurdirWindow.new(content_win_id, user_win_opts)
     height = 1,
     relative = "editor",
     focusable = false,
-    border = user_win_opts.border,
+    border = win_config.border,
   })
 
   local width = api.nvim_win_get_config(self.win_id).width
