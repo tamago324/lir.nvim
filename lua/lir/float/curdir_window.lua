@@ -97,15 +97,17 @@ function CurdirWindow.new(content_win_id, win_config)
     border = win_config.border,
   })
 
-  local width = api.nvim_win_get_config(self.win_id).width
-  local dir = normalize_path(lvim.get_context().dir, width)
-  api.nvim_buf_set_lines(self.bufnr, 0, -1, false, { dir })
+  -- Since the process after this may result in an error, set it here
   api.nvim_win_set_option(
     self.win_id,
     "winhl",
     "Normal:LirFloatCurdirWindowNormal,EndOfBuffer:LirFloatCurdirWindowNormal"
   )
   setup_autocmd(self.content_bufnr, self.win_id)
+
+  local width = api.nvim_win_get_config(self.win_id).width
+  local dir = normalize_path(lvim.get_context().dir, width)
+  api.nvim_buf_set_lines(self.bufnr, 0, -1, false, { dir })
   if config.values.float.curdir_window.highlight_dirname then
     hl_curdir_name(self.bufnr)
   end
