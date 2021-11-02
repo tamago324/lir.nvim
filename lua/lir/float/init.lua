@@ -91,7 +91,7 @@ end
 
 ---Is the current buffer terminal?
 ---@return boolean
-function is_terminal_current_win()
+local function is_terminal_current_win()
   local current_win_info = vim.fn["getwininfo"](vim.api.nvim_get_current_win())
   if current_win_info == nil or #current_win_info == 0 then
     return false
