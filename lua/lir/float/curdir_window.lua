@@ -66,6 +66,9 @@ end
 local hl_curdir_name = function(bufnr)
   local text = api.nvim_buf_get_lines(bufnr, 0, 1, false)[1]
   local start, _end = text:find(string.format("[^%s]+%s$", Path.path.sep, Path.path.sep))
+  if start == nil or _end == nil then
+    return
+  end
   api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
   api.nvim_buf_add_highlight(bufnr, ns, "LirFloatCurdirWindowDirName", 0, start - 1, _end)
 end
