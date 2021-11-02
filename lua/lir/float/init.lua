@@ -89,6 +89,16 @@ function float.setlocal_winhl()
   end
 end
 
+---Is the current buffer terminal?
+---@return boolean
+function is_terminal_current_win()
+  local current_win_info = vim.fn["getwininfo"](vim.api.nvim_get_current_win())
+  if current_win_info == nil or #current_win_info == 0 then
+    return false
+  end
+  return current_win_info[1].terminal == 1
+end
+
 ---@param dir_path? string
 function float.init(dir_path)
   local dir, file, old_win
@@ -100,8 +110,14 @@ function float.init(dir_path)
       old_win = a.nvim_get_current_win()
     end
   else
-    dir = dir_path or vim.fn.expand("%:p:h")
-    file = vim.fn.expand("%:p")
+    if is_terminal_current_win() then
+      --- If terminal, use cwd
+      dir = dir_path or vim.fn["getcwd"]()
+      file = nil
+    else
+      dir = dir_path or vim.fn.expand("%:p:h")
+      file = vim.fn.expand("%:p")
+    end
   end
 
   local user_win_opts = {}
