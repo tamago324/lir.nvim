@@ -47,6 +47,13 @@ config.values = {}
 ---@param opts lir.config.values
 function config.set_default_values(opts)
   config.values = vim.tbl_deep_extend("force", defaults_values, opts or {})
+
+  -- For an empty table
+  if vim.tbl_isempty(config.values.float) then
+    config.values.float = defaults_values.float
+  elseif vim.tbl_isempty(config.values.float.curdir_window) then
+    config.values.float.curdir_window = defaults_values.float.curdir_window
+  end
 end
 
 return config
