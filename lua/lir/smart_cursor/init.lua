@@ -12,11 +12,6 @@ local config = require("lir.config")
 -----------------------------
 local guicursor_saved = nil
 
-local function highlight()
-  vim.cmd([[highlight default LirTransparentCursor gui=strikethrough blend=100]])
-end
-highlight()
-
 local function hide_cursor_init()
   vim.cmd([[augroup lir-smart-cursor]])
   vim.cmd([[  autocmd! * <buffer>]])
