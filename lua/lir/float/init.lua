@@ -2,6 +2,7 @@ local actions = require("lir.actions")
 local lvim = require("lir.vim")
 local config = require("lir.config")
 local CurdirWindow = require("lir.float.curdir_window")
+local smart_cursor = require'lir.smart_cursor'
 
 local a = vim.api
 
@@ -140,6 +141,11 @@ function float.init(dir_path)
   -- current directory window
   if config.values.float.curdir_window.enable then
     vim.w.lir_curdir_win = CurdirWindow.new(win_id, win_config)
+
+    -- After creating curdir window, the cursor will restore, so hide it.
+    if config.values.hide_cursor then
+      smart_cursor._hide()
+    end
   end
 
   float.setlocal_winhl()
