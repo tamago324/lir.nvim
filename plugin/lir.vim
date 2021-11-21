@@ -29,3 +29,4 @@ highlight def link LirSymLink                 PreProc
 highlight def link LirEmptyDirText            BlueSign
 highlight def link LirFloatCurdirWindowNormal Normal
 highlight def link LirFloatCurdirWindowDirName PreProc
+highlight def      LirTransparentCursor gui=strikethrough blend=100
