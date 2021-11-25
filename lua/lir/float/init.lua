@@ -141,11 +141,6 @@ function float.init(dir_path)
   -- current directory window
   if config.values.float.curdir_window.enable then
     vim.w.lir_curdir_win = CurdirWindow.new(win_id, win_config)
-
-    -- After creating curdir window, the cursor will restore, so hide it.
-    if config.values.hide_cursor then
-      smart_cursor._hide()
-    end
   end
 
   float.setlocal_winhl()
@@ -153,6 +148,11 @@ function float.init(dir_path)
   -- 空バッファに置き換える
   if old_win then
     a.nvim_win_set_buf(old_win, a.nvim_create_buf(true, false))
+  end
+
+  -- Calling nvim_win_set_buf() will restore it, so hide it.
+  if config.values.hide_cursor then
+    smart_cursor._hide()
   end
 end
 
