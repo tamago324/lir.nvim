@@ -44,7 +44,11 @@ end
 -----------------------------
 
 --- edit
-function actions.edit()
+---@param opts table
+function actions.edit(opts)
+  opts = opts or {}
+  local modified_split_command = vim.F.if_nil(opts.modified_split_command, 'split')
+
   local ctx = get_context()
   local dir, file = ctx.dir, ctx:current_value()
   if not file then
@@ -58,7 +62,8 @@ function actions.edit()
     actions.quit()
   end
 
-  local cmd = (vim.api.nvim_buf_get_option(0, "modified") and "split") or "edit"
+  print(modified_split_command)
+  local cmd = (vim.api.nvim_buf_get_option(0, "modified") and modified_split_command) or "edit"
 
   vim.cmd(string.format("%s %s %s", keepalt, cmd, vim.fn.fnameescape(dir .. file)))
   history.add(dir, file)
