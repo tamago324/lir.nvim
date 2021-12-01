@@ -354,8 +354,15 @@ NOTE: see https://github.com/tamago324/lir.nvim/wiki/Custom-actions
 ------------------------------------------------------------------------------
 Lua module: lir.actions                                          *lir-actions*
 
-edit()                                                    *lir.actions.edit()*
+edit([{opts}])                                            *lir.actions.edit()*
     Use |:edit| to open the file under the cursor.
+
+        Parameters: ~
+            {opts} (table) Definition of editing commands. Keys: 
+                    • `modified_split_command` : Specifies the command to use
+                      when opening a file when the file has not been saved.
+                      (Default: `'split'`)
+
 
 split()                                                  *lir.actions.split()*
     Use |:new| to open the file under the cursor.

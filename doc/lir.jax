@@ -347,8 +347,14 @@ NOTE: see https://github.com/tamago324/lir.nvim/wiki/Custom-actions
 ------------------------------------------------------------------------------
 Lua module: lir.actions                                          *lir-actions*
 
-edit()                                                    *lir.actions.edit()*
+edit([{opts}])                                            *lir.actions.edit()*
     カーソル下のファイルを|:edit| を使って開く。
+
+        Parameters: ~
+            {opts} (table) 編集のコマンドの定義。 Keys: 
+                    • `modified_split_command` : ファイルが保存されていないと
+                      き、ファイルを開くときに使用するコマンド。
+                      (デフォルト: `'split'`)
 
 split()                                                  *lir.actions.split()*
     カーソル下のファイルを|:new| を使って開く。
