@@ -2,7 +2,7 @@ local actions = require("lir.actions")
 local lvim = require("lir.vim")
 local config = require("lir.config")
 local CurdirWindow = require("lir.float.curdir_window")
-local smart_cursor = require'lir.smart_cursor'
+local smart_cursor = require("lir.smart_cursor")
 
 local a = vim.api
 

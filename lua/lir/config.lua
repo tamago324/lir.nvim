@@ -9,7 +9,7 @@ local defaults_values = {
     winblend = 15,
     curdir_window = {
       enable = false,
-      highlight_dirname = false
+      highlight_dirname = false,
     },
   },
   hide_cursor = false,

@@ -32,14 +32,14 @@ local M = {}
 
 function M._hide()
   if not guicursor_saved then
-    guicursor_saved = vim.api.nvim_get_option('guicursor')
+    guicursor_saved = vim.api.nvim_get_option("guicursor")
   end
 
-  vim.api.nvim_set_option('guicursor', guicursor_saved .. ',a:LirTransparentCursor/lCursor')
+  vim.api.nvim_set_option("guicursor", guicursor_saved .. ",a:LirTransparentCursor/lCursor")
 end
 
 function M._restore()
-  vim.api.nvim_set_option('guicursor', guicursor_saved)
+  vim.api.nvim_set_option("guicursor", guicursor_saved)
 end
 
 function M.init()
