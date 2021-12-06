@@ -154,6 +154,7 @@ hi LirFloatCurdirWindowDirName guifg=#7ebae4
 
 ![](https://github.com/tamago324/images/blob/master/lir.nvim/lir-float.png)
 
+![](https://github.com/tamago324/images/blob/master/lir.nvim/lir-float-current-dir.png)
 
 ## License
 
