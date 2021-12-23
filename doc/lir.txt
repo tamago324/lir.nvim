@@ -155,6 +155,7 @@ default value: >
     {
       show_hidden_files = false,
       devicons_enable = false,
+      hide_cursor = false
       mappings = {},
       float = {
         winblend = 15,
@@ -164,7 +165,7 @@ default value: >
           highlight_name = false
         }
       },
-      hide_cursor = false
+      on_init = function() end,
     }
 <
 
@@ -178,13 +179,13 @@ mappings                                               *lir-settings-mappings*
     Specify the table to be used for mapping.
     You can also specify a function that you define yourself.
 
-float.size_percentage                     *lir-settings-float.size_percentage*
-    Percentage of the window size to be displayed in the floating window.
-    You can either specify a `number` or a `table` with width and height keys.
-
 hide_cursor                                         *lir-settings-hide_cursor*
     Hide the cursor in lir?
     If the cursor is shown, it will be prefixed with a space.
+
+on_init                                                 *lir-settings-on_init*
+    Function to be executed after displaying the buffer of lir.
+    This function will be executed immediately after the |FileType| autocmd.
 
 float.winblend                                   *lir-settings-float.winblend*
     The degree of transparency of the window displayed by the floating
@@ -271,7 +272,20 @@ Example: >
             col = math.floor((vim.o.columns - width) / 2),
           }
         end,
-      }
+      },
+      on_init = function()
+        -- use visual mode
+        vim.api.nvim_buf_set_keymap(
+          0,
+          "x",
+          "J",
+          ':<C-u>lua require"lir.mark.actions".toggle_mark("v")<CR>',
+          { noremap = true, silent = true }
+        )
+
+        -- echo cwd
+        vim.api.nvim_echo({ { vim.fn.expand("%:p"), "Normal" } }, false, {})
+      end,
     }
 
     -- custom folder icon
@@ -284,18 +298,6 @@ Example: >
         },
       }
     })
-
-    -- use visual mode
-    function _G.LirSettings()
-      vim.api.nvim_buf_set_keymap(
-        0, 'x', 'J',
-        ':<C-u>lua require"lir.mark.actions".toggle_mark("v")<CR>', {noremap = true, silent = true})
-    end
-
-    vim.cmd [[augroup lir-settings]]
-    vim.cmd [[  autocmd!]]
-    vim.cmd [[  autocmd Filetype lir :lua LirSettings()]]
-    vim.cmd [[augroup END]]
 <
 
 ==============================================================================

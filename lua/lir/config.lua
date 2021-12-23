@@ -4,6 +4,8 @@
 local defaults_values = {
   show_hidden_files = false,
   devicons_enable = false,
+  hide_cursor = false,
+  on_init = function() end,
   mappings = {},
   float = {
     winblend = 15,
@@ -12,7 +14,6 @@ local defaults_values = {
       highlight_dirname = false,
     },
   },
-  hide_cursor = false,
 }
 
 -----------------------------
@@ -26,6 +27,7 @@ local config = {}
 ---@class lir.config.values
 ---@field show_hidden_files boolean
 ---@field devicons_enable   boolean
+---@field on_init           function
 ---@field mappings          table
 ---@field float             lir.config.values.float
 ---@field hide_cursor       boolean

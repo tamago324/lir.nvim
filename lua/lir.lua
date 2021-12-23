@@ -241,6 +241,8 @@ function lir.init()
   a.nvim_buf_set_option(0, "modified", false)
   a.nvim_buf_set_option(0, "modifiable", false)
   a.nvim_buf_set_option(0, "filetype", "lir")
+
+  config.values.on_init(context)
 end
 
 local function is_use_removed_config(prefs)

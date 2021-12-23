@@ -75,6 +75,19 @@ require'lir'.setup {
     -- end,
   },
   hide_cursor = true,
+  on_init = function()
+    -- use visual mode
+    vim.api.nvim_buf_set_keymap(
+      0,
+      "x",
+      "J",
+      ':<C-u>lua require"lir.mark.actions".toggle_mark("v")<CR>',
+      { noremap = true, silent = true }
+    )
+
+    -- echo cwd
+    vim.api.nvim_echo({ { vim.fn.expand("%:p"), "Normal" } }, false, {})
+  end,
 }
 
 -- custom folder icon
@@ -85,19 +98,6 @@ require'nvim-web-devicons'.set_icon({
     name = "LirFolderNode"
   }
 })
-
--- use visual mode
-function _G.LirSettings()
-  vim.api.nvim_buf_set_keymap(0, 'x', 'J', ':<C-u>lua require"lir.mark.actions".toggle_mark("v")<CR>', {noremap = true, silent = true})
-
-  -- echo cwd
-  vim.api.nvim_echo({{vim.fn.expand('%:p'), 'Normal'}}, false, {})
-end
-
-vim.cmd [[augroup lir-settings]]
-vim.cmd [[  autocmd!]]
-vim.cmd [[  autocmd Filetype lir :lua LirSettings()]]
-vim.cmd [[augroup END]]
 ```
 
 NOTE: Actions can be added easily (see [wiki](https://github.com/tamago324/lir.nvim/wiki/Custom-actions))
