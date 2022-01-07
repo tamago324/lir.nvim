@@ -117,7 +117,7 @@ end
 function _G._LirFloatSetCurdirText()
   if config.values.float.curdir_window.enable and vim.w.lir_is_float and vim.w.lir_curdir_win then
     -- local dir = vim.fn.fnamemodify(lvim.get_context().dir, ":~")
-    local width = api.nvim_win_get_config(vim.w.lir_curdir_win).width
+    local width = api.nvim_win_get_config(vim.w.lir_curdir_win.win_id).width
     local dir = normalize_path(lvim.get_context().dir, width)
     api.nvim_buf_set_lines(vim.w.lir_curdir_win.bufnr, 0, -1, false, { dir })
     if config.values.float.curdir_window.highlight_dirname then
