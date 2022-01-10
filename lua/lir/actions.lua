@@ -158,7 +158,7 @@ function actions.rename()
     return
   end
 
-  if new == "." or new == ".." or string.match(new, "[/\\]") then
+  if new == "." or new == ".." then
     utils.error("Invalid name: " .. new)
     return
   end
