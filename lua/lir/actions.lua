@@ -154,10 +154,15 @@ end
 function actions.rename()
   local ctx = get_context()
   local old = string.gsub(ctx:current_value(), sep .. "$", "")
+  local default = ""
+  if config.values.rename_default then
+    default = old
+  end
+
   local opts = {
     completion = "dir",
     prompt = "Rename: ",
-    default = "" -- Leave empty to allow to quickly give a new name without having to delete the old
+    default = default,
   }
 
   -- cd to the currently focused dir to get completion from the current directory
@@ -174,7 +179,8 @@ function actions.rename()
 
   -- If target is a directory, move the file into the directory.
   -- Makes it work like linux `mv`
-  if uv.fs_stat(new).type == "directory" then
+  local stat = uv.fs_stat(new);
+  if stat and stat.fs_stat(new).type == "directory" then
     new = string.format("%s/%s", new, old)
   end
 

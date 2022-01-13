@@ -14,6 +14,8 @@ local defaults_values = {
       highlight_dirname = false,
     },
   },
+  -- Use existing filename as default for rename
+  rename_default = true,
 }
 
 -----------------------------
@@ -31,6 +33,7 @@ local config = {}
 ---@field mappings          table
 ---@field float             lir.config.values.float
 ---@field hide_cursor       boolean
+---@field rename_default    boolean
 config.values = {}
 
 ---@class lir.config.values.float
