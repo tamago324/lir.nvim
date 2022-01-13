@@ -6,6 +6,7 @@ local Path = require("plenary.path")
 
 local sep = Path.path.sep
 
+local fn = vim.fn
 local vim = vim
 local uv = vim.loop
 local a = vim.api
@@ -153,14 +154,28 @@ end
 function actions.rename()
   local ctx = get_context()
   local old = string.gsub(ctx:current_value(), sep .. "$", "")
-  local new = vim.fn.input("Rename: ", old)
+  local opts = {
+    completion = "dir",
+    prompt = "Rename: ",
+    default = "" -- Leave empty to allow to quickly give a new name without having to delete the old
+  }
+
+  -- cd to the currently focused dir to get completion from the current directory
+  local old_dir = fn.getcwd()
+
+  vim.cmd ("noau :cd " .. ctx.dir)
+  local new = vim.fn.input(opts)
   if new == "" or new == old then
     return
   end
 
-  if new == "." or new == ".." then
-    utils.error("Invalid name: " .. new)
-    return
+  -- Restore working directory
+  vim.cmd ("noau :cd " .. old_dir)
+
+  -- If target is a directory, move the file into the directory.
+  -- Makes it work like linux `mv`
+  if uv.fs_stat(new).type == "directory" then
+    new = string.format("%s/%s", new, old)
   end
 
   if not uv.fs_rename(ctx.dir .. old, ctx.dir .. new) then
