@@ -34,6 +34,9 @@ lir.float.toggle([{dir}])                                 *lir.float.toggle()*
 
     If `dir` is nil, then `vim.fn.expand('%:p:h')` is used.
 
+lir.float.close()                                            *lir.float.close()*
+    Close floating window.
+
                                          *lir.float.helper.make_border_opts()*
 lir.float.helper.make_border_opts({borderchars}, {highlight})
     Generate the value of `border` to be passed to config as the third

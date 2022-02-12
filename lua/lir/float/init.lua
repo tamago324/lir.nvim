@@ -83,6 +83,18 @@ function float.toggle(dir)
   end
 end
 
+function float.close()
+  local float_win = find_lir_float_win()
+  if float_win then
+    a.nvim_set_current_win(float_win)
+    -- なぜか、current_win が閉じないため、閉じる
+    if config.values.float.curdir_window.enable then
+      pcall(a.nvim_win_close, a.nvim_win_get_var(float_win, "lir_curdir_win").win_id, true)
+    end
+    actions.quit()
+  end
+end
+
 -- setlocal を使っているため、毎回セットする必要があるため BufWinEnter で呼び出す
 function float.setlocal_winhl()
   if vim.w.lir_is_float then
