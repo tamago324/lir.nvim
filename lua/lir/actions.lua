@@ -169,26 +169,29 @@ function actions.rename()
   local old_dir = fn.getcwd()
 
   vim.cmd ("noau :cd " .. ctx.dir)
-  local new = vim.fn.input(opts)
-  if new == "" or new == old then
-    return
-  end
 
-  -- Restore working directory
-  vim.cmd ("noau :cd " .. old_dir)
+  vim.ui.input(opts, function(new)
+    if new == nil or new == old then
+      vim.cmd ("noau :cd " .. old_dir)
+      return
+    end
 
-  -- If target is a directory, move the file into the directory.
-  -- Makes it work like linux `mv`
-  local stat = uv.fs_stat(new);
-  if stat and stat.fs_stat(new).type == "directory" then
-    new = string.format("%s/%s", new, old)
-  end
+    -- Restore working directory
+    vim.cmd ("noau :cd " .. old_dir)
 
-  if not uv.fs_rename(ctx.dir .. old, ctx.dir .. new) then
-    utils.error("Rename failed")
-  end
+    -- If target is a directory, move the file into the directory.
+    -- Makes it work like linux `mv`
+    local stat = uv.fs_stat(new);
+    if stat and stat.type == "directory" then
+      new = string.format("%s/%s", new, old)
+    end
 
-  actions.reload()
+    if not uv.fs_rename(ctx.dir .. old, ctx.dir .. new) then
+      utils.error("Rename failed")
+    end
+
+    actions.reload()
+  end)
 end
 
 --- delete
