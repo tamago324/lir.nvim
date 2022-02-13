@@ -151,11 +151,11 @@ function actions.mkdir()
 end
 
 --- rename
-function actions.rename()
+function actions.rename(use_default)
   local ctx = get_context()
   local old = string.gsub(ctx:current_value(), sep .. "$", "")
   local default = ""
-  if config.values.rename_default then
+  if use_default ~= false then
     default = old
   end
 
