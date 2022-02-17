@@ -166,8 +166,7 @@ local function set_virtual_text_symlink(dir, files)
   end
 end
 
----@param devicon_enable boolean
-local function set_nocontent_text(devicon_enable)
+local function set_nocontent_text()
   -- From vim-clap
   local text = " Directory is empty"
   a.nvim_buf_set_virtual_text(0, -1, 0, { { text, "LirEmptyDirText" } }, {})

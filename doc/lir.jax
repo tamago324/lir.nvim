@@ -385,8 +385,12 @@ mkdir()                                                  *lir.actions.mkdir()*
     指定したディレクトリの親ディレクトリが存在しない場合、その親ディレクトリも作成
     されます。`mkdir -p`に似ています。
 
-rename()                                                *lir.actions.rename()*
+rename([{use_default}])                                   *lir.actions.rename()*
     ファイル名を変更する。
+
+        Parameters: ~
+            {use_default} (boolean) 元のファイル名をプロンプトに入力するか (default)
+                           `false` の場合、プロンプトは空で初期化されます。
 
 delete([{force}])                                       *lir.actions.delete()*
     ファイルを削除する。

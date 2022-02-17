@@ -388,8 +388,9 @@ mkdir()                                                  *lir.actions.mkdir()*
     Create directories recursively i.e., if the path has missing parents, then
     they will be created as well. Similar to `mkdir -p`
 
-rename([{use_default}])                                                *lir.actions.rename()*
+rename([{use_default}])                                   *lir.actions.rename()*
     Rename or move a file.
+
         Parameters: ~
             {use_default} (boolean) Use the already existing filename as prompt (default)
                 If `false` the prompt for new name will be empty.
