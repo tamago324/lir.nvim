@@ -168,20 +168,20 @@ function actions.rename(use_default)
   -- cd to the currently focused dir to get completion from the current directory
   local old_dir = fn.getcwd()
 
-  vim.cmd ("noau :cd " .. ctx.dir)
+  vim.cmd("noau :cd " .. ctx.dir)
 
   vim.ui.input(opts, function(new)
     if new == nil or new == old then
-      vim.cmd ("noau :cd " .. old_dir)
+      vim.cmd("noau :cd " .. old_dir)
       return
     end
 
     -- Restore working directory
-    vim.cmd ("noau :cd " .. old_dir)
+    vim.cmd("noau :cd " .. old_dir)
 
     -- If target is a directory, move the file into the directory.
     -- Makes it work like linux `mv`
-    local stat = uv.fs_stat(new);
+    local stat = uv.fs_stat(new)
     if stat and stat.type == "directory" then
       new = string.format("%s/%s", new, old)
     end
