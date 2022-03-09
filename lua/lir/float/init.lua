@@ -140,7 +140,17 @@ function float.init(dir_path)
 
   local win_config = vim.tbl_extend("force", make_default_win_config(), user_win_opts)
   win_config = calculate_position(win_config)
-  local win_id = open_win(win_config, config.values.float.winblend)
+
+  -- もし、curdir window を表示するなら、中に表示しているような感じにする
+  local content_win_config = vim.deepcopy(win_config)
+  if config.values.float.curdir_window.enable then
+    if type(win_config.border) == "table" then
+      content_win_config.border[1] = content_win_config.border[8]
+      content_win_config.border[3] = content_win_config.border[4]
+    end
+  end
+
+  local win_id = open_win(content_win_config, config.values.float.winblend)
 
   vim.t.lir_float_winid = win_id
   -- To move the cursor
