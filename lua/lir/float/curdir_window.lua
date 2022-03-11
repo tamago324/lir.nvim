@@ -101,7 +101,7 @@ function CurdirWindow.new(content_win_id, win_config)
   api.nvim_win_set_option(
     self.win_id,
     "winhl",
-    "Normal:LirFloatCurdirWindowNormal,EndOfBuffer:LirFloatCurdirWindowNormal"
+    "Normal:LirFloatCurdirWindowNormal,EndOfBuffer:LirFloatCurdirWindowNormal,FloatBorder:LirFloatBorder"
   )
   setup_autocmd(self.content_bufnr, self.win_id)
 

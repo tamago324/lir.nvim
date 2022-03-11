@@ -310,6 +310,13 @@ LirFloatNormal                                                *LirFloatNormal*
     floating window のハイライト。
 
 
+LirFloatBorder                                                *LirFloatBorder*
+
+    デフォルト: `highlight def link LirFloatBorder FloatBorder``
+
+    floating window の枠線のハイライト.
+
+
 LirDir                                                                *LirDir*
 
     Default: `highlight def link LirDir PreProc`

@@ -312,6 +312,11 @@ LirFloatNormal                                                *LirFloatNormal*
 
     The highlight for float window.
 
+LirFloatBorder                                                *LirFloatBorder*
+
+    Default: `highlight def link LirFloatBorder FloatBorder``
+
+    The highlight for float window border.
 
 LirDir                                                                *LirDir*
 
@@ -552,9 +557,9 @@ A: It can be set by `float.win_opts` in |lir.setup()|.
           local width = math.floor(vim.o.columns * 0.6)
           local height = math.floor(vim.o.lines * 0.8)
           return {
-            border = require("lir.float.helper").make_border_opts({
+            border = {
               "+", "─", "+", "│", "+", "─", "+", "│",
-            }, "Normal"),
+            },
             width = width,
             height = height,
             row = math.floor((vim.o.columns - width) / 2) - 1,

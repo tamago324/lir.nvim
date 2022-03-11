@@ -64,9 +64,9 @@ require'lir'.setup {
     --   local width = math.floor(vim.o.columns * 0.8)
     --   local height = math.floor(vim.o.lines * 0.8)
     --   return {
-    --     border = require("lir.float.helper").make_border_opts({
+    --     border = {
     --       "+", "─", "+", "│", "+", "─", "+", "│",
-    --     }, "Normal"),
+    --     },
     --     width = width,
     --     height = height,
     --     row = 1,
@@ -132,6 +132,7 @@ hi LirSymLink guifg=#7c6f64
 hi LirEmptyDirText guifg=#7c6f64
 hi LirFloatCurdirWindowNormal guibg=#32302f
 hi LirFloatCurdirWindowDirName guifg=#7ebae4
+hi LirFloatBorder guifg=#dddddd
 ```
 
 
