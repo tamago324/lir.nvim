@@ -98,7 +98,11 @@ end
 -- setlocal を使っているため、毎回セットする必要があるため BufWinEnter で呼び出す
 function float.setlocal_winhl()
   if vim.w.lir_is_float then
-    vim.api.nvim_win_set_option(0, "winhl", "Normal:LirFloatNormal,EndOfBuffer:LirFloatNormal,FloatBorder:LirFloatBorder")
+    vim.api.nvim_win_set_option(
+      0,
+      "winhl",
+      "Normal:LirFloatNormal,EndOfBuffer:LirFloatNormal,FloatBorder:LirFloatBorder"
+    )
   end
 end
 
