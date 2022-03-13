@@ -122,7 +122,7 @@ function _G._LirFloatSetCurdirText(lir_curdir_win)
       hl_curdir_name(lir_curdir_win.bufnr)
     end
 
-    vim.cmd('doautocmd <nomodeline> User LirSetTextFloatCurdirWindow')
+    vim.cmd("doautocmd <nomodeline> User LirSetTextFloatCurdirWindow")
   end
 end
 
