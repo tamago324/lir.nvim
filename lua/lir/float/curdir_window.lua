@@ -106,7 +106,7 @@ function CurdirWindow.new(content_win_id, win_config)
   setup_autocmd(self.content_bufnr, self.win_id)
 
   vim.w.lir_curdir_win = self
-  _LirFloatSetCurdirText(self)
+  _G._LirFloatSetCurdirText(self)
 
   return self
 end
