@@ -166,7 +166,7 @@ function float.init(dir_path)
 
   -- current directory window
   if config.values.float.curdir_window.enable then
-    vim.w.lir_curdir_win = CurdirWindow.new(win_id, win_config)
+    CurdirWindow.new(win_id, win_config)
   end
 
   float.setlocal_winhl()

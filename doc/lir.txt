@@ -354,6 +354,14 @@ LirFloatCurdirWindowDirName                      *LirFloatCurdirWindowDirName*
 
 
 ==============================================================================
+AUTOCMDS                                                        *lir-autocmds*
+
+LirSetTextFloatCurdirWindow                *LirSetTextFloatCurdirWindow*
+
+    Text is set in the current directory window.
+
+
+==============================================================================
 ACTIONS                                                     *lir-actions-list*
 
 A list of functions for use in mapping.

@@ -105,24 +105,24 @@ function CurdirWindow.new(content_win_id, win_config)
   )
   setup_autocmd(self.content_bufnr, self.win_id)
 
-  local width = api.nvim_win_get_config(self.win_id).width
-  local dir = normalize_path(lvim.get_context().dir, width)
-  api.nvim_buf_set_lines(self.bufnr, 0, -1, false, { dir })
-  if config.values.float.curdir_window.highlight_dirname then
-    hl_curdir_name(self.bufnr)
-  end
+  vim.w.lir_curdir_win = self
+  _LirFloatSetCurdirText(self)
+
   return self
 end
 
-function _G._LirFloatSetCurdirText()
-  if config.values.float.curdir_window.enable and vim.w.lir_is_float and vim.w.lir_curdir_win then
+function _G._LirFloatSetCurdirText(lir_curdir_win)
+  lir_curdir_win = vim.F.if_nil(lir_curdir_win, vim.w.lir_curdir_win)
+  if config.values.float.curdir_window.enable and vim.w.lir_is_float and lir_curdir_win then
     -- local dir = vim.fn.fnamemodify(lvim.get_context().dir, ":~")
-    local width = api.nvim_win_get_config(vim.w.lir_curdir_win.win_id).width
+    local width = api.nvim_win_get_config(lir_curdir_win.win_id).width
     local dir = normalize_path(lvim.get_context().dir, width)
-    api.nvim_buf_set_lines(vim.w.lir_curdir_win.bufnr, 0, -1, false, { dir })
+    api.nvim_buf_set_lines(lir_curdir_win.bufnr, 0, -1, false, { dir })
     if config.values.float.curdir_window.highlight_dirname then
-      hl_curdir_name(vim.w.lir_curdir_win.bufnr)
+      hl_curdir_name(lir_curdir_win.bufnr)
     end
+
+    vim.cmd('doautocmd <nomodeline> User LirSetTextFloatCurdirWindow')
   end
 end
 

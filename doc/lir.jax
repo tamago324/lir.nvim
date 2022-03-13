@@ -353,6 +353,14 @@ LirFloatCurdirWindowDirName                      *LirFloatCurdirWindowDirName*
 
 
 ==============================================================================
+AUTOCMDS                                                        *lir-autocmds*
+
+LirSetTextFloatCurdirWindow                *LirSetTextFloatCurdirWindow*
+
+    カレントディレクトリウィンドウにテキストがセットされた
+
+
+==============================================================================
 ACTIONS                                                     *lir-actions-list*
 
 マッピングに使用するための関数
