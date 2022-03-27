@@ -312,11 +312,20 @@ LirFloatNormal                                                *LirFloatNormal*
 
     The highlight for float window.
 
+
 LirFloatBorder                                                *LirFloatBorder*
 
     Default: `highlight def link LirFloatBorder FloatBorder``
 
     The highlight for float window border.
+
+
+LirFloatCursorLine                                        *LirFloatCursorLine*
+
+    デフォルト: `highlight def link LirFloatCursorLine CursorLine``
+
+    The highlight for float window cursor line.
+
 
 LirDir                                                                *LirDir*
 

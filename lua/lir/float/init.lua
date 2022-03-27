@@ -101,7 +101,7 @@ function float.setlocal_winhl()
     vim.api.nvim_win_set_option(
       0,
       "winhl",
-      "Normal:LirFloatNormal,EndOfBuffer:LirFloatNormal,FloatBorder:LirFloatBorder"
+      "Normal:LirFloatNormal,EndOfBuffer:LirFloatNormal,FloatBorder:LirFloatBorder,CursorLine:LirFloatCursorLine"
     )
   end
 end
