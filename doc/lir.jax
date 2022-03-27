@@ -317,6 +317,13 @@ LirFloatBorder                                                *LirFloatBorder*
     floating window の枠線のハイライト.
 
 
+LirFloatCursorLine                                        *LirFloatCursorLine*
+
+    デフォルト: `highlight def link LirFloatCursorLine CursorLine``
+
+    floating window のカーソル行のハイライト。
+
+
 LirDir                                                                *LirDir*
 
     Default: `highlight def link LirDir PreProc`

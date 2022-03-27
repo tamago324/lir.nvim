@@ -123,18 +123,6 @@ or
 :lua require'lir.float'.init()
 ```
 
-Change highlights groups.
-
-```viml
-hi LirFloatNormal guibg=#32302f
-hi LirDir guifg=#7ebae4
-hi LirSymLink guifg=#7c6f64
-hi LirEmptyDirText guifg=#7c6f64
-hi LirFloatCurdirWindowNormal guibg=#32302f
-hi LirFloatCurdirWindowDirName guifg=#7ebae4
-hi LirFloatBorder guifg=#dddddd
-```
-
 
 ### Extensions
 

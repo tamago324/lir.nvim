@@ -31,3 +31,4 @@ highlight def link LirFloatCurdirWindowNormal Normal
 highlight def link LirFloatCurdirWindowDirName PreProc
 highlight def      LirTransparentCursor gui=strikethrough blend=100
 highlight def link LirFloatBorder             FloatBorder
+highlight def link LirFloatCursorLine         CursorLine
