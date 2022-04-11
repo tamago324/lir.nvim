@@ -133,11 +133,10 @@ end
 ---@param kind lir_clipboard__kind
 ---@return boolean
 local function _paste(from, to, kind)
-  local from_path, to_path = Path:new(from), Path:new(to)
   local is_error_if_exists = true
 
-  if to_path:exists() then
-    local res = ask_action(to_path:absolute(), kind)
+  if Path:new(to):exists() then
+    local res = ask_action(to, kind)
 
     if res == PASTE_ACTIONS.CANCEL or res == PASTE_ACTIONS.QUIT then
       return true
@@ -145,19 +144,19 @@ local function _paste(from, to, kind)
       return false
     elseif res == PASTE_ACTIONS.RENAME then
       vim.cmd([[redraw!]])
-      local prompt = string.format("Rename: %s -> ", to_path:absolute())
+      local prompt = string.format("Rename: %s -> ", to)
       vim.cmd([[noautocmd normal! :]])
-      local new_path = npcall(vim.fn.input, prompt, to_path:absolute())
+      local new_path = npcall(vim.fn.input, prompt, to)
       if not (new_path and #new_path > 0) then
         return true
       end
-      to_path = Path:new(new_path)
+      to = Path:new(new_path):absolute()
     elseif res == PASTE_ACTIONS.FORCE then
       is_error_if_exists = false
     end
   end
 
-  if not paste_funcs[kind](from_path:absolute(), to_path:absolute(), is_error_if_exists) then
+  if not paste_funcs[kind](from, to, is_error_if_exists) then
     utils.error("Paste failed")
     return true
   end
