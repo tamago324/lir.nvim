@@ -3,6 +3,7 @@ local lvim = require("lir.vim")
 local config = require("lir.config")
 local CurdirWindow = require("lir.float.curdir_window")
 local smart_cursor = require("lir.smart_cursor")
+local utils = require("lir.utils")
 
 local a = vim.api
 
@@ -64,7 +65,7 @@ end
 local function find_lir_float_win()
   for _, win in ipairs(a.nvim_tabpage_list_wins(0)) do
     local buf = a.nvim_win_get_buf(win)
-    local is_float = vim.F.npcall(a.nvim_win_get_var, win, "lir_is_float")
+    local is_float = utils.win_get_var("lir_is_float", win)
     if a.nvim_buf_get_option(buf, "filetype") == "lir" and is_float then
       return win
     end
@@ -89,7 +90,7 @@ function float.close()
     a.nvim_set_current_win(float_win)
     -- なぜか、current_win が閉じないため、閉じる
     if config.values.float.curdir_window.enable then
-      pcall(a.nvim_win_close, a.nvim_win_get_var(float_win, "lir_curdir_win").win_id, true)
+      pcall(a.nvim_win_close, utils.win_get_var("lir_curdir_win", float_win).win_id, true)
     end
     actions.quit()
   end
@@ -97,7 +98,7 @@ end
 
 -- setlocal を使っているため、毎回セットする必要があるため BufWinEnter で呼び出す
 function float.setlocal_winhl()
-  if vim.w.lir_is_float then
+  if utils.win_get_var('lir_is_float') then
     vim.api.nvim_win_set_option(
       0,
       "winhl",
@@ -123,7 +124,7 @@ function float.init(dir_path)
     dir = lvim.get_context().dir
     file = lvim.get_context():current_value()
 
-    if not vim.w.lir_is_float then
+    if not utils.win_get_var('lir_is_float') then
       old_win = a.nvim_get_current_win()
     end
   else
