@@ -56,9 +56,9 @@ function actions.edit(opts)
     return
   end
 
-  local keepalt = (vim.w.lir_is_float and "") or "keepalt"
+  local keepalt = (utils.win_get_var("lir_is_float") and "") or "keepalt"
 
-  if vim.w.lir_is_float and not ctx:is_dir_current() then
+  if utils.win_get_var("lir_is_float") and not ctx:is_dir_current() then
     -- 閉じてから開く
     actions.quit()
   end
@@ -105,11 +105,11 @@ end
 
 --- quit
 function actions.quit()
-  if vim.w.lir_is_float then
+  if utils.win_get_var("lir_is_float") then
     a.nvim_win_close(0, true)
   else
-    if vim.w.lir_file_quit_on_edit ~= nil then
-      vim.cmd("edit " .. vim.w.lir_file_quit_on_edit)
+    if utils.win_get_var("lir_file_quit_on_edit") ~= nil then
+      vim.cmd("edit " .. utils.win_get_var("lir_file_quit_on_edit"))
     end
   end
 end
@@ -238,7 +238,7 @@ end
 --- newfile
 function actions.newfile()
   local ctx = get_context()
-  if vim.w.lir_is_float then
+  if utils.win_get_var("lir_is_float") then
     a.nvim_feedkeys(":close | :edit " .. ctx.dir, "n", true)
   else
     a.nvim_feedkeys(":keepalt edit " .. ctx.dir, "n", true)
