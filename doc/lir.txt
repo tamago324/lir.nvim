@@ -161,7 +161,7 @@ default value: >
       hide_cursor = false
       mappings = {},
       float = {
-        winblend = 15,
+        winblend = 0,
         win_opts = nil
         curdir_window = {
           enable = false,

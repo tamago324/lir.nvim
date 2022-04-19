@@ -221,7 +221,7 @@ function lir.init()
   highlight.update_highlight(files)
 
   if #files == 0 then
-    set_nocontent_text(config.values.devicons_enable)
+    set_nocontent_text()
   end
   set_virtual_text_symlink(dir, files)
 
@@ -237,34 +237,8 @@ function lir.init()
   config.values.on_init(context)
 end
 
-local function is_use_removed_config(prefs)
-  local float = prefs.float or {}
-  if vim.tbl_isempty(float) then
-    return false
-  end
-
-  local deprecated_opts = { "size_percentage", "border", "borderchars", "shadow" }
-  for _, v in ipairs(deprecated_opts) do
-    if vim.tbl_contains(vim.tbl_keys(float), v) then
-      return true
-    end
-  end
-
-  return false
-end
-
 ---@param prefs lir.config.values
 function lir.setup(prefs)
-  if is_use_removed_config(prefs) then
-    -- stylua: ignore
-    local msg =
-      string.format(
-        '[lir.nvim] You are using a removed setting value. Please use float.win_opts.' ..
-        '(see :h lir-settings-float.win_opts)'
-      )
-    a.nvim_echo({ { msg, "WarningMsg" } }, true, {})
-  end
-
   -- Set preferences
   config.set_default_values(prefs)
 
