@@ -1,10 +1,14 @@
+local Path = require("plenary.path")
+
+local sep = Path.path.sep
+
 -----------------------------
 -- Private
 -----------------------------
 local _histories = {}
 
 local normalize = function(dir)
-  return string.gsub(dir, "/$", "")
+  return string.gsub(dir, sep .. "$", "")
 end
 
 -----------------------------

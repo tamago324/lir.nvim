@@ -7,7 +7,7 @@ local smart_cursor = require("lir.smart_cursor")
 local Context = require("lir.context")
 local lvim = require("lir.vim")
 local Path = require("plenary.path")
-local utils = require('lir.utils')
+local utils = require("lir.utils")
 
 local sep = Path.path.sep
 
@@ -109,14 +109,14 @@ local function setlines(dir, lines)
   end
 
   -- 前が lir ではない場合
-  if utils.win_get_var('lir_prev_filetype') ~= "lir" then
+  if utils.win_get_var("lir_prev_filetype") ~= "lir" then
     -- ジャンプ対象のファイルが指定されていれば、そのファイルの位置にカーソルを移動する
     -- そうでなければ、代替ファイルの位置にカーソルを移動する
     local file = utils.win_get_var("lir_file_jump_cursor") or vim.fn.expand("#")
     file = vim.fn.fnamemodify(file, ":p:t")
     if file then
       local alt_dir = vim.fn.fnamemodify(vim.fn.expand("#"), ":p:h")
-      if string.gsub(dir, "/$", "") == alt_dir then
+      if string.gsub(dir, sep .. "$", "") == alt_dir then
         lnum = lvim.get_context():indexof(file)
       end
     end
