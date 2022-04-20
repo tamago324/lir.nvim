@@ -41,4 +41,10 @@ history.get_all = function()
   return _histories
 end
 
+--- 履歴を置き換える
+---@param histories table
+history.replace_all = function(histories)
+  _histories = histories
+end
+
 return history

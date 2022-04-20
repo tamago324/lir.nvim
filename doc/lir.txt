@@ -58,6 +58,13 @@ lir.float.helper.make_border_opts({borderchars}, {highlight})
       { "│", "Normal" },
     }
 <
+lir.history.get_all()                                  *lir.history.get_all()*
+    Return history information.
+
+lir.history.replace_all({histories})               *lir.history.replace_all()*
+    Rewrite history information
+
+    `histories` is data in the same format as |lir.history.get_all()|
 
 
 ==============================================================================

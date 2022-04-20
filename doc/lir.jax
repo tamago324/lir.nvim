@@ -57,6 +57,13 @@ lir.float.helper.make_border_opts({borderchars}, {highlight})
       { "│", "Normal" },
     }
 <
+lir.history.get_all()                                  *lir.history.get_all()*
+    履歴情報を返す
+
+lir.history.replace_all({histories})               *lir.history.replace_all()*
+    履歴情報を書き換える
+
+    `histories` は |lir.history.get_all()| を同じ形式のデータです。
 
 ==============================================================================
 CONTEXT                                                          *lir-context*
@@ -478,6 +485,7 @@ cut()                                            *lir.clipboard.actions.cut()*
 
 paste()                                        *lir.clipboard.actions.paste()*
     クリップボードに保存されているアイテムを貼り付ける
+
 
 
 ==============================================================================
