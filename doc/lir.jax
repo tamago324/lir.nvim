@@ -192,6 +192,7 @@ SETTINGS                                                        *lir-settings*
         }
       },
       on_init = function() end,
+      get_filters = {}
     }
 <
 
@@ -222,6 +223,15 @@ on_init                                                 *lir-settings-on_init*
 
     このオプションは非推奨です。変わりに |nvim_create_autocmd()| を使用してく
     ださい。
+
+get_filters                                         *lir-settings-get_filters*
+    |lir-file-item| をフィルタするため関数のリストを返す関数。
+    バッファに表示する前にリストの先頭から順に呼び出されます。
+
+    以下の関数のリストを返す関数を設定します。
+    `lir_item` は |lir-file-item| のことです。
+
+        `fun(files: lir_item[]): lir_item[]`
 
 float.winblend                                   *lir-settings-float.winblend*
     floating window で表示するウィンドウの透過度合い
@@ -324,7 +334,47 @@ float.curdir_window.highlight_dirname
 
         -- echo cwd
         vim.api.nvim_echo({ { vim.fn.expand("%:p"), "Normal" } }, false, {})
+<<<<<<< HEAD
       end
+=======
+      end,
+
+      get_filters = function()
+        -- states.mod_mode で更新順で表示するかどうかを判断する
+        -- if not states.mod_mode then
+        --   return {}
+        -- end
+
+        return {
+          function(files)
+            -- https://www.man7.org/linux/man-pages/man2/stat.2.html
+            -- mtime: 最終更新日時
+            -- mtime.sec でソートする
+
+            files = vim.tbl_map(function(f)
+              local mtime = uv.fs_stat(f.fullpath).mtime or nil
+              f.mod_time = mtime.sec
+              return f
+            end, files)
+
+            local function sort(lhs, rhs)
+              if lhs.is_dir and not rhs.is_dir then
+                return true
+              elseif not lhs.is_dir and rhs.is_dir then
+                return false
+              elseif lhs.is_dir and rhs.is_dir then
+                -- どちらともディレクトリなら、アルファベット順
+                return lhs.value < rhs.value
+              end
+              return lhs.mod_time > rhs.mod_time
+            end
+
+            table.sort(files, sort)
+            return files
+          end,
+        }
+      end,
+>>>>>>> 3d16260 (feat: add get_filters)
     }
 
 

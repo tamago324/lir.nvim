@@ -165,6 +165,17 @@ local function set_nocontent_text()
   a.nvim_buf_set_virtual_text(0, -1, 0, { { text, "LirEmptyDirText" } }, {})
 end
 
+--- filter を適用する
+--- 用途としては並び替えをしたり、順番を入れ替えたりする
+---@param files lir_item[]
+---@return lir_item[]
+local function do_filter(files)
+  for _, filter in ipairs(config.values.get_filters()) do
+    files = filter(files)
+  end
+  return files
+end
+
 -----------------------------
 -- Export
 -----------------------------
@@ -220,6 +231,8 @@ function lir.init()
   end
 
   table.sort(files, sort)
+
+  files = do_filter(files)
 
   context.files = files
   setlines(

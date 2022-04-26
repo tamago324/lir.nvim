@@ -15,6 +15,7 @@ local defaults_values = {
       highlight_dirname = false,
     },
   },
+  get_filters = nil,
 }
 
 ---@class lir.config
@@ -29,11 +30,15 @@ local config = {}
 ---@field mappings          table
 ---@field float             lir.config.values.float
 ---@field hide_cursor       boolean
+---@field get_filters fun(): lir.config.filter_func[]
 config.values = {}
+
 
 ---@class lir.config.values.devicons
 ---@field enable            boolean
 ---@field highlight_dirname boolean
+
+---@alias lir.config.filter_func fun(files: lir_item[]): lir_item[]
 
 ---@class lir.config.values.float
 ---@field winblend        number
