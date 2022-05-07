@@ -5,6 +5,7 @@ local clipboard = require("lir.clipboard")
 local utils = require("lir.utils")
 local actions = require("lir.actions")
 local mark_utils = require("lir.mark.utils")
+local lvim = require("lir.vim")
 
 local uv = vim.loop
 
@@ -186,13 +187,25 @@ end
 M.paste = function()
   local context = lir.get_context()
   local files, kind = clipboard.get().files, clipboard.get().kind
+  local pasted_files = {}
   for _, f in ipairs(files) do
-    local quit_or_cancel = _paste(f.fullpath, context.dir .. f.value, kind)
+    local source = f.fullpath
+    local target = context.dir .. f.value
+    local quit_or_cancel = _paste(source, target, kind)
     if quit_or_cancel then
       break
     end
+    table.insert(pasted_files, {
+      source_path = source,
+      target_path = target,
+    })
   end
-  actions.reload(context)
+
+  actions.reload()
+
+  context = lir.get_context()
+  context.pasted_files = pasted_files
+  lvim.set_context(context, vim.fn.bufnr())
 end
 
 M._print = function()

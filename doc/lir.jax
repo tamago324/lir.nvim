@@ -77,6 +77,20 @@ context.dir                                                  *lir-context.dir*
 context.files                                              *lir-context.files*
     |lir-file-item| のリスト
 
+context.pasted_files                                *lir-context.pasted_files*
+    |lir.clipboard.actions.paste()| で貼り付けたファイルの情報。
+    |lir.clipboard.actions.paste()| を呼び出した直後以外は、`nil` です。
+
+   次のようなリストです。 >
+       {
+         {
+           source_path: string,
+           target_path: string
+         },
+         ...
+       }
+>
+
 context:current()                                      *lir-context:current()*
     カーソル下の |lir-file-item| を返します
 

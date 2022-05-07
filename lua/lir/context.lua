@@ -5,6 +5,7 @@
 ---@class lir_context
 ---@field dir   string
 ---@field files lir_item[]
+---@field pasted_files lir_pasted_info[]
 local Context = {}
 
 ---@class lir_item
@@ -14,6 +15,10 @@ local Context = {}
 ---@field display string
 ---@field devicons table
 ---@field marked boolean
+
+---@class lir_pasted_info
+---@field source_path string
+---@field target_path string
 
 ---@param dir string
 ---@return lir_context

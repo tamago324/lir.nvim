@@ -79,6 +79,19 @@ context.dir                                                  *lir-context.dir*
 context.files                                              *lir-context.files*
     List of |lir-file-item|.
 
+context.pasted_files                                *lir-context.pasted_files*
+    Information about the file pasted with |lir.clipboard.actions.paste()|.
+    |lir.clipboard.actions.paste()| is `nil` except immediately after the call.
+
+    The list is as follows: >
+       {
+         {
+           source_path: string,
+           target_path: string
+         },
+         ...
+       }
+>
 context:current()                                      *lir-context:current()*
     Returns the |lir-file-item| under the cursor.
 
