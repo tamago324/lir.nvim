@@ -448,6 +448,10 @@ wipeout()                                              *lir.actions.wipeout()*
     Delete a file and the respective buffer simultaneously.
 
 newfile()                                              *lir.actions.newfile()*
+    Opens a new buffer.
+    The file is created by executing commands such as |:w| or |:update|.
+
+touch()                                                  *lir.actions.touch()*
     Create a new file.
 
 cd()                                                        *lir.actions.cd()*

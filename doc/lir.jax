@@ -447,7 +447,11 @@ wipeout()                                              *lir.actions.wipeout()*
     ファイルとそのバッファを同時に削除します。
 
 newfile()                                              *lir.actions.newfile()*
-    ファイルを新規作成する。
+    新しいバッファを開きます。
+    |:w| や |:update| を実行することでファイルが作成されます。
+
+touch()                                                  *lir.actions.touch()*
+    ファイルを新規作成します。
 
 cd()                                                        *lir.actions.cd()*
     Vim のカレントディレクトリを lir のディレクトリ (|lir-context.dir|) に変更
