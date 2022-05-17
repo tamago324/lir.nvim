@@ -150,6 +150,42 @@ function actions.mkdir()
   end)
 end
 
+--- touch
+function actions.touch()
+  local name = vim.fn.input("Create file: ")
+  if name == "" then
+    return
+  end
+
+  if name == "." or name == ".." then
+    utils.error("Invalid file name: " .. name)
+    return
+  end
+
+  local ctx = get_context()
+  local path = Path:new(ctx.dir .. name)
+  if path:exists() then
+    utils.error("File already exists")
+    -- cursor jump
+    local lnum = ctx:indexof(name)
+    if lnum then
+      vim.cmd(tostring(lnum))
+    end
+    return
+  end
+
+  path:touch()
+
+  actions.reload()
+
+  vim.schedule(function()
+    local lnum = lvim.get_context():indexof(name)
+    if lnum then
+      vim.cmd(tostring(lnum))
+    end
+  end)
+end
+
 --- rename
 function actions.rename(use_default)
   local ctx = get_context()
