@@ -173,7 +173,7 @@ end
 local lir = {}
 
 function lir.init()
-  local path = vim.fn.resolve(vim.fn.expand("%:p"))
+  local path = vim.fn.expand("%:p")
 
   if path == "" or not Path:new(path):is_dir() then
     return
