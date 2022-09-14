@@ -5,13 +5,6 @@ From telescope.nvim
 local a = vim.api
 
 -----------------------------
--- Private
------------------------------
-
--- { bufnr = { esc_key = function } }
-local buf_keymap = {}
-
------------------------------
 -- Export
 -----------------------------
 
@@ -23,9 +16,8 @@ function M.apply_mappings(mappings)
   if mappings == nil then
     return
   end
-  local bufnr = a.nvim_get_current_buf()
-  local options = {}
 
+  local bufnr = a.nvim_get_current_buf()
   for lhs, rhs in pairs(mappings) do
     vim.keymap.set("n", lhs, rhs, {
       buffer = bufnr,
