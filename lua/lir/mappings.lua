@@ -27,11 +27,11 @@ function M.apply_mappings(mappings)
   local options = {}
 
   for lhs, rhs in pairs(mappings) do
-    vim.keymap.set('n', lhs, rhs, {
+    vim.keymap.set("n", lhs, rhs, {
       buffer = bufnr,
       noremap = true,
       silent = true,
-      nowait = true
+      nowait = true,
     })
   end
 end

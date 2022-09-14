@@ -98,7 +98,7 @@ end
 
 -- setlocal を使っているため、毎回セットする必要があるため BufWinEnter で呼び出す
 function float.setlocal_winhl()
-  if utils.win_get_var('lir_is_float') then
+  if utils.win_get_var("lir_is_float") then
     vim.api.nvim_win_set_option(
       0,
       "winhl",
@@ -124,7 +124,7 @@ function float.init(dir_path)
     dir = lvim.get_context().dir
     file = lvim.get_context():current_value()
 
-    if not utils.win_get_var('lir_is_float') then
+    if not utils.win_get_var("lir_is_float") then
       old_win = a.nvim_get_current_win()
     end
   else
