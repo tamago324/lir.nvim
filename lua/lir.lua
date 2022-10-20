@@ -211,7 +211,7 @@ function lir.init()
 
   for _, file in pairs(config.values.ignore) do
     files = vim.tbl_filter(function(val)
-      local f = "^[^" .. file .. "]"
+      local f = "[^" .. file .. "]"
       if string.match(val.value, f) then
         return string.match(val.value, f) ~= nil
       end
