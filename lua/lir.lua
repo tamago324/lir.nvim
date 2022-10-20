@@ -208,6 +208,21 @@ function lir.init()
       return string.match(val.value, "^[^.]") ~= nil
     end, files)
   end
+
+  if config.values.ignore == nil then
+    print("No Ignored Files")
+  end
+
+  for _, file in pairs(config.values.ignore) do
+    files = vim.tbl_filter(function(val)
+      local f = "^[^" .. file .. "]"
+      if string.match(val.value, f) then
+        print(f)
+        return string.match(val.value, f) ~= nil
+      end
+    end, files)
+  end
+
   table.sort(files, sort)
 
   context.files = files

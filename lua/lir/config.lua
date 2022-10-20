@@ -3,6 +3,7 @@
 -----------------------------
 local defaults_values = {
   show_hidden_files = false,
+  ignore = {},
   devicons_enable = false,
   hide_cursor = false,
   on_init = function() end,
@@ -25,6 +26,7 @@ local defaults_values = {
 local config = {}
 
 ---@class lir.config.values
+---@field ignore            table
 ---@field show_hidden_files boolean
 ---@field devicons_enable   boolean
 ---@field on_init           function
