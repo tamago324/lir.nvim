@@ -214,7 +214,7 @@ function lir.init()
       return
     end
     files = vim.tbl_filter(function(val)
-      local f = "" .. file .. ".-$"
+      local f = "^" .. file .. ".-$"
       if string.match(val.value, f) then
         return string.match(val.value, f) ~= nil
       end
