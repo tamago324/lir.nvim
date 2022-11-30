@@ -177,6 +177,7 @@ default value: >
 
     {
       show_hidden_files = false,
+      ignore = {},
       devicons_enable = false,
       hide_cursor = false
       mappings = {},
@@ -194,6 +195,9 @@ default value: >
 
 show_hidden_files                             *lir-settings-show_hidden_files*
     Show files whose file names start with `.` by default?
+
+ignore                                                   *lir-settings-ignore*
+    List of files not to be displayed.
 
 devicons_enable                                 *lir-settings-devicons_enable*
     Show devicons?
@@ -248,6 +252,7 @@ Example: >
 
     require'lir'.setup {
       show_hidden_files = false,
+      ignore = { '.DS_Store' },
       devicons_enable = true,
       mappings = {
         ['l']     = actions.edit,

@@ -176,6 +176,7 @@ SETTINGS                                                        *lir-settings*
 
     {
       show_hidden_files = false,
+      ignore = {},
       devicons_enable = false,
       hide_cursor = false
       mappings = {},
@@ -193,6 +194,9 @@ SETTINGS                                                        *lir-settings*
 
 show_hidden_files                             *lir-settings-show_hidden_files*
     デフォルトで先頭が `.` のファイルを表示するか
+
+ignore                                                   *lir-settings-ignore*
+    非表示にするファイル、ディレクトリの一覧
 
 devicons_enable                                 *lir-settings-devicons_enable*
     devicons を表示するか
@@ -245,6 +249,7 @@ float.curdir_window.highlight_dirname
 
     require'lir'.setup {
       show_hidden_files = false,
+      ignore = { '.DS_Store' },
       devicons_enable = true,
       mappings = {
         ['l']     = actions.edit,
