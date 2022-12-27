@@ -416,14 +416,26 @@ edit([{opts}])                                            *lir.actions.edit()*
                       (Default: `'split'`)
 
 
-split()                                                  *lir.actions.split()*
+split([{quit_lir}])                                      *lir.actions.split()*
     Use |:new| to open the file under the cursor.
 
-vsplit()                                                *lir.actions.vsplit()*
+        Parameters:
+            {quit_lir} (boolean) Quit lir after opening the new file (default)
+                If false lir will remain open.
+
+vsplit([{quit_lir}])                                    *lir.actions.vsplit()*
     Use |:vnew| to open the file under the cursor.
 
-tabedit()                                              *lir.actions.tabedit()*
+        Parameters:
+            {quit_lir} (boolean) Quit lir after opening the new file (default)
+                If false lir will remain open.
+
+tabedit([{quit_lir}])                                  *lir.actions.tabedit()*
     Use |:tabedit| to open the file under the cursor.
+
+        Parameters:
+            {quit_lir} (boolean) Quit lir after opening the new file (default)
+                If false lir will remain open.
 
 up()                                                        *lir.actions.up()*
     Move to the parent directory.

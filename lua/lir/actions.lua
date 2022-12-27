@@ -20,13 +20,16 @@ local actions = {}
 local get_context = lvim.get_context
 
 ---@param cmd string
-local function open(cmd)
+---@param quit_lir boolean | nil
+local function open(cmd, quit_lir)
   local ctx = get_context()
   if not ctx:current_value() then
     return
   end
   local filename = vim.fn.fnameescape(ctx.dir .. ctx:current_value())
-  actions.quit()
+  if quit_lir ~= false then
+    actions.quit()
+  end
   vim.cmd(cmd .. " " .. filename)
   history.add(ctx.dir, ctx:current_value())
 end
@@ -70,18 +73,21 @@ function actions.edit(opts)
 end
 
 --- split
-function actions.split()
-  open("new")
+---@param quit_lir boolean | nil
+function actions.split(quit_lir)
+  open("new", quit_lir)
 end
 
 --- vsplit
-function actions.vsplit()
-  open("vnew")
+---@param quit_lir boolean | nil
+function actions.vsplit(quit_lir)
+  open("vnew", quit_lir)
 end
 
 --- tabedit
-function actions.tabedit()
-  open("tabedit")
+---@param quit_lir boolean | nil
+function actions.tabedit(quit_lir)
+  open("tabedit", quit_lir)
 end
 
 --- up
