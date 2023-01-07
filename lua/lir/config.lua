@@ -6,6 +6,7 @@ local defaults_values = {
   ignore = {},
   devicons_enable = false,
   hide_cursor = false,
+  highlight_dirnames_with_devicons = false,
   on_init = function() end,
   mappings = {},
   float = {
@@ -29,6 +30,7 @@ local config = {}
 ---@field ignore            table
 ---@field show_hidden_files boolean
 ---@field devicons_enable   boolean
+---@field highlight_dirnames_with_devicons   boolean
 ---@field on_init           function
 ---@field mappings          table
 ---@field float             lir.config.values.float

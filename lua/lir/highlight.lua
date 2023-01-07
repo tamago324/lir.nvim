@@ -19,7 +19,8 @@ local highlight = {}
 function highlight.update_highlight(files)
   if config.values.devicons_enable then
     devicons.update_highlight(files)
-  else
+  end
+  if not config.values.devicons_enable or config.values.highlight_dirnames_with_devicons then
     a.nvim_buf_clear_namespace(0, ns, 0, -1)
     for i, file in ipairs(files) do
       if file.is_dir then

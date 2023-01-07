@@ -4,7 +4,6 @@ A simple file explorer
 
 Note: lir.nvim does not define any default mappings, you need to configure them yourself by referring to [help](doc/lir.txt).
 
-
 ## Installation
 
 ```vim
@@ -14,7 +13,6 @@ Plug 'nvim-lua/plenary.nvim'
 " Optional
 Plug 'kyazdani42/nvim-web-devicons'
 ```
-
 
 ## Configuration
 
@@ -76,6 +74,7 @@ require'lir'.setup {
     -- end,
   },
   hide_cursor = true,
+  highlight_dirnames_with_devicons = false,
   on_init = function()
     -- use visual mode
     vim.api.nvim_buf_set_keymap(
@@ -124,19 +123,17 @@ or
 :lua require'lir.float'.init()
 ```
 
-
 ### Extensions
 
-* [tamago324/lir-mmv.nvim](https://github.com/tamago324/lir-mmv.nvim)
-* [tamago324/lir-bookmark.nvim](https://github.com/tamago324/lir-bookmark.nvim)
-* [tamago324/lir-git-status.nvim](https://github.com/tamago324/lir-git-status.nvim)
-
+- [tamago324/lir-mmv.nvim](https://github.com/tamago324/lir-mmv.nvim)
+- [tamago324/lir-bookmark.nvim](https://github.com/tamago324/lir-bookmark.nvim)
+- [tamago324/lir-git-status.nvim](https://github.com/tamago324/lir-git-status.nvim)
 
 ## Credit
 
-* [mattn/vim-molder](https://github.com/mattn/vim-molder)
-* [norcalli/nvim_utils](https://github.com/norcalli/nvim_utils)
-* [lambdalisue/fern.vim](https://github.com/lambdalisue/fern.vim)
+- [mattn/vim-molder](https://github.com/mattn/vim-molder)
+- [norcalli/nvim_utils](https://github.com/norcalli/nvim_utils)
+- [lambdalisue/fern.vim](https://github.com/lambdalisue/fern.vim)
 
 ## Screenshots
 
