@@ -17,10 +17,10 @@ local highlight = {}
 
 ---@param files lir_item[]
 function highlight.update_highlight(files)
-  if config.values.devicons_enable then
+  if config.values.devicons.enable then
     devicons.update_highlight(files)
   end
-  if not config.values.devicons_enable or config.values.highlight_dirnames_with_devicons then
+  if not config.values.devicons.enable or config.values.devicons.highlight_dirnames then
     a.nvim_buf_clear_namespace(0, ns, 0, -1)
     for i, file in ipairs(files) do
       if file.is_dir then
