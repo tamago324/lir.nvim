@@ -178,7 +178,10 @@ default value: >
     {
       show_hidden_files = false,
       ignore = {},
-      devicons_enable = false,
+      devicons = {
+        enable = false,
+        highlight_dirnames = false
+      },
       hide_cursor = false
       mappings = {},
       float = {
@@ -199,8 +202,12 @@ show_hidden_files                             *lir-settings-show_hidden_files*
 ignore                                                   *lir-settings-ignore*
     List of files not to be displayed.
 
-devicons_enable                                 *lir-settings-devicons_enable*
+devicons.enable                                 *lir-settings-devicons.enable*
     Show devicons?
+
+devicons.highlight_dirnames                     *lir-settings-devicons.highlight_dirnames*
+    Highlight dirnames with devicons enabled?
+    Only has an effect when `devicons.enable = true`
 
 mappings                                               *lir-settings-mappings*
     Specify the table to be used for mapping.

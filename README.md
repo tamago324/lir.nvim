@@ -24,7 +24,10 @@ local clipboard_actions = require'lir.clipboard.actions'
 require'lir'.setup {
   show_hidden_files = false,
   ignore = {}, -- { ".DS_Store" "node_modules" } etc.
-  devicons_enable = true,
+  devicons = {
+    enable = false,
+    highlight_dirnames = false
+  },
   mappings = {
     ['l']     = actions.edit,
     ['<C-s>'] = actions.split,
@@ -74,7 +77,6 @@ require'lir'.setup {
     -- end,
   },
   hide_cursor = true,
-  highlight_dirnames_with_devicons = false,
   on_init = function()
     -- use visual mode
     vim.api.nvim_buf_set_keymap(
