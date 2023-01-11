@@ -180,7 +180,7 @@ default value: >
       ignore = {},
       devicons = {
         enable = false,
-        highlight_dirnames = false
+        highlight_dirname = false
       },
       hide_cursor = false
       mappings = {},
@@ -205,7 +205,7 @@ ignore                                                   *lir-settings-ignore*
 devicons.enable                                 *lir-settings-devicons.enable*
     Show devicons?
 
-devicons.highlight_dirnames                     *lir-settings-devicons.highlight_dirnames*
+devicons.highlight_dirname                     *lir-settings-devicons.highlight_dirname*
     Highlight dirnames with devicons enabled?
     Only has an effect when `devicons.enable = true`
 

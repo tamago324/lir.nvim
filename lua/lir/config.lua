@@ -6,7 +6,7 @@ local defaults_values = {
   ignore = {},
   devicons = {
     enable = false,
-    highlight_dirnames = false
+    highlight_dirname = false
   },
   hide_cursor = false,
   on_init = function() end,
@@ -40,7 +40,7 @@ config.values = {}
 
 ---@class lir.config.values.devicons
 ---@field enable            boolean
----@field highlight_dirnames boolean
+---@field highlight_dirname boolean
 
 ---@class lir.config.values.float
 ---@field winblend        number

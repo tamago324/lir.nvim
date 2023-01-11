@@ -26,7 +26,7 @@ require'lir'.setup {
   ignore = {}, -- { ".DS_Store" "node_modules" } etc.
   devicons = {
     enable = false,
-    highlight_dirnames = false
+    highlight_dirname = false
   },
   mappings = {
     ['l']     = actions.edit,
