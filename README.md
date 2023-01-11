@@ -4,7 +4,6 @@ A simple file explorer
 
 Note: lir.nvim does not define any default mappings, you need to configure them yourself by referring to [help](doc/lir.txt).
 
-
 ## Installation
 
 ```vim
@@ -14,7 +13,6 @@ Plug 'nvim-lua/plenary.nvim'
 " Optional
 Plug 'kyazdani42/nvim-web-devicons'
 ```
-
 
 ## Configuration
 
@@ -26,7 +24,10 @@ local clipboard_actions = require'lir.clipboard.actions'
 require'lir'.setup {
   show_hidden_files = false,
   ignore = {}, -- { ".DS_Store" "node_modules" } etc.
-  devicons_enable = true,
+  devicons = {
+    enable = false,
+    highlight_dirname = false
+  },
   mappings = {
     ['l']     = actions.edit,
     ['<C-s>'] = actions.split,
@@ -124,19 +125,17 @@ or
 :lua require'lir.float'.init()
 ```
 
-
 ### Extensions
 
-* [tamago324/lir-mmv.nvim](https://github.com/tamago324/lir-mmv.nvim)
-* [tamago324/lir-bookmark.nvim](https://github.com/tamago324/lir-bookmark.nvim)
-* [tamago324/lir-git-status.nvim](https://github.com/tamago324/lir-git-status.nvim)
-
+- [tamago324/lir-mmv.nvim](https://github.com/tamago324/lir-mmv.nvim)
+- [tamago324/lir-bookmark.nvim](https://github.com/tamago324/lir-bookmark.nvim)
+- [tamago324/lir-git-status.nvim](https://github.com/tamago324/lir-git-status.nvim)
 
 ## Credit
 
-* [mattn/vim-molder](https://github.com/mattn/vim-molder)
-* [norcalli/nvim_utils](https://github.com/norcalli/nvim_utils)
-* [lambdalisue/fern.vim](https://github.com/lambdalisue/fern.vim)
+- [mattn/vim-molder](https://github.com/mattn/vim-molder)
+- [norcalli/nvim_utils](https://github.com/norcalli/nvim_utils)
+- [lambdalisue/fern.vim](https://github.com/lambdalisue/fern.vim)
 
 ## Screenshots
 

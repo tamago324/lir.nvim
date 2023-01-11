@@ -23,7 +23,7 @@ function devicons.setup()
   if not has_devicons then
     utils.error("[lir.nvim] Require nvim-web-devicons")
     -- XXX: Can I change the config here?
-    -- config.values.devicons_enable = false
+    -- config.values.devicons.enable = false
     return
   end
   local folder_icon, _ = Devicons.get_icon(FOLDER_ICON_NAME)

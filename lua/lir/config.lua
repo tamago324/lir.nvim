@@ -4,7 +4,10 @@
 local defaults_values = {
   show_hidden_files = false,
   ignore = {},
-  devicons_enable = false,
+  devicons = {
+    enable = false,
+    highlight_dirname = false
+  },
   hide_cursor = false,
   on_init = function() end,
   mappings = {},
@@ -28,12 +31,16 @@ local config = {}
 ---@class lir.config.values
 ---@field ignore            table
 ---@field show_hidden_files boolean
----@field devicons_enable   boolean
+---@field devicons          lir.config.values.devicons
 ---@field on_init           function
 ---@field mappings          table
 ---@field float             lir.config.values.float
 ---@field hide_cursor       boolean
 config.values = {}
+
+---@class lir.config.values.devicons
+---@field enable            boolean
+---@field highlight_dirname boolean
 
 ---@class lir.config.values.float
 ---@field winblend        number
@@ -57,6 +64,19 @@ function config.set_default_values(opts)
     config.values.float = defaults_values.float
   elseif vim.tbl_isempty(config.values.float.curdir_window) then
     config.values.float.curdir_window = defaults_values.float.curdir_window
+  end
+
+  if vim.tbl_isempty(config.values.devicons) then
+    config.values.devicons = defaults_values.devicons
+  end
+
+  if opts.devicons_enable then
+    config.values.devicons.enable = true
+    -- echo waring
+    vim.api.nvim_echo({ { '\n', 'Normal' } }, false, {})
+    vim.api.nvim_echo(
+      { { '[lir.nvim] `devicons_enable` is deprecated. Use `devicons.enable` instead. \n', 'WarningMsg' } },
+      false, {})
   end
 end
 

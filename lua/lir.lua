@@ -46,7 +46,7 @@ local function readdir(path)
 
     local prefix = config.values.hide_cursor and "" or " "
 
-    if config.values.devicons_enable then
+    if config.values.devicons.enable then
       local icon, highlight_name = devicons.get_devicons(name, is_dir)
       file.display = string.format("%s%s %s%s", prefix, icon, name, (is_dir and "/" or ""))
       file.devicons = { icon = icon, highlight_name = highlight_name }
@@ -254,7 +254,7 @@ function lir.setup(prefs)
   config.set_default_values(prefs)
 
   -- devicons
-  if config.values.devicons_enable then
+  if config.values.devicons.enable then
     devicons.setup()
   end
 end
