@@ -159,37 +159,38 @@ end
 
 --- touch
 function actions.touch()
-  local name = vim.fn.input("Create file: ")
-  if name == "" then
-    return
-  end
-
-  if name == "." or name == ".." then
-    utils.error("Invalid file name: " .. name)
-    return
-  end
-
-  local ctx = get_context()
-  local path = Path:new(ctx.dir .. name)
-  if path:exists() then
-    utils.error("File already exists")
-    -- cursor jump
-    local lnum = ctx:indexof(name)
-    if lnum then
-      vim.cmd(tostring(lnum))
+  vim.ui.input({ prompt = "Create file: " }, function(name)
+    if name == nil then
+      return
     end
-    return
-  end
 
-  path:touch()
-
-  actions.reload()
-
-  vim.schedule(function()
-    local lnum = lvim.get_context():indexof(name)
-    if lnum then
-      vim.cmd(tostring(lnum))
+    if name == "." or name == ".." then
+      utils.error("Invalid file name: " .. name)
+      return
     end
+
+    local ctx = get_context()
+    local path = Path:new(ctx.dir .. name)
+    if path:exists() then
+      utils.error("File already exists")
+      -- cursor jump
+      local lnum = ctx:indexof(name)
+      if lnum then
+        vim.cmd(tostring(lnum))
+      end
+      return
+    end
+
+    path:touch()
+
+    actions.reload()
+
+    vim.schedule(function()
+      local lnum = lvim.get_context():indexof(name)
+      if lnum then
+        vim.cmd(tostring(lnum))
+      end
+    end)
   end)
 end
 
