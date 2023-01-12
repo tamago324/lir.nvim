@@ -122,37 +122,38 @@ end
 
 --- mkdir
 function actions.mkdir()
-  local name = vim.fn.input("Create directory: ")
-  if name == "" then
-    return
-  end
-
-  if name == "." or name == ".." then
-    utils.error("Invalid directory name: " .. name)
-    return
-  end
-
-  local ctx = get_context()
-  local path = Path:new(ctx.dir .. name)
-  if path:exists() then
-    utils.error("Directory already exists")
-    -- cursor jump
-    local lnum = ctx:indexof(name)
-    if lnum then
-      vim.cmd(tostring(lnum))
+  vim.ui.input({ prompt = "Create directory: " }, function(name)
+    if name == nil then
+      return
     end
-    return
-  end
 
-  path:mkdir({ parents = true })
-
-  actions.reload()
-
-  vim.schedule(function()
-    local lnum = lvim.get_context():indexof(name)
-    if lnum then
-      vim.cmd(tostring(lnum))
+    if name == "." or name == ".." then
+      utils.error("Invalid directory name: " .. name)
+      return
     end
+
+    local ctx = get_context()
+    local path = Path:new(ctx.dir .. name)
+    if path:exists() then
+      utils.error("Directory already exists")
+      -- cursor jump
+      local lnum = ctx:indexof(name)
+      if lnum then
+        vim.cmd(tostring(lnum))
+      end
+      return
+    end
+
+    path:mkdir({ parents = true })
+
+    actions.reload()
+
+    vim.schedule(function()
+      local lnum = lvim.get_context():indexof(name)
+      if lnum then
+        vim.cmd(tostring(lnum))
+      end
+    end)
   end)
 end
 
