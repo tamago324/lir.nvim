@@ -1,6 +1,3 @@
------------------------------
--- Private
------------------------------
 local defaults_values = {
   show_hidden_files = false,
   ignore = {},
@@ -19,10 +16,6 @@ local defaults_values = {
     },
   },
 }
-
------------------------------
--- Export
------------------------------
 
 ---@class lir.config
 ---@field values lir.config.values
@@ -55,6 +48,23 @@ config.values = {}
 ---@field enable  boolean
 ---@field highlight_dirname boolean
 
+local function echo_warning(message)
+    vim.api.nvim_echo({ { "\n", "Normal" } }, false, {})
+    vim.api.nvim_echo( { { message, "WarningMsg" } }, false, {}
+    )
+end
+
+local function warning_deprecated(opts)
+  if opts.devicons_enable then
+    config.values.devicons.enable = true
+    echo_warning( "[lir.nvim] `devicons_enable` is deprecated. Use `devicons.enable` instead. \n" )
+  end
+
+  -- if opts.on_init then
+  --   echo_warning("on_init", "vim.api.nvim_create_autocmd()")
+  -- end
+end
+
 ---@param opts lir.config.values
 function config.set_default_values(opts)
   config.values = vim.tbl_deep_extend("force", defaults_values, opts or {})
@@ -70,16 +80,8 @@ function config.set_default_values(opts)
     config.values.devicons = defaults_values.devicons
   end
 
-  if opts.devicons_enable then
-    config.values.devicons.enable = true
-    -- echo waring
-    vim.api.nvim_echo({ { "\n", "Normal" } }, false, {})
-    vim.api.nvim_echo(
-      { { "[lir.nvim] `devicons_enable` is deprecated. Use `devicons.enable` instead. \n", "WarningMsg" } },
-      false,
-      {}
-    )
-  end
+  warning_deprecated(opts)
 end
+
 
 return config
