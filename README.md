@@ -76,8 +76,12 @@ require'lir'.setup {
     --   }
     -- end,
   },
-  hide_cursor = true,
-  on_init = function()
+  hide_cursor = true
+}
+
+vim.api.nvim_create_autocmd({'FileType'}, {
+  pattern = {"lir"},
+  callback = function()
     -- use visual mode
     vim.api.nvim_buf_set_keymap(
       0,
@@ -86,11 +90,11 @@ require'lir'.setup {
       ':<C-u>lua require"lir.mark.actions".toggle_mark("v")<CR>',
       { noremap = true, silent = true }
     )
-
+  
     -- echo cwd
     vim.api.nvim_echo({ { vim.fn.expand("%:p"), "Normal" } }, false, {})
-  end,
-}
+  end
+})
 
 -- custom folder icon
 require'nvim-web-devicons'.set_icon({

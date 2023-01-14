@@ -6,7 +6,7 @@ local defaults_values = {
   ignore = {},
   devicons = {
     enable = false,
-    highlight_dirname = false
+    highlight_dirname = false,
   },
   hide_cursor = false,
   on_init = function() end,
@@ -73,10 +73,12 @@ function config.set_default_values(opts)
   if opts.devicons_enable then
     config.values.devicons.enable = true
     -- echo waring
-    vim.api.nvim_echo({ { '\n', 'Normal' } }, false, {})
+    vim.api.nvim_echo({ { "\n", "Normal" } }, false, {})
     vim.api.nvim_echo(
-      { { '[lir.nvim] `devicons_enable` is deprecated. Use `devicons.enable` instead. \n', 'WarningMsg' } },
-      false, {})
+      { { "[lir.nvim] `devicons_enable` is deprecated. Use `devicons.enable` instead. \n", "WarningMsg" } },
+      false,
+      {}
+    )
   end
 end
 

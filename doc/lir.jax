@@ -177,7 +177,10 @@ SETTINGS                                                        *lir-settings*
     {
       show_hidden_files = false,
       ignore = {},
-      devicons_enable = false,
+      devicons = {
+        enable = false,
+        highlight_dirname = false
+      },
       hide_cursor = false
       mappings = {},
       float = {
@@ -198,8 +201,12 @@ show_hidden_files                             *lir-settings-show_hidden_files*
 ignore                                                   *lir-settings-ignore*
     非表示にするファイル、ディレクトリの一覧
 
-devicons_enable                                 *lir-settings-devicons_enable*
+devicons.enable                                 *lir-settings-devicons.enable*
     devicons を表示するか
+
+devicons.highlight_dirname           *lir-settings-devicons.highlight_dirname*
+    devicons が表示されているときにディレクトリ名を強調表示するか？
+    これは `devicons.enable = true` が指定されているときのみ有効なオプションです。
 
 mappings                                               *lir-settings-mappings*
     table を指定する。
@@ -212,6 +219,9 @@ hide_cursor                                         *lir-settings-hide_cursor*
 on_init                                                 *lir-settings-on_init*
     lir のバッファを表示したあとに実行する関数。
     この関数は、|FileType| 自動コマンドの直後に実行されます。
+
+    このオプションは非推奨です。変わりに |nvim_create_autocmd()| を使用してく
+    ださい。
 
 float.winblend                                   *lir-settings-float.winblend*
     floating window で表示するウィンドウの透過度合い
@@ -298,7 +308,11 @@ float.curdir_window.highlight_dirname
           }
         end,
       },
-      on_init = function()
+    }
+
+    vim.api.nvim_create_autocmd({'FileType'}, {
+      pattern = {"lir"},
+      callback = function()
         -- use visual mode
         vim.api.nvim_buf_set_keymap(
           0,
@@ -310,8 +324,9 @@ float.curdir_window.highlight_dirname
 
         -- echo cwd
         vim.api.nvim_echo({ { vim.fn.expand("%:p"), "Normal" } }, false, {})
-      end,
+      end
     }
+
 
     -- custom folder icon
     require'nvim-web-devicons'.setup({
@@ -413,14 +428,29 @@ edit([{opts}])                                            *lir.actions.edit()*
                       き、ファイルを開くときに使用するコマンド。
                       (デフォルト: `'split'`)
 
-split()                                                  *lir.actions.split()*
+split([{quit_lir}])                                      *lir.actions.split()*
     カーソル下のファイルを|:new| を使って開く。
 
-vsplit()                                                *lir.actions.vsplit()*
+        Parameters: ~
+            {quit_lir} (boolean) ファイルを開いたときに lir を閉じるか。
+                       もし `false` が指定されていた場合、閉じない。
+                       (デフォルト: `true`)
+
+vsplit([{quit_lir}])                                    *lir.actions.vsplit()*
     カーソル下のファイルを|:vnew| を使って開く。
 
-tabedit()                                              *lir.actions.tabedit()*
+        Parameters:
+            {quit_lir} (boolean) ファイルを開いたときに lir を閉じるか。
+                       もし `false` が指定されていた場合、閉じない。
+                       (デフォルト: `true`)
+
+tabedit([{quit_lir}])                                  *lir.actions.tabedit()*
     カーソル下のファイルを|:tabedit| を使って開く。
+
+        Parameters:
+            {quit_lir} (boolean) ファイルを開いたときに lir を閉じるか。
+                       もし `false` が指定されていた場合、閉じない。
+                       (デフォルト: `true`)
 
 up()                                                        *lir.actions.up()*
     ひとつ上のディレクトリに移動する。
