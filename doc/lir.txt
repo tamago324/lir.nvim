@@ -221,6 +221,8 @@ on_init                                                 *lir-settings-on_init*
     Function to be executed after displaying the buffer of lir.
     This function will be executed immediately after the |FileType| autocmd.
 
+    Deprecated `on_init`. Use |vim.api.nvim_create_autocmd()| instead.
+
 float.winblend                                   *lir-settings-float.winblend*
     The degree of transparency of the window displayed by the floating
     window.
