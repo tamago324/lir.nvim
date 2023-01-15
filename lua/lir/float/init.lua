@@ -56,12 +56,15 @@ local function open_win(opts, winblend)
   vim.cmd("setlocal nocursorcolumn")
   a.nvim_win_set_option(win_id, "winblend", winblend)
 
-  vim.cmd(string.format("autocmd WinLeave <buffer> silent! execute 'bdelete! %s'", bufnr))
+  a.nvim_create_autocmd({ "WinLeave" }, {
+    buffer = bufnr,
+    command = "silent! execute 'bdelete! %s'",
+  })
 
   return win_id
 end
 
----@return number
+---@return number|nil
 local function find_lir_float_win()
   for _, win in ipairs(a.nvim_tabpage_list_wins(0)) do
     local buf = a.nvim_win_get_buf(win)
@@ -86,14 +89,16 @@ end
 
 function float.close()
   local float_win = find_lir_float_win()
-  if float_win then
-    a.nvim_set_current_win(float_win)
-    -- なぜか、current_win が閉じないため、閉じる
-    if config.values.float.curdir_window.enable then
-      pcall(a.nvim_win_close, utils.win_get_var("lir_curdir_win", float_win).win_id, true)
-    end
-    actions.quit()
+  if float_win == nil then
+    return
   end
+
+  a.nvim_set_current_win(float_win)
+  -- なぜか、current_win が閉じないため、閉じる
+  if config.values.float.curdir_window.enable then
+    pcall(a.nvim_win_close, utils.win_get_var("lir_curdir_win", float_win).win_id, true)
+  end
+  actions.quit()
 end
 
 -- setlocal を使っているため、毎回セットする必要があるため BufWinEnter で呼び出す

@@ -9,14 +9,15 @@ local CurdirWindow = {}
 
 local ns = api.nvim_create_namespace("lir_curdir_win")
 
-local function setup_autocmd(bufnr, win_id)
-  vim.cmd(
-    string.format(
-      "autocmd WinClosed <buffer=%s> ++nested ++once :lua pcall(vim.api.nvim_win_close, %s, true)",
-      bufnr,
-      win_id
-    )
-  )
+local function setup_autocmd_win_close(bufnr, win_id)
+  vim.api.nvim_create_autocmd({ "WinClosed" }, {
+    buffer = bufnr,
+    nested = true,
+    once = true,
+    callback = function()
+      pcall(vim.api.nvim_win_close, win_id, true)
+    end,
+  })
 end
 
 -- from plenary
@@ -74,6 +75,23 @@ local hl_curdir_name = function(bufnr)
   api.nvim_buf_add_highlight(bufnr, ns, "LirFloatCurdirWindowDirName", 0, start - 1, _end)
 end
 
+local setup_curdir_text = function(lir_curdir_win)
+  if config.values.float.curdir_window.enable and utils.win_get_var("lir_is_float") and lir_curdir_win then
+    -- local dir = vim.fn.fnamemodify(lvim.get_context().dir, ":~")
+    local width = api.nvim_win_get_config(lir_curdir_win.win_id).width
+    local dir = normalize_path(lvim.get_context().dir, width)
+    api.nvim_buf_set_lines(lir_curdir_win.bufnr, 0, -1, false, { dir })
+    if config.values.float.curdir_window.highlight_dirname then
+      hl_curdir_name(lir_curdir_win.bufnr)
+    end
+
+    vim.api.nvim_exec_autocmds("User", {
+      modeline = false,
+      pattern = "LirSetTextFloatCurdirWindow",
+    })
+  end
+end
+
 function CurdirWindow.new(content_win_id, win_config)
   local self = setmetatable({}, { __index = CurdirWindow })
   local context_win_config = api.nvim_win_get_config(content_win_id)
@@ -104,39 +122,26 @@ function CurdirWindow.new(content_win_id, win_config)
     "winhl",
     "Normal:LirFloatCurdirWindowNormal,EndOfBuffer:LirFloatCurdirWindowNormal,FloatBorder:LirFloatBorder"
   )
-  setup_autocmd(self.content_bufnr, self.win_id)
+  setup_autocmd_win_close(self.content_bufnr, self.win_id)
 
   vim.w.lir_curdir_win = self
-  _G._LirFloatSetCurdirText(self)
+  setup_curdir_text(self)
 
   return self
 end
 
-function _G._LirFloatSetCurdirText(lir_curdir_win)
-  lir_curdir_win = vim.F.if_nil(lir_curdir_win, utils.win_get_var("lir_curdir_win"))
-  if config.values.float.curdir_window.enable and utils.win_get_var("lir_is_float") and lir_curdir_win then
-    -- local dir = vim.fn.fnamemodify(lvim.get_context().dir, ":~")
-    local width = api.nvim_win_get_config(lir_curdir_win.win_id).width
-    local dir = normalize_path(lvim.get_context().dir, width)
-    api.nvim_buf_set_lines(lir_curdir_win.bufnr, 0, -1, false, { dir })
-    if config.values.float.curdir_window.highlight_dirname then
-      hl_curdir_name(lir_curdir_win.bufnr)
-    end
-
-    vim.cmd("doautocmd <nomodeline> User LirSetTextFloatCurdirWindow")
-  end
+local setup_autocmd_curdir_window = function()
+  vim.api.nvim_create_autocmd({ "FileType" }, {
+    pattern = "lir",
+    callback = function()
+      local curdir_win = utils.win_get_var("lir_curdir_win")
+      if config.values.float.curdir_window.enable and curdir_win and utils.win_get_var("lir_is_float") then
+        setup_autocmd_win_close(vim.api.nvim_get_current_buf(), curdir_win.win_id)
+        setup_curdir_text(curdir_win)
+      end
+    end,
+  })
 end
-
-function _G._LirFloatSetupAutocmd()
-  if config.values.float.curdir_window.enable and utils.win_get_var("lir_curdir_win") then
-    setup_autocmd(vim.fn.bufnr(), utils.win_get_var("lir_curdir_win").win_id)
-  end
-end
-
-vim.cmd([[augroup lir-float-curdir-window]])
-vim.cmd([[  autocmd!]])
-vim.cmd([[  autocmd FileType lir :lua _LirFloatSetCurdirText()]])
-vim.cmd([[  autocmd FileType lir :lua _LirFloatSetupAutocmd()]])
-vim.cmd([[augroup END]])
+setup_autocmd_curdir_window()
 
 return CurdirWindow

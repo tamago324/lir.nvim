@@ -49,15 +49,14 @@ config.values = {}
 ---@field highlight_dirname boolean
 
 local function echo_warning(message)
-    vim.api.nvim_echo({ { "\n", "Normal" } }, false, {})
-    vim.api.nvim_echo( { { message, "WarningMsg" } }, false, {}
-    )
+  vim.api.nvim_echo({ { "\n", "Normal" } }, false, {})
+  vim.api.nvim_echo({ { message, "WarningMsg" } }, false, {})
 end
 
 local function warning_deprecated(opts)
   if opts.devicons_enable then
     config.values.devicons.enable = true
-    echo_warning( "[lir.nvim] `devicons_enable` is deprecated. Use `devicons.enable` instead. \n" )
+    echo_warning("[lir.nvim] `devicons_enable` is deprecated. Use `devicons.enable` instead. \n")
   end
 
   -- if opts.on_init then
@@ -82,6 +81,5 @@ function config.set_default_values(opts)
 
   warning_deprecated(opts)
 end
-
 
 return config
