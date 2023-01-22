@@ -209,13 +209,30 @@ function lir.init()
     end, files)
   end
 
+  function GetFileName(file)
+    return file:match("^.+(.+)$")
+  end
+
+  function GetHyphen(file)
+    return file:match("[^-]+$")
+  end
+
+  function GetFileExtension(file)
+    return file:match("^.+(%..+)$")
+  end
+
+  function GetFileToIgnore(file)
+    local name = GetFileName(file)
+    name = GetHyphen(file)
+    return name
+  end
+
   for _, file in pairs(config.values.ignore) do
     if file == nil then
       return
     end
     files = vim.tbl_filter(function(val)
-      local f = "^" .. file .. ".-$"
-      return string.match(val.value, f) == nil
+      return string.match(val.value, GetFileToIgnore(file)) == nil
     end, files)
   end
 
