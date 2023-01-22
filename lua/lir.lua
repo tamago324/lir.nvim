@@ -209,21 +209,13 @@ function lir.init()
     end, files)
   end
 
-  local function file_name(file)
-    return file:match("^.+(.+)$")
-  end
-
-  local function hyphenated(file)
+  local function get_file(file)
     return file:match("[^-]+$")
   end
 
-  -- local function file_extension(file)
-  --   return file:match("^.+(%..+)$")
-  -- end
-
   local function file_to_ignore(file)
-    local name = file_name(hyphenated(file))
-    return name
+    local ignore = get_file(file)
+    return ignore
   end
 
   for _, file in pairs(config.values.ignore) do
