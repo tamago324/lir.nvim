@@ -23,7 +23,7 @@ local clipboard_actions = require'lir.clipboard.actions'
 
 require'lir'.setup {
   show_hidden_files = false,
-  ignore = {}, -- { ".DS_Store" "node_modules" } etc.
+  ignore = {}, -- { ".DS_Store", "node_modules" } etc.
   devicons = {
     enable = false,
     highlight_dirname = false
