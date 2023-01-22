@@ -209,21 +209,12 @@ function lir.init()
     end, files)
   end
 
-  local function get_file(file)
-    return file:match("[^-]+$")
-  end
-
-  local function file_to_ignore(file)
-    local ignore = get_file(file)
-    return ignore
-  end
-
   for _, file in pairs(config.values.ignore) do
     if file == nil then
       return
     end
     files = vim.tbl_filter(function(val)
-      return string.match(val.value, file_to_ignore(file)) == nil
+      return string.match(val.value, file:match("[^-]+$")) == nil
     end, files)
   end
 
