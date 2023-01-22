@@ -222,8 +222,7 @@ function lir.init()
   -- end
 
   local function file_to_ignore(file)
-    local name = file_name(file)
-    name = hyphenated(file)
+    local name = file_name(hyphenated(file))
     return name
   end
 
