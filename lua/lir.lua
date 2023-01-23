@@ -216,9 +216,8 @@ function lir.init()
     files = vim.tbl_filter(function(val)
       if val.value == file then
         return nil
-      else
-        return val.value
       end
+      return val.value
     end, files)
   end
 
