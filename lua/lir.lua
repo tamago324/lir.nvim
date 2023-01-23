@@ -214,7 +214,11 @@ function lir.init()
       return
     end
     files = vim.tbl_filter(function(val)
-      return string.match(val.value, file:match("[^-]+$")) == nil
+      if val.value == file then
+        return nil
+      else
+        return val.value
+      end
     end, files)
   end
 
