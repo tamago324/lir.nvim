@@ -209,15 +209,9 @@ function lir.init()
     end, files)
   end
 
-  for _, file in pairs(config.values.ignore) do
-    if file == nil then
-      return
-    end
-    files = vim.tbl_filter(function(val)
-      local f = "^" .. file .. ".-$"
-      return string.match(val.value, f) == nil
-    end, files)
-  end
+  files = vim.tbl_filter(function(val)
+    return not vim.tbl_contains(config.values.ignore, val.value)
+  end, files)
 
   table.sort(files, sort)
 
