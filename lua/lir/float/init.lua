@@ -76,7 +76,7 @@ local function find_lir_float_win()
   return nil
 end
 
----@param dir string
+---@param dir string?
 function float.toggle(dir)
   local float_win = find_lir_float_win()
   if float_win then
