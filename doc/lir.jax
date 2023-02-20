@@ -192,6 +192,7 @@ SETTINGS                                                        *lir-settings*
         }
       },
       on_init = function() end,
+      get_filters = {}
     }
 <
 
@@ -222,6 +223,15 @@ on_init                                                 *lir-settings-on_init*
 
     このオプションは非推奨です。変わりに |nvim_create_autocmd()| を使用してく
     ださい。
+
+get_filters                                         *lir-settings-get_filters*
+    |lir-file-item| をフィルタするため関数のリストを返す関数。
+    バッファに表示する前にリストの先頭から順に呼び出されます。
+
+    以下の関数のリストを返す関数を設定します。
+    `lir_item` は |lir-file-item| のことです。
+
+        `fun(files: lir_item[]): lir_item[]`
 
 float.winblend                                   *lir-settings-float.winblend*
     floating window で表示するウィンドウの透過度合い
