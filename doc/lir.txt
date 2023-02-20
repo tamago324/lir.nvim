@@ -193,6 +193,7 @@ default value: >
         }
       },
       on_init = function() end,
+      get_filters = nil
     }
 <
 

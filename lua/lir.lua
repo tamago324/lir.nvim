@@ -226,7 +226,10 @@ function lir.init()
 
   table.sort(files, sort)
 
-  files = do_filter(files)
+  local do_filter_status, filtered_files = pcall(do_filter, files)
+  if do_filter_status then
+    files = filtered_files
+  end
 
   context.files = files
   setlines(
