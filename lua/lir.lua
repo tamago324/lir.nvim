@@ -166,7 +166,7 @@ local function set_nocontent_text()
 end
 
 --- filter を適用する
---- 用途としては並び替えをしたり、順番を入れ替えたりする
+--- 用途としては並び替えをしたり、要素を削除したりする
 ---@param files lir_item[]
 ---@return lir_item[]
 local function do_filter(files)

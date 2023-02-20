@@ -223,6 +223,16 @@ on_init                                                 *lir-settings-on_init*
 
     Deprecated `on_init`. Use |vim.api.nvim_create_autocmd()| instead.
 
+get_filters                                         *lir-settings-get_filters*
+    |lir-file-item| function that returns a list of functions to filter for.
+    They are called in order from the top of the list before being displayed
+    on the buffer.
+
+    Set up a function that returns a list of the following functions.
+    `lir_item` is |lir-file-item|.
+
+        `fun(files: lir_item[]): lir_item[]`
+
 float.winblend                                   *lir-settings-float.winblend*
     The degree of transparency of the window displayed by the floating
     window.
