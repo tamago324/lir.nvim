@@ -192,7 +192,7 @@ SETTINGS                                                        *lir-settings*
         }
       },
       on_init = function() end,
-      get_filters = {}
+      get_filters = nil
     }
 <
 
