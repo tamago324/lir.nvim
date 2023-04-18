@@ -15,6 +15,7 @@ local defaults_values = {
       highlight_dirname = false,
     },
   },
+  natural_sort = false,
   get_filters = nil,
 }
 
@@ -30,9 +31,9 @@ local config = {}
 ---@field mappings          table
 ---@field float             lir.config.values.float
 ---@field hide_cursor       boolean
+---@field natural_sort      boolean
 ---@field get_filters fun(): lir.config.filter_func[]
 config.values = {}
-
 
 ---@class lir.config.values.devicons
 ---@field enable            boolean
