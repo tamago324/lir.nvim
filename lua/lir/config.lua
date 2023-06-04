@@ -42,7 +42,7 @@ config.values = {}
 
 ---@class lir.config.values.float
 ---@field winblend        number
----@field win_opts         table
+---@field win_opts        table|function
 ---@field curdir_window   lir.config.values.float.curdir_window
 
 ---@class lir.config.values.float.size_percentage
