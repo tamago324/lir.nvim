@@ -23,12 +23,24 @@ augroup lir
 augroup END
 
 
-highlight def link LirFloatNormal             Normal
-highlight def link LirDir                     PreProc
-highlight def link LirSymLink                 PreProc
-highlight def link LirEmptyDirText            BlueSign
-highlight def link LirFloatCurdirWindowNormal Normal
-highlight def link LirFloatCurdirWindowDirName PreProc
-highlight def      LirTransparentCursor gui=strikethrough blend=100
-highlight def link LirFloatBorder             FloatBorder
-highlight def link LirFloatCursorLine         CursorLine
+function Define_hlgroups()
+  highlight def link LirFloatNormal             Normal
+  highlight def link LirDir                     PreProc
+  highlight def link LirSymLink                 PreProc
+  highlight def link LirEmptyDirText            BlueSign
+  highlight def link LirFloatCurdirWindowNormal Normal
+  highlight def link LirFloatCurdirWindowDirName PreProc
+  highlight def      LirTransparentCursor gui=strikethrough blend=100
+  highlight def link LirFloatBorder             FloatBorder
+  highlight def link LirFloatCursorLine         CursorLine
+endfunction
+
+call Define_hlgroups()
+
+" Update highlights on ColorScheme event because
+"  a theme might execute ":highlight clear"
+augroup LirHighlight
+  autocmd!
+  au ColorScheme * call Define_hlgroups()
+augroup END
+
