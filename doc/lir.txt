@@ -183,6 +183,7 @@ default value: >
         highlight_dirname = false
       },
       hide_cursor = false
+      natural_sort = false
       mappings = {},
       float = {
         winblend = 0,
@@ -217,6 +218,10 @@ mappings                                               *lir-settings-mappings*
 hide_cursor                                         *lir-settings-hide_cursor*
     Hide the cursor in lir?
     If the cursor is shown, it will be prefixed with a space.
+
+natural_sort                                       *lir-settings-natural_sort*
+    Sort numbers in natural order.
+    This setting sorts numbers correctly.
 
 on_init                                                 *lir-settings-on_init*
     Function to be executed after displaying the buffer of lir.
