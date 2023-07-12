@@ -167,8 +167,8 @@ function float.init(dir_path)
   if file then
     vim.w.lir_file_jump_cursor = file
   end
-  vim.cmd("edit " .. vim.fn.fnameescape(dir))
   vim.w.lir_is_float = true
+  vim.cmd("edit " .. vim.fn.fnameescape(dir))
 
   -- current directory window
   if config.values.float.curdir_window.enable then
