@@ -102,13 +102,22 @@ function CurdirWindow.new(content_win_id, win_config)
     border_line = 1
   end
 
+  local win_config_row = context_win_config.row
+  if type(win_config_row) ~= "number" then
+    win_config_row = win_config_row[false]
+  end
+  local win_config_col = context_win_config.col
+  if type(win_config_col) ~= "number" then
+    win_config_col = win_config_col[false]
+  end
+
   self.content_bufnr = vim.api.nvim_win_get_buf(content_win_id)
   self.content_win_id = content_win_id
   self.bufnr = api.nvim_create_buf(false, true)
   self.win_id = api.nvim_open_win(self.bufnr, false, {
     style = "minimal",
-    row = context_win_config.row[false] - 1 - border_line,
-    col = context_win_config.col[false],
+    row = win_config_row - 1 - border_line,
+    col = win_config_col,
     width = context_win_config.width,
     height = 1,
     relative = "editor",
