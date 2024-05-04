@@ -287,6 +287,13 @@ function lir.init()
     highlight.update_highlight(files, header_lines_count)
   end
 
+  -- put the cursor on the first line after the header
+  if header_lines_count > 0 then
+    vim.schedule(function()
+      vim.cmd("normal! " .. header_lines_count + 1 .. "G")
+    end)
+  end
+
   if #files == 0 then
     set_nocontent_text()
   end
