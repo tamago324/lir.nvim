@@ -16,15 +16,16 @@ local ns = a.nvim_create_namespace("lir_dir")
 local highlight = {}
 
 ---@param files lir_item[]
-function highlight.update_highlight(files)
+---@param header_offset integer
+function highlight.update_highlight(files, header_offset)
   if config.values.devicons.enable then
-    devicons.update_highlight(files)
+    devicons.update_highlight(files, header_offset)
   end
   if not config.values.devicons.enable or config.values.devicons.highlight_dirname then
     a.nvim_buf_clear_namespace(0, ns, 0, -1)
     for i, file in ipairs(files) do
       if file.is_dir then
-        a.nvim_buf_add_highlight(0, ns, "LirDir", i - 1, 0, -1)
+        a.nvim_buf_add_highlight(0, ns, "LirDir", i - 1 + header_offset, 0, -1)
       end
     end
   end

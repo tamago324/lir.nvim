@@ -56,6 +56,24 @@ local function readdir(path)
 
     table.insert(files, file)
   end
+
+  return files
+end
+
+---@param path string
+---@param files lir_item[]
+local function prepend_dotpaths(path, files)
+  -- prepend './' and '../' to files
+  for _, v in ipairs({ "./", "../" }) do
+    table.insert(files, 1, {
+      value = v,
+      is_dir = true,
+      fullpath = Path:new(path):joinpath(v):absolute(),
+      display = config.values.hide_cursor and " " .. v
+        or " " .. (config.values.devicons.enable and devicons.get_devicons(v, true) or v),
+      devicons = { icon = devicons.get_devicons(v, true), highlight_name = "LirDir" },
+    })
+  end
   return files
 end
 
@@ -121,6 +139,22 @@ local function setlines(dir, lines)
       end
     end
     a.nvim_win_set_var(0, "lir_file_jump_cursor", nil)
+  end
+
+  -- prepend config.values.header to lines
+  local header_lines = vim.split(config.values.header, "\n")
+  if config.values.header then
+    local header_lines_copy = vim.deepcopy(header_lines)
+    lines = vim.list_extend(header_lines_copy, lines)
+  end
+
+  -- set highlight group `LirHeader` to header.
+  -- FIXME: This does not work, I don't know why!
+  local ns = a.nvim_create_namespace("lir_header")
+  if config.values.header then
+    for i = 1, #header_lines do
+      a.nvim_buf_add_highlight(0, ns, "LirHeader", i - 1, 0, -1)
+    end
   end
 
   if lnum == nil or lnum == 1 then
@@ -200,7 +234,12 @@ function lir.init()
     dir = path .. sep
   end
 
-  local context = Context.new(dir)
+  -- count the lines in config.values.header string.
+  -- this is used to adjust the cursor position.
+  local header_lines = vim.split(config.values.header, "\n")
+  local header_lines_count = #header_lines
+
+  local context = Context.new(dir, header_lines_count)
   lvim.set_context(context)
 
   -- nvim_buf_set_lines() するため
@@ -226,6 +265,11 @@ function lir.init()
 
   table.sort(files, sort)
 
+  -- prepend './' and '../' after filtering hidden files and sorting
+  if config.values.show_navigation then
+    files = prepend_dotpaths(path, files)
+  end
+
   local do_filter_status, filtered_files = pcall(do_filter, files)
   if do_filter_status then
     files = filtered_files
@@ -239,7 +283,9 @@ function lir.init()
     end, files)
   )
 
-  highlight.update_highlight(files)
+  if not config.values.disable_highlight then
+    highlight.update_highlight(files, header_lines_count)
+  end
 
   if #files == 0 then
     set_nocontent_text()

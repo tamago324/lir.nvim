@@ -52,12 +52,13 @@ function devicons.get_devicons(filename, is_dir)
 end
 
 ---@param files lir_item[]
-function devicons.update_highlight(files)
+---@param header_offset integer
+function devicons.update_highlight(files, header_offset)
   local col_start, col_end = #" ", ICON_WIDTH + #" "
 
   a.nvim_buf_clear_namespace(0, ns, 0, -1)
   for i, file in ipairs(files) do
-    a.nvim_buf_add_highlight(0, ns, file.devicons.highlight_name, i - 1, col_start, col_end)
+    a.nvim_buf_add_highlight(0, ns, file.devicons.highlight_name, i - 1 + header_offset, col_start, col_end)
   end
 end
 
