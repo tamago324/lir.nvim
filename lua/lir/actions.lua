@@ -305,6 +305,7 @@ end
 function actions.yank_path()
   local ctx = get_context()
   local path = ctx.dir .. ctx:current_value()
+  path = string.gsub(path, ' ', '\\ ')
   vim.fn.setreg(vim.v.register, path)
   print("Yank path: " .. path)
 end
