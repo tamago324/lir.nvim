@@ -31,8 +31,10 @@ local config = {}
 ---@field float             lir.config.values.float
 ---@field hide_cursor       boolean
 ---@field get_filters fun(): lir.config.filter_func[]
+---@field header            string
+---@field disable_highlight boolean
+---@field show_navigation   boolean
 config.values = {}
-
 
 ---@class lir.config.values.devicons
 ---@field enable            boolean

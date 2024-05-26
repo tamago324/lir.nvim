@@ -234,6 +234,15 @@ get_filters                                         *lir-settings-get_filters*
 
         `fun(files: lir_item[]): lir_item[]`
 
+header                                                      lir-settings-header
+    A (multiline) string that will be displayed at the top of a lir buffer.
+
+disable_highlight                                lir-settings-disable_highlight
+    Set to true to disable directory highlighting inside a lir buffer.
+
+show_navigation                                    lir-settings-show_navigation
+    Set to true to show '../' and './' in the file list.
+
 float.winblend                                   *lir-settings-float.winblend*
     The degree of transparency of the window displayed by the floating
     window.

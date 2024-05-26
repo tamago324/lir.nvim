@@ -33,6 +33,7 @@ function Define_hlgroups()
   highlight def      LirTransparentCursor gui=strikethrough blend=100
   highlight def link LirFloatBorder             FloatBorder
   highlight def link LirFloatCursorLine         CursorLine
+  highlight def link LirHeader                  Comment
 endfunction
 
 call Define_hlgroups()

@@ -6,6 +6,7 @@
 ---@field dir   string
 ---@field files lir_item[]
 ---@field pasted_files lir_pasted_info[]
+---@field header_offset number
 local Context = {}
 
 ---@class lir_item
@@ -22,16 +23,17 @@ local Context = {}
 
 ---@param dir string
 ---@return lir_context
-function Context.new(dir)
+function Context.new(dir, header_offset)
   local self = setmetatable({}, { __index = Context })
   self.dir = dir
   self.files = nil
+  self.header_offset = header_offset or 0
   return self
 end
 
 ---@return lir_item|nil
 function Context:current()
-  local file = self.files[vim.fn.line(".")]
+  local file = self.files[vim.fn.line(".") - self.header_offset]
   if file then
     return file
   end
@@ -45,7 +47,8 @@ function Context:current_items(mode)
   if mode == "v" then
     s, e = vim.fn.line("'<"), vim.fn.line("'>")
   else
-    s, e = vim.fn.line("."), vim.fn.line(".")
+    local line = vim.fn.line(".") - self.header_offset
+    s, e = line, line
   end
 
   local results = {}
@@ -57,7 +60,7 @@ end
 
 ---@return string
 function Context:current_value()
-  local file = self.files[vim.fn.line(".")]
+  local file = self.files[vim.fn.line(".") - self.header_offset]
   if file then
     return file.value
   end
@@ -77,7 +80,7 @@ end
 
 ---@return boolean
 function Context:is_dir_current()
-  local file = self.files[vim.fn.line(".")]
+  local file = self.files[vim.fn.line(".") - self.header_offset]
   if file then
     return file.is_dir
   end
