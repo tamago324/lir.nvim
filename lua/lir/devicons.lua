@@ -1,6 +1,6 @@
 local has_devicons, Devicons = pcall(require, "nvim-web-devicons")
 local utils = require("lir.utils")
--- local config = 'lir.config'
+local config = require("lir.config")
 
 local vim = vim
 local a = vim.api
@@ -53,7 +53,11 @@ end
 
 ---@param files lir_item[]
 function devicons.update_highlight(files)
-  local col_start, col_end = #" ", ICON_WIDTH + #" "
+  local col_start = #" "
+  if config.values.hide_cursor then
+    col_start = 0
+  end
+  local col_end = ICON_WIDTH + #" "
 
   a.nvim_buf_clear_namespace(0, ns, 0, -1)
   for i, file in ipairs(files) do
