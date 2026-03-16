@@ -67,6 +67,16 @@ local function sort(lhs, rhs)
   elseif not lhs.is_dir and rhs.is_dir then
     return false
   end
+
+  if config.values.natural_sort then
+    ---@see http://notebook.kulchenko.com/algorithms/alphanumeric-natural-sorting-for-humans-in-lua
+    local function padnum(d)
+      return ("%012d"):format(d)
+    end
+
+    return tostring(lhs.value):gsub("%d+", padnum) < tostring(rhs.value):gsub("%d+", padnum)
+  end
+
   return lhs.value < rhs.value
 end
 
