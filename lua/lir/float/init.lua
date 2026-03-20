@@ -143,6 +143,8 @@ function float.init(dir_path)
     end
   end
 
+  vim.t.lir_float_origin_winid = a.nvim_get_current_win()
+
   local user_win_opts = {}
   if type(config.values.float.win_opts) == "function" then
     user_win_opts = config.values.float.win_opts()
