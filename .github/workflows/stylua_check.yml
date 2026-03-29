@@ -3,7 +3,7 @@ on:
   # 手動実行できるようにする
   workflow_dispatch:
   pull_request:
-    branches: 
+    branches:
       - "**"
   push:
     branches:
@@ -12,10 +12,11 @@ jobs:
   stylua:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: JohnnyMorganz/stylua-action@v1
+      - uses: actions/checkout@v4
+      - uses: JohnnyMorganz/stylua-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
           # CLI arguments
           args: --check --config-path stylua.toml --glob 'lua/**/*.lua' -- lua
           # Specify `version` to pin a specific version, otherwise action will always use latest version/automatically update
